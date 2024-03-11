@@ -4,33 +4,29 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Home: React.FC = () => {
-  const [itemName, setItemName] = useState<string>("");
+  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchItemData() {
       try {
-        const responseItem = await axios.get(
-          "https://api.dofusdb.fr/items?id=2469"
-        );
-        setItemName(responseItem.data.data[0].name.fr);
-        const responseRecipe = await axios.get(
-          `https://api.dofusdb.fr/recipes/${responseItem.data.data[0].id}`
-        );
-      } catch (error) {}
+        const response = await axios.get("https://api.dofusdb.fr/items?$limit=50");
+        setItems(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-
     fetchItemData();
   }, []);
 
   return (
     <div>
-      <h1>
-        Nom de l{"'"}objet : {itemName}
-      </h1>
-      <div>
-        <h2>Recette de l{"'"}objet :</h2>
-        <ul></ul>
-      </div>
+      {items.map((item: any, index: number) => (
+        <div key={index}>
+          <img src={item.imgset[0].url} alt={item.name.fr} />
+          <h1>Nom de l'objet : {item.name.fr}</h1>
+          <h2>Description de l'objet: {item.description.fr}</h2>
+        </div>
+      ))}
     </div>
   );
 };
