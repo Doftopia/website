@@ -1,10 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { error } from "console";
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<any[]>([]);
+  const [characs, setCharacs] = useState<any[]>([]); 
+  const [characsDisplay, setCharacsDisplay] = useState<any[]>([]); 
   let skip = 0;
+  let characteristics: any[] = []; 
 
   useEffect(() => {
     fetchItems();
@@ -13,36 +17,45 @@ const Home: React.FC = () => {
   const fetchItems = async () => {
     try {
       const response = await axios.get(`https://api.dofusdb.fr/items?$limit=50&$skip=${skip}`);
-      skip+=50;
       setItems(prevItems => [...prevItems, ...response.data.data]);
-      console.log(response.data.data[0].effects[0].characteristic);
-      try {
-        const responseCharacs = await axios.get(`https://api.dofusdb.fr/characteristics?id=${response.data.data[0].effects[0].characteristic}`);
-        console.log(responseCharacs.data.data[0].name.fr);
-      } catch (error) {
-        console.log(error, "Item has no characteristics");
-      }
-    } catch (error) { 
+      let characsPerItem: any[] = []; 
+
+      response.data.data.forEach((arrayResponse: any) => {
+        arrayResponse.effects.forEach((charac: any) => {
+          characsPerItem.push(charac.characteristic);
+        });
+        characteristics.push(characsPerItem); 
+        characsPerItem = []; 
+      });
+      skip += 50;
+
+      setCharacs([...characs, ...characteristics]); 
+    } catch (error) {
       console.log(error);
-    } 
-  };
+    }
 
-  const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (scrollTop + windowHeight >= documentHeight) {
-      fetchItems();
+    let characsItem: String[];
+    characsItem = [];
+    
+    for (let i = 0; i < characteristics.length; i++) {
+      for (let y = 0; y < characteristics[i].length; y++) {
+        try {
+          const response = await axios.get(`https://api.dofusdb.fr/characteristics?id=${characteristics[i][y]}`);
+          let responseData = response.data.data
+          responseData.forEach((data: any) => {
+            console.log(`${characteristics[i][y]} = ${data.name.fr}`);
+            characsItem.push(data.name.fr)
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      setCharacsDisplay(prevCharacItem => [...prevCharacItem, ...characsItem]);
+      console.log(characsItem);
+      console.log("\n");
+      characsItem = [];
     }
   };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <div>
@@ -51,6 +64,8 @@ const Home: React.FC = () => {
           <img src={item.imgset[0].url} alt={item.name.fr} />
           <h1>Nom de l'objet : {item.name.fr}</h1>
           <h2>Description de l'objet : {item.description.fr}</h2>
+          <h2>Type de l'objet : {item.type.name.fr}</h2>
+          <h2>{characsDisplay}</h2>
         </div>
       ))}
     </div>
