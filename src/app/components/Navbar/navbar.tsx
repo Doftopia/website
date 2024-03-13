@@ -78,7 +78,7 @@ const Navbar = () => {
                   href="#"
                   className="block px-4 py-2 text-white hover:bg-gray-600"
                 >
-                  Outil 3
+                  Jobs Calculator
                 </a>
               </div>
             )}

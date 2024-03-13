@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { error } from "console";
 import Navbar from "./components/Navbar/navbar";
+import XpCalculator from "./components/XpCalculator/XpCalculator";
 
 const Home: React.FC = () => {
   const [items, setItems] = useState<any[]>([]);
@@ -79,6 +80,9 @@ const Home: React.FC = () => {
           <h2>{characsDisplay}</h2>
         </div>
       ))}
+      <div>
+        <XpCalculator />
+      </div>
     </>
   );
 };
