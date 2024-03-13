@@ -9,39 +9,47 @@ const dbConfig = {
 };
 
 async function fetchItemsAndInsertIntoDB(limit, pool) {
-    while (true) {
-        try {
-            const responseItems = await axios.get(`https://api.dofusdb.fr/items?$limit=${limit}&$skip=${limit}`)
-            limit+=50;
+    try {
+        while (true) {
+            const responseItems = await axios.get(`https://api.dofusdb.fr/items?$limit=${limit}&$skip=${limit}`);
+            limit += 50;
             const items = responseItems.data.data;
+
+            if (items.length === 0) {
+                console.log("No more items to fetch.");
+                break;
+            }
 
             for (const item of items) {
                 try {
                     const insertItemQuery = "INSERT INTO items (name, description, type, level, img) VALUES (?, ?, ?, ?, ?)";
                     const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url];
-                    const [itemRows] = await pool.execute(insertItemQuery, insertItemParams);
+                    await pool.execute(insertItemQuery, insertItemParams);
 
-                    const itemId = itemRows.insertId;
+                    const itemId = (await pool.query("SELECT LAST_INSERT_ID() as id"))[0][0].id;
 
                     for (const effect of item.effects) {
-                        const insertEffectQuery = "INSERT INTO effects (item_id, characteristic) VALUES (?, ?)";
-                        const insertEffectParams = [itemId, effect.characteristic];
+                        const insertEffectQuery = "INSERT INTO effects (item_id, characteristic, `from`, `to`) VALUES (?, ?, ?, ?)";
+                        const insertEffectParams = [itemId, effect.characteristic, effect.from, effect.to];
                         await pool.execute(insertEffectQuery, insertEffectParams);
                     }
                 } catch (error) {
                     console.error("Error inserting item:", error);
                 }
             }
-        } catch (error) {
-            console.error("Error fetching items:", error);
-            break;
         }
+    } catch (error) {
+        console.error("Error fetching items:", error);
     }
 }
 
 async function main() {
     const pool = await mysql.createPool(dbConfig);
-    await fetchItemsAndInsertIntoDB(50, pool);
+    try {
+        await fetchItemsAndInsertIntoDB(50, pool);
+    } finally {
+        await pool.end(); // Close the connection pool when done
+    }
 }
 
 main();
@@ -55,8 +63,11 @@ main();
 //     ->     img VARCHAR(255)
 //     -> );
 
-// CREATE TABLE IF NOT EXISTS doftopia.effects (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     item_id INT,
-//     characteristic VARCHAR(255)
-// );
+// mysql> CREATE TABLE IF NOT EXISTS doftopia.effects (
+//     ->     id INT AUTO_INCREMENT PRIMARY KEY,
+//     ->     item_id INT,
+//     ->     characteristic VARCHAR(255),
+//     ->     `from` INT,
+//     ->     `to` INT
+//     -> );
+
