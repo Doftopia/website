@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 interface NavbarProps {
   pageName: string;
@@ -87,9 +88,7 @@ const Navbar = () => {
           <button className="text-white hover:text-gray-300 focus:outline-none">
             Login
           </button>
-          <button className="text-white hover:text-gray-300 focus:outline-none">
-            Changer Thème
-          </button>
+          <ThemeSwitcher />
         </div>
       </div>
     </nav>

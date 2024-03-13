@@ -1,20 +1,26 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
+import { useState } from "react";
 
-interface ThemeSwitcherProps {
-  theme: "dark" | "light";
-}
+interface ThemeSwitcherProps {}
 
-const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ theme }) => {
-  const darkImagePath = "/chemin/vers/limage_sombre.png";
-  const lightImagePath = "/chemin/vers/limage_claire.png";
+const ThemeSwitcher: React.FC<ThemeSwitcherProps> = () => {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  const handleThemeSwitch = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+  };
+
+  const darkImagePath = "/tofu_noir.png";
+  const lightImagePath = "/tofu.png";
 
   const imagePath = theme === "dark" ? darkImagePath : lightImagePath;
 
   return (
     <>
-      <button>
-        <img src={imagePath} alt="theme" />
+      <button onClick={handleThemeSwitch}>
+        <img src={imagePath} alt="theme" width={45} height={45} />
       </button>
     </>
   );
