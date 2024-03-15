@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -14,7 +15,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  });
 
   const fetchItems = async () => {
     try {

@@ -42,7 +42,7 @@ const Navbar = () => {
             À Propos
           </a>
           <a href="#" className="text-white hover:text-gray-300">
-            Services
+            Quêtes
           </a>
           <div
             className="relative"
@@ -72,7 +72,7 @@ const Navbar = () => {
                   href="#"
                   className="block px-4 py-2 text-white hover:bg-gray-600"
                 >
-                  Outil 2
+                  Maps
                 </a>
                 <a
                   href="#"

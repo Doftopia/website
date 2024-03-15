@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  username       String       @unique
+  email          String       @unique
+  password       String
+  ankamaUsername String?
+  createdAt      DateTime     @default(now())
+  Personnages    Personnage[]
+  updater        Portail[]
+  Panoplies      Panoplie[]
+}
+
+model Personnage {
+  id         Int    @id @default(autoincrement())
+  user       User   @relation(fields: [userId], references: [id])
+  userId     Int
+  name       String
+  race       String
+  level      Int
+  server     String
+  stuff      String
+  completion Int
+  Panoplie   Panoplie[]
+}
+
+model Panoplie {
+  id          Int    @id @default(autoincrement())
+  user        User   @relation(fields: [userId], references: [id])
+  userId      Int
+  character   Personnage @relation(fields: [characterId], references: [id])
+  characterId Int
+  name        String
+  stuff       String
+  tags        String
+}
+
+model Portail {
+  name        String   @unique
+  server      String
+  position    String
+  lastUpdate  DateTime @default(now())
+  updater     User     @relation(fields: [updaterName], references: [username])
+  updaterName String
+}
