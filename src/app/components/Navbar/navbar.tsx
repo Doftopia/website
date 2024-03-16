@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import ThemeSwitcher from "./ThemeSwitcher";
 
@@ -85,9 +87,12 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="text-white hover:text-gray-300 focus:outline-none">
+          <a
+            href="/sign-in"
+            className="text-white hover:text-gray-300 focus:outline-none"
+          >
             Login
-          </button>
+          </a>
           <ThemeSwitcher />
         </div>
       </div>
