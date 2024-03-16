@@ -72,7 +72,7 @@ const Home: React.FC = () => {
       <header className="w-[33rem]">
         <Navbar />
       </header>
-      {items.map((item: any, index: number) => (
+      {/* {items.map((item: any, index: number) => (
         <div key={index}>
           <img src={item.imgset[0].url} alt={item.name.fr} />
           <h1>Nom de l&apos;objet : {item.name.fr}</h1>
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
           <h2>Type de l&pos;objet : {item.type.name.fr}</h2>
           <h2>{characsDisplay}</h2>
         </div>
-      ))}
+      ))} */}
       <div>
         <XpCalculator />
       </div>
