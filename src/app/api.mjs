@@ -31,7 +31,16 @@ connection.connect((err) => {
 });
 
 app.get("/items", (req, res) => {
-    const query = `SELECT * FROM items`;
+    let query = `SELECT * FROM items`;
+
+    if (req.query.name) {
+        const nameFilter = mysql.escape(`%${req.query.name}%`);
+        query += ` WHERE name LIKE ${nameFilter}`;
+    } else if (req.query.effects) {
+        const nameFilter = mysql.escape(`%${req.query.effects}%`);
+        query += ` WHERE items.effects LIKE ${nameFilter}`;
+    }
+
     connection.query(query, (error, results) => {
         if (error) {
             console.error('Error fetching items:', error);
@@ -41,6 +50,7 @@ app.get("/items", (req, res) => {
         res.json({ data: results });
     });
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
