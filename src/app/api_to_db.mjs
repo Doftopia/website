@@ -1,5 +1,5 @@
 import axios from "axios";
-import { response } from "express";
+import express from "express";
 import mysql from "mysql2/promise"; 
 
 let characName = "";
