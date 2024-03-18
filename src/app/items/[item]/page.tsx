@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
-    const itemName = searchParams.get('name');
+    const itemId = searchParams.get('id');
     const [item, setItem] = useState<any[]>([]);
 
     useEffect(() => {
@@ -14,11 +14,10 @@ const Page: React.FC = () => {
     })
 
     const fetchItem = async () => {
-        const response = await axios.get(`http://localhost:3000/items?name=${itemName}`);
+        const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
         setItem(response.data.data);
     }
     
-
     return (
         <div className='h-screen bg-gray-800 pt-10'>
             {item.map((item: any) => (

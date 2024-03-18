@@ -24,24 +24,45 @@ const connection = mysql.createConnection(dbConfig);
 
 connection.connect((err) => {
     if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
+        console.log(err);
     }
-    console.log('Connected to the database');
-});
+    console.log("Connected to db");
+})
 
 app.get("/items", (req, res) => {
     let query = `SELECT * FROM items`;
 
+    const queryParams = [];
+    const conditions = [];
+
     if (req.query.name) {
-        const nameFilter = mysql.escape(`%${req.query.name}%`);
-        query += ` WHERE name LIKE ${nameFilter}`;
-    } else if (req.query.effects) {
-        const nameFilter = mysql.escape(`%${req.query.effects}%`);
-        query += ` WHERE items.effects LIKE ${nameFilter}`;
+        const nameFilter = `%${req.query.name}%`;
+        queryParams.push(nameFilter);
+        conditions.push(`name LIKE ?`);
     }
 
-    connection.query(query, (error, results) => {
+    if (req.query.effects) {
+        const effectsFilter = `%${req.query.effects}%`;
+        queryParams.push(effectsFilter);
+        conditions.push(`effects LIKE ?`);
+    }
+
+    if (req.query.id) {
+        const itemIdFilter = req.query.id;
+        queryParams.push(itemIdFilter);
+        conditions.push(`itemId = ?`);
+    }
+
+    if (conditions.length > 0) {
+        query += ` WHERE ${conditions.join(' AND ')}`;
+    }
+
+    if (req.query.limit) {
+        query += ` LIMIT ?`;
+        queryParams.push(parseInt(req.query.limit));
+    }
+
+    connection.query(query, queryParams, (error, results) => {
         if (error) {
             console.error('Error fetching items:', error);
             res.status(500).json({ error: "Internal Server Error" });

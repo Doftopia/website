@@ -1,6 +1,6 @@
 import axios from "axios";
 import express from "express";
-import mysql from "mysql2/promise"; 
+import mysql from "mysql2"; 
 
 let characName = "";
 let characImg = "";
@@ -12,7 +12,28 @@ const dbConfig = {
     database: 'doftopia'
 };
 
+
 async function fetchItemsAndInsertIntoDB(pool) {
+    let queryCharac = "SELECT * FROM characteristics;"
+    const connection = mysql.createConnection(dbConfig)
+    let characsInfo = {};
+    try {
+        connection.connect((err) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log("Connected to db");
+        })
+        connection.query(queryCharac, (error, results) => {
+            if (error) {
+                console.log(error);
+            } 
+            characsInfo = results;
+        })
+    } catch (error) {
+        console.log(err);
+    }
+
     let skip = 0;
     try {
         while (true) {
@@ -29,15 +50,12 @@ async function fetchItemsAndInsertIntoDB(pool) {
                 try {
                     const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
-                        try {
-                            // HORRIBLEMENT OPTI J'AI FAIT AUCUN EFFORT NE L'UTILISE PAS TROP AVANT QUE JE LE CHANGE
-                            const responseCharacteristics = await axios.get(`https://api.beta.dofusdb.fr/characteristics?id=${item.effects[i].characteristic}`);
-                            characName = responseCharacteristics.data.data[0].name.fr
-                            characImg = responseCharacteristics.data.data[0].asset
-                        } catch (error) {
-                        }
-                        item.effects[i]['characName'] = characName;
-                        item.effects[i]['characImg'] = `https://beta.dofusdb.fr/icons/characteristics/${characImg}.png`;
+                        characsInfo.forEach(characInfo => {
+                            if (characInfo.characteristic_id == item.effects[i].characteristic) {
+                                item.effects[i]['characName'] = characInfo.name;
+                                item.effects[i]['characImg'] = characInfo.img_url;
+                            }
+                        });
                     }
                     const effects = JSON.stringify(item.effects);
                     const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, effects];
@@ -114,7 +132,7 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
 async function main() {
     const pool = await mysql.createPool(dbConfig);
     try {
-        await fetchCharacteristicsAndInsertIntoDB(pool);    
+        // await fetchCharacteristicsAndInsertIntoDB(pool);    
         await fetchItemsAndInsertIntoDB(pool);
     } finally {
         await pool.end(); 

@@ -3,32 +3,40 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
-
 const Page: React.FC = () => {
     const [items, setItems] = useState<any[]>([]);
     const [nameFilter, setNameFilter] = useState<string>(""); 
+    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
-    const redirectItem = (itemName: string) => {
-        router.push(`/items/item?name=${itemName}`);
+    const redirectItem = (itemId: string) => {
+        router.push(`/items/item?id=${itemId}`);
     }
 
     const fetchItems = async () => {
         try {
-            const responseItems = await axios.get(`http://localhost:3000/items`, {
+            setLoading(true);
+            const responseItems = await axios.get(`http://localhost:3000/items?limit=100`, {
                 params: {
                     name: nameFilter,
+                    offset: items.length, 
                 },
             });
-            setItems(responseItems.data.data);
+            setItems(responseItems.data.data); 
         } catch (error) {
             console.log(error);
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         fetchItems();
     }, [nameFilter]); 
+
+    useEffect(() => {
+        fetchItems();
+    }); 
 
     const handleNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNameFilter(event.target.value);
@@ -44,15 +52,14 @@ const Page: React.FC = () => {
             />
             <div className="grid gap-3 mx-4 2xl:grid-cols-4 2xl:mx-52 lg:grid-cols-3 lg:mx-44 md:grid-cols-2 md:mx-28 sm:grid-cols-1 sm:mx-16">
               {items.map((item: any, index: number) => (
-                <div id={index.toString()} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">  
+                <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border hover:brightness-150">  
                 <div className="flex  justify-between mt-4 pb-3 mb-4 border-white border-b">
                   <div className="flex flex-col">
-                    <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.name)}>{item.name}</h2>
+                    <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.itemId)}>{item.name}</h2>
                     <h3 className="text-sm mb-5 text-gray-400">{item.type} - niveau {item.level}</h3>
                   </div>
                   <img src={item.img} alt={item.name} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
-                      {/* <h3 className="w-fit mb-3 text-sm">{item.description}</h3> */}
                       {item.effects.map((effect: any, idx: number) => (
                           effect.characteristic !== -1 && (
                               <div key={idx} className="flex items-center">
