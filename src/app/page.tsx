@@ -72,7 +72,7 @@ const Home: React.FC = async () => {
 
   return (
     <>
-      <header className="w-[33rem]">
+      <header className="w-full">
         <Navbar />
       </header>
       {/* {items.map((item: any, index: number) => (

@@ -3,9 +3,7 @@
 import React from "react";
 import { useState } from "react";
 
-interface ThemeSwitcherProps {}
-
-const ThemeSwitcher: React.FC<ThemeSwitcherProps> = () => {
+const ThemeSwitcher: React.FC = () => {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   const handleThemeSwitch = () => {
@@ -16,7 +14,7 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = () => {
   const darkImagePath = "/tofu_noir.png";
   const lightImagePath = "/tofu.png";
 
-  const imagePath = theme === "dark" ? darkImagePath : lightImagePath;
+  const imagePath = theme === "dark" ? lightImagePath : darkImagePath;
 
   return (
     <>

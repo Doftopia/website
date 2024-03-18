@@ -56,4 +56,5 @@ model Portail {
   lastUpdate  DateTime @default(now())
   updater     User     @relation(fields: [updaterName], references: [username])
   updaterName String
+  image       String?
 }
