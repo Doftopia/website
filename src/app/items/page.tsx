@@ -14,21 +14,22 @@ const Page: React.FC = () => {
 
     const fetchItems = async () => {
         try {
-            const responseItems = await axios.get(`http://localhost:3000/items?limit=100`, {
+            const responseItems = await axios.get(`http://localhost:3000/items`, {
                 params: {
+                    limit: 50,
                     name: nameFilter,
-                    offset: items.length, 
+                    offset: items.length,
                 },
             });
             setItems(responseItems.data.data); 
         } catch (error) {
-            console.log(error);
-        };
+            console.log("Error fetching items:", error);
+        }
     }
 
     useEffect(() => {
         fetchItems();
-    }); 
+    }, [nameFilter]); 
 
     const handleNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNameFilter(event.target.value);
@@ -45,45 +46,51 @@ const Page: React.FC = () => {
             <div className="grid gap-3 mx-4 2xl:grid-cols-4 2xl:mx-52 lg:grid-cols-3 lg:mx-44 md:grid-cols-2 md:mx-28 sm:grid-cols-1 sm:mx-16">
               {items.map((item: any, index: number) => (
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border hover:brightness-150">  
-                <div className="flex  justify-between mt-4 pb-3 mb-4 border-white border-b">
+                <div className="flex justify-between mt-4 pb-3 mb-4 border-gray-800 border-b">
                   <div className="flex flex-col">
                     <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.itemId)}>{item.name}</h2>
-                    <h3 className="text-sm mb-5 text-gray-400">{item.type} - niveau {item.level}</h3>
+                    <h3 className="text-sm mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
                   </div>
                   <img src={item.img} alt={item.name} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
-                      {item.effects.map((effect: any, idx: number) => (
-                              <div key={idx} className="flex items-center">
-                                  <p className={effect.from < 0 || effect.to < 0 ? "text-red-500 text-sm" : "text-sm"}> 
-                                    {effect.to ? (
-                                        <>
-                                            <div className="flex">
-                                                {/* <p className="text-red-400">
-                                                    PA : {effect.apCost}
-                                                    range : {effect.minRange} a {effect.range}
-                                                    nmb de cast : {effect.nmbCast}
-                                                    crit : {effect.criticalHitProbability}
-                                                    condition : {effect.condition}
-                                                </p> */}
-                                                    <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
-                                                    {effect.from} à {effect.to} {effect.characName}
-                                            </div>
-                                        </>
+                <div>
+                </div>
+                    {item.effects.map((effect: any, idx: number) => (
+                        <div key={idx} className="flex items-center">
+                            <p className={effect.from < 0 || effect.to < 0 ? "text-red-500 text-sm" : "text-sm"}> 
+                                {effect.to ? (
+                                    <>
+                                        <div className="flex">
+                                            <img src={effect.characImg} alt='text' className="mr-1 size-7" draggable='false'/>
+                                            <p>{effect.from} à {effect.to} {effect.characName}</p>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="flex">
+                                            <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+                                            <p>{effect.from} {effect.characName}</p>
+                                        </div>
+                                    </>
+                                )}
+                                </p>
+                        </div>
+                    ))}
+                    {item.apCost && (
+                        <>
+                                <div className="text-sm border-t border-gray-800 mt-3 pt-3 mb-1">
+                                    <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
+                                    {item.minRange !== item.maxRange ? (
+                                        <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
                                     ) : (
-                                        <>
-                                            <div className="flex">
-                                                <p className="text-red-400">
-                                                    {effect.apCost}
-                                                    {effect.range}
-                                                </p>
-                                                    <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
-                                                    {effect.from} à {effect.characName}
-                                            </div>
-                                        </>
+                                        <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.maxRange}</p>
                                     )}
-                                  </p>
-                              </div>
-                      ))}
+                                    <p className="flex"><p className="text-gray-500 mr-1">Utilisation par tour </p>{item.nmbCast}</p>
+                                    <p className="flex"><p className="text-gray-500 mr-1">Critique </p>{item.criticalHitProbability}%</p>
+                                </div>
+                                {/* <p>{item.criteria} critere</p> */}
+                        </>
+                    )}
                   </div>
               ))}
             </div>

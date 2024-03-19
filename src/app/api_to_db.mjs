@@ -1,9 +1,7 @@
+"use client";
 import axios from "axios";
-import express from "express";
-import mysql from "mysql2"; 
+import mysql from "mysql2/promise"; 
 
-let characName = "";
-let characImg = "";
 
 const dbConfig = {
     host: 'localhost',
@@ -12,26 +10,18 @@ const dbConfig = {
     database: 'doftopia'
 };
 
-
 async function fetchItemsAndInsertIntoDB(pool) {
     let queryCharac = "SELECT * FROM characteristics;"
-    const connection = mysql.createConnection(dbConfig)
+    let queryEffects = "SELECT * FROM effects;"
     let characsInfo = {};
+    let effectsInfo = {};
+    
     try {
-        connection.connect((err) => {
-            if (err) {
-                console.log(err);
-            }
-            console.log("Connected to db");
-        })
-        connection.query(queryCharac, (error, results) => {
-            if (error) {
-                console.log(error);
-            } 
-            characsInfo = results;
-        })
+        const connection = await mysql.createConnection(dbConfig)
+        characsInfo = await connection.execute(queryCharac);
+        effectsInfo = await connection.execute(queryEffects);
     } catch (error) {
-        console.log(err);
+        console.error(error)
     }
 
     let skip = 0;
@@ -48,9 +38,9 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
             for (const item of items) {
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
-                        characsInfo.forEach(characInfo => {
+                        characsInfo[0].forEach(characInfo => {
                             if (characInfo.characteristic_id == item.effects[i].characteristic) {
                                 item.effects[i]['characName'] = characInfo.name;
                                 item.effects[i]['characImg'] = characInfo.img_url;
@@ -58,18 +48,21 @@ async function fetchItemsAndInsertIntoDB(pool) {
                         });
 
                         if (item.effects[i].characteristic == -1) {
-                            item.effects[i]['apCost'] = item.apCost;
-                            item.effects[i]['minRange'] = item.minRange;
-                            item.effects[i]['range'] = item.range;
-                            item.effects[i]['nmbCast'] = item.maxCastPerTurn;
-                            item.effects[i]['criticalHitProbability'] = item.criticalHitProbability;
+                            effectsInfo[0].forEach(effectInfo => {
+                                if (effectInfo.id == item.possibleEffects[i].effectId) {
+                                    item.effects[i]['characName'] = effectInfo.description;
+                                    console.log(effectInfo);
+                                    // item.effects[i]['characImg'] = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
+                                }
+                            });
                         }
                     }
+
                     const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria, effects];
+                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, effects];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
-                    console.error("Error inserting item:", error);
+                    // console.error("Error inserting item:", error);
                 }
             }
         }
@@ -99,7 +92,36 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
                     const insertCharacteristicParams = [characteristic.id, characteristic.name.fr, `https://dofusdb.fr/icons/characteristics/${characteristic.asset}.png`];
                     await pool.execute(insertCharacteristicQuery, insertCharacteristicParams);
                 } catch (error) {
-                    console.error("Error inserting item:", error);
+                    // console.error("Error inserting item:", error);
+                }
+            }
+        } 
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function fetchEffectsAndInsertIntoDB(pool) {
+    let skip = 0;
+    try {
+        while (true) {
+            const responseEffects = await axios.get(`https://api.beta.dofusdb.fr/effects?$limit=50&$skip=${skip}`);
+            skip+=50;
+            const effects = responseEffects.data.data;
+
+            if (effects.length === 0) {
+                console.log("No more effects to fetch.");
+                break;
+            }
+
+            for (const effect of effects) {
+                try {
+                    const insertEffectQuery = "INSERT INTO effects (id, description, characteristic) VALUES (?, ?, ?)";
+                    const insertEffectParams = [effect.id, effect.description.fr || undefined, effect.characteristic];
+                    await pool.execute(insertEffectQuery, insertEffectParams);
+                } catch (error) {
+                    // console.error("Error inserting item:", error);
                 }
             }
         } 
@@ -138,12 +160,14 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
 // }
 
 async function main() {
-    const pool = await mysql.createPool(dbConfig);
     try {
+        const pool = await mysql.createPool(dbConfig);
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
+        // await fetchEffectsAndInsertIntoDB(pool);
         await fetchItemsAndInsertIntoDB(pool);
-    } finally {
         await pool.end(); 
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -174,5 +198,23 @@ main();
 // img varchar(255),
 // puuid varchar(50),
 // itemId varchar(50),
+// effects JSON
+// );
+
+// create table items (
+// id int AUTO_INCREMENT PRIMARY KEY,
+// name varchar(255),
+// description text,
+// type varchar(100),
+// level int,
+// img varchar(255),
+// puuid varchar(255),
+// itemId int,
+// criteria varchar(255),
+// apCost int,
+// maxRange int,
+// nmbCast int,
+// criticalHitProbability int,
+// minRange int,
 // effects JSON
 // );
