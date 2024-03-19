@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 const Page: React.FC = () => {
     const [items, setItems] = useState<any[]>([]);
     const [nameFilter, setNameFilter] = useState<string>(""); 
-    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
     const redirectItem = (itemId: string) => {
@@ -15,7 +14,6 @@ const Page: React.FC = () => {
 
     const fetchItems = async () => {
         try {
-            setLoading(true);
             const responseItems = await axios.get(`http://localhost:3000/items?limit=100`, {
                 params: {
                     name: nameFilter,
@@ -25,14 +23,8 @@ const Page: React.FC = () => {
             setItems(responseItems.data.data); 
         } catch (error) {
             console.log(error);
-        } finally {
-            setLoading(false);
-        }
+        };
     }
-
-    useEffect(() => {
-        fetchItems();
-    }, [nameFilter]); 
 
     useEffect(() => {
         fetchItems();
@@ -61,22 +53,26 @@ const Page: React.FC = () => {
                   <img src={item.img} alt={item.name} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
                       {item.effects.map((effect: any, idx: number) => (
-                          effect.characteristic !== -1 && (
                               <div key={idx} className="flex items-center">
-                                  <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+
                                   <p className={effect.from < 0 || effect.to < 0 ? "text-red-500 text-sm" : "text-sm"}> 
                                     {effect.to ? (
                                         <>
-                                            {effect.from} à {effect.to} {effect.characName}
+                                            <div className="flex">
+                                                <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+                                                {effect.from} à {effect.to} {effect.characName}
+                                            </div>
                                         </>
                                     ) : (
                                         <>
-                                            {effect.from} {effect.characName}
+                                            <div className="flex">
+                                                <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+                                                {effect.from} {effect.characName}
+                                            </div>
                                         </>
                                     )}
                                   </p>
                               </div>
-                          )
                       ))}
                   </div>
               ))}

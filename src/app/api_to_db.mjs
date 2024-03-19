@@ -56,6 +56,11 @@ async function fetchItemsAndInsertIntoDB(pool) {
                                 item.effects[i]['characImg'] = characInfo.img_url;
                             }
                         });
+
+                        if (item.effects[i].characteristic == -1) {
+                            item.effects[i]['apCost'] = item.apCost;
+                            item.effects[i]['range'] = item.range;
+                        }
                     }
                     const effects = JSON.stringify(item.effects);
                     const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, effects];
