@@ -54,20 +54,30 @@ const Page: React.FC = () => {
                 </div>                  
                       {item.effects.map((effect: any, idx: number) => (
                               <div key={idx} className="flex items-center">
-
                                   <p className={effect.from < 0 || effect.to < 0 ? "text-red-500 text-sm" : "text-sm"}> 
                                     {effect.to ? (
                                         <>
                                             <div className="flex">
-                                                <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
-                                                {effect.from} à {effect.to} {effect.characName}
+                                                {/* <p className="text-red-400">
+                                                    PA : {effect.apCost}
+                                                    range : {effect.minRange} a {effect.range}
+                                                    nmb de cast : {effect.nmbCast}
+                                                    crit : {effect.criticalHitProbability}
+                                                    condition : {effect.condition}
+                                                </p> */}
+                                                    <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+                                                    {effect.from} à {effect.to} {effect.characName}
                                             </div>
                                         </>
                                     ) : (
                                         <>
                                             <div className="flex">
-                                                <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
-                                                {effect.from} {effect.characName}
+                                                <p className="text-red-400">
+                                                    {effect.apCost}
+                                                    {effect.range}
+                                                </p>
+                                                    <img src={effect.characImg} alt={effect.characName} className="mr-1 size-7" draggable='false'/>
+                                                    {effect.from} à {effect.characName}
                                             </div>
                                         </>
                                     )}

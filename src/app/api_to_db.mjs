@@ -7,7 +7,7 @@ let characImg = "";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -48,7 +48,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
             for (const item of items) {
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
                         characsInfo.forEach(characInfo => {
                             if (characInfo.characteristic_id == item.effects[i].characteristic) {
@@ -59,11 +59,14 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
                         if (item.effects[i].characteristic == -1) {
                             item.effects[i]['apCost'] = item.apCost;
+                            item.effects[i]['minRange'] = item.minRange;
                             item.effects[i]['range'] = item.range;
+                            item.effects[i]['nmbCast'] = item.maxCastPerTurn;
+                            item.effects[i]['criticalHitProbability'] = item.criticalHitProbability;
                         }
                     }
                     const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, effects];
+                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria, effects];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
                     console.error("Error inserting item:", error);
