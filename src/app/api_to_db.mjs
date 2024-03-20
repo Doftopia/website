@@ -5,7 +5,7 @@ import mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -37,8 +37,9 @@ async function fetchItemsAndInsertIntoDB(pool) {
             }
 
             for (const item of items) {
+                let itemWeaponDmg = [];
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, itemDmg, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
                         characsInfo[0].forEach(characInfo => {
                             if (characInfo.characteristic_id == item.effects[i].characteristic) {
@@ -50,16 +51,28 @@ async function fetchItemsAndInsertIntoDB(pool) {
                         if (item.effects[i].characteristic == -1) {
                             effectsInfo[0].forEach(effectInfo => {
                                 if (effectInfo.id == item.possibleEffects[i].effectId) {
-                                    item.effects[i]['characName'] = effectInfo.description;
-                                    console.log(effectInfo);
-                                    // item.effects[i]['characImg'] = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
+                                    let splitDescription = effectInfo.description.split(' ');
+                                    let description = `${splitDescription[3].slice(1, splitDescription[3].length)} ${splitDescription[4].slice(0, splitDescription[4].length-1)}`;
+                                    let weaponDmgImg = ''
+                                    if (description == 'dommages Eau') {
+                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
+                                    } else if (description == 'dommages Air') {
+                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_agility.png';
+                                    } else if (description == 'dommages Neutre') {
+                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_neutral.png';
+                                    } else if (description == 'dommages Feu') {
+                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_intelligence.png';
+                                    } else if (description == 'dommages Terre') {
+                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
+                                    } 
+                                    itemWeaponDmg.push({'name': description, 'from': item.effects[i].from, 'to': item.effects[i].to, 'img': weaponDmgImg});
                                 }
                             });
                         }
                     }
 
                     const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, effects];
+                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, itemWeaponDmg || null, effects];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
                     // console.error("Error inserting item:", error);
