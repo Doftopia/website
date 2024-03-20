@@ -29,19 +29,19 @@ const NavbarLinks = () => {
 
   return (
     <div className="flex items-center space-x-4">
-      <a href="#" className="text-white hover:text-gray-300">
+      <a href="/objets" className="text-white hover:text-gray-300">
         Objets
       </a>
-      <a href="#" className="text-white hover:text-gray-300">
+      <a href="/panoplies" className="text-white hover:text-gray-300">
         Panoplies
       </a>
-      <a href="#" className="text-white hover:text-gray-300">
+      <a href="/quetes" className="text-white hover:text-gray-300">
         Quêtes
       </a>
-      <a href="#" className="text-white hover:text-gray-300">
+      <a href="/succes" className="text-white hover:text-gray-300">
         Succès
       </a>
-      <a href="#" className="text-white hover:text-gray-300">
+      <a href="/donjons" className="text-white hover:text-gray-300">
         Donjons
       </a>
       <div
@@ -49,13 +49,14 @@ const NavbarLinks = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <button
+        <a
           className="text-white hover:text-gray-300 focus:outline-none"
           onMouseEnter={handleMenuMouseEnter}
           onMouseLeave={handleMenuMouseLeave}
+          href="/outils"
         >
           Outils
-        </button>
+        </a>
         {(isHovered || isMenuHovered) && (
           <div
             className="absolute bg-[#a7a18d] dark:bg-[#494944] rounded-md py-2 mt-4 space-y-2 w-48 z-10"
@@ -63,7 +64,7 @@ const NavbarLinks = () => {
             onMouseLeave={handleMenuMouseLeave}
           >
             <a
-              href="/tools/portails"
+              href="/outils/portails"
               className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
             >
               Portails
@@ -75,7 +76,7 @@ const NavbarLinks = () => {
               Carte Ressources
             </a>
             <a
-              href="#"
+              href="/outils/xp-metiers"
               className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
             >
               Xp Métiers

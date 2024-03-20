@@ -84,10 +84,7 @@ const Home: React.FC = async () => {
           <h2>{characsDisplay}</h2>
         </div>
       ))} */}
-      <div>
-        <XpCalculator />
-        {session && <h1>Bonjour {session.user.username}</h1>}
-      </div>
+      <div>{session && <h1>Bonjour {session.user.username}</h1>}</div>
     </>
   );
 };

@@ -24,7 +24,7 @@ const Navbar = async () => {
             <SignOutButton />
           ) : (
             <Link
-              className={`${buttonVariants()} h-12 w-32 bg-green-600`}
+              className={`${buttonVariants()} bg-[#ec8e02] hover:bg-[#b86d00] h-12 w-32`}
               href="/sign-in"
             >
               Sign in

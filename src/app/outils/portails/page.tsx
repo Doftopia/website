@@ -27,19 +27,29 @@ const Page = async () => {
             <h2>{portal.position}</h2>
             <p>mis à jour {portal.lastUpdate.toString().slice(4, 25)}</p>
             <p>par : {portal.updaterName}</p>
-            <Button className="bg-[#16a34a] mx-auto">
+            <div className="grid grid-cols-3 w-fit">
+              <Button className="bg-[#16a34a] w-fit mx-auto">
+                <img
+                  src="https://img.icons8.com/color/48/where.png"
+                  alt="fast travel"
+                  height={32}
+                  width={32}
+                />
+              </Button>
+              <Button className="bg-[#FFCC02] w-fit mx-auto">
+                <img
+                  src="https://img.icons8.com/windows/32/plus.png"
+                  alt="add_position"
+                  height={32}
+                  width={32}
+                />
+              </Button>
               <img
-                src="https://img.icons8.com/color/48/where.png"
-                alt="fast travel"
-                height={32}
-                width={32}
+                className="h-48 w-32 relative bottom-[2rem]"
+                src={`/${portal.image}.webp`}
+                alt=""
               />
-            </Button>
-            <img
-              className="h-48 w-32 bg-slate-800 bg-opacity-10 relative bottom-[2rem]"
-              src={`/${portal.image}.webp`}
-              alt=""
-            />
+            </div>
           </Frame>
         ))}
       </div>
