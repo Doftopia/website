@@ -13,7 +13,6 @@ async function fetchItemsAndInsertIntoDB(pool) {
     const queryCharac = "SELECT * FROM characteristics;"
     const queryEffects = "SELECT * FROM effects;"
     let characsInfo = {};
-    let criteres = [];
     let effectsInfo = {};
     
     try {
@@ -39,7 +38,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
             for (const item of items) {
                 let itemWeaponDmg = [];
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, itemDmg, effects) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
                         characsInfo[0].forEach(characInfo => {
                             if (characInfo.characteristic_id == item.effects[i].characteristic) {
@@ -71,9 +70,9 @@ async function fetchItemsAndInsertIntoDB(pool) {
                             });
                         }
                     }
-
+                    console.log(item.effects[0].from);
                     const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, itemWeaponDmg || null, effects];
+                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
                     console.error("Error inserting item:", error);
@@ -144,18 +143,74 @@ async function fetchEffectsAndInsertIntoDB(pool) {
 }
 
 
-async function createCriteriaJson() {
+//Criterias are only accessible from item.criteria. Then you have to use it on /criteria/[] therefore this will be a bit slow.
+async function fetchCriteriaAndInsertIntoDB(pool) {
+    let skip = 0;
+    let criterias = [];
+    let criteriaFilter;
+    while (true) {
+        const responseItems = await axios.get(`https://api.beta.dofusdb.fr/items?$limit=50&$skip=${skip}`);
+        skip+=50
+        let items = responseItems.data.data;
 
+        if (items.length == 0) {
+            console.log("No more criterias to fetch.");
+            break;
+        }
+
+        for (const item of items) {
+            if (item.criteria !== null && item.criteria != "") {
+                if (!criterias.includes(item.criteria)) {
+                    criterias.push(`${item.criteria}&`);
+                }   
+            }
+        }
+    }
+
+    let index = 0;
+    let criteriaResponse = "";
+    for (const criteria of criterias) {
+        criteriaFilter += criteria+'&'
+        if (index == 50) {
+            console.log(`https://api.dofusdb.fr/criterion/${criteriaFilter}`);
+            criteriaResponse = await axios.get(`https://api.dofusdb.fr/criterion/${criteriaFilter}`)
+            // console.log(criteriaResponse.data);
+            // criteriaResponse.forEach(criteriaRes => {
+            //     try {
+            //         criteriaRes.forEach(cri => {
+            //             console.log(cri);
+            //         });
+            //         console.log("END\NEND\NEND\N"+criteria);
+            //         // const insertCriteriaQuery = "INSERT INTO criteria (criteriaId, description) VALUES (?, ?)";
+            //         // const insertQuerytParams = [cr];
+            //         // await pool.execute(insertCriteriaQuery, insertQuerytParams);
+
+            //         // console.log(`name ${criteria.name.fr}`);
+            //         // console.log(`rules ${criteria.rules.fr}`);
+            //         // console.log(`femaleName ${nameFemale.fr}`);
+            //         // console.log(`rules ${criteria.rules.fr}`);
+            //         // criteria.forEach(conditions => {
+            //         //     console.log(`conditions ${conditions}`);
+            //         // });
+            //     } catch (error) {
+            //     }
+            // });
+            index = 0;
+            criteriaFilter = "";
+            // name.fr nameMale.fr nameFemale.fr || foreach and get all || rules.fr
+        }
+        index += 1;
+    }
 }
 
 
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
-        await createCriteriaJson();
+        // await fetchCriteriaAndInsertIntoDB(pool);
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
-        // await fetchItemsAndInsertIntoDB(pool);
+        await fetchItemsAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

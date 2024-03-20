@@ -61,7 +61,7 @@ const Page: React.FC = () => {
                                 {/* <p className="text-gray-500">Degats d'arme</p> */}
                                 {item.itemDmg.map((itemDmg: any) => (
                                     <div className="flex items-center">
-                                        <img src={itemDmg.img} alt={itemDmg.name} className="mr-1 size-6" draggable='false'/>
+                                        <img src={itemDmg.img} alt={itemDmg.name} className="mr-1" draggable='false'/>
                                         <p>{itemDmg.from} à {itemDmg.to} {itemDmg.name}</p>
                                     </div>
                                 ))}
