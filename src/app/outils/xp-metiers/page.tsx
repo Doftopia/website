@@ -1,5 +1,5 @@
 import Navbar from "@/app/components/Navbar/navbar";
-import XpCalculator from "@/app/components/XpCalculator/XpCalculator";
+import XpCalculator from "@/app/components/tools/XpCalculator/XpCalculator";
 import * as React from "react";
 
 const page: React.FC = () => {

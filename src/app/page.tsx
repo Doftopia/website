@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { error } from "console";
 import Navbar from "./components/Navbar/navbar";
-import XpCalculator from "./components/XpCalculator/XpCalculator";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
+import DailyAlmanax from "./components/tools/Almanax/DailyAlmanax";
 
 const Home: React.FC = async () => {
   // const [items, setItems] = useState<any[]>([]);
@@ -84,7 +83,12 @@ const Home: React.FC = async () => {
           <h2>{characsDisplay}</h2>
         </div>
       ))} */}
-      <div>{session && <h1>Bonjour {session.user.username}</h1>}</div>
+      <div>
+        {session && (
+          <h1 className="dark:text-white ">Bonjour {session.user.username}</h1>
+        )}
+      </div>
+      <DailyAlmanax />
     </>
   );
 };
