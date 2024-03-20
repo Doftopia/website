@@ -2,7 +2,6 @@
 import axios from "axios";
 import mysql from "mysql2/promise"; 
 
-
 const dbConfig = {
     host: 'localhost',
     user: 'doftopia',
@@ -11,9 +10,10 @@ const dbConfig = {
 };
 
 async function fetchItemsAndInsertIntoDB(pool) {
-    let queryCharac = "SELECT * FROM characteristics;"
-    let queryEffects = "SELECT * FROM effects;"
+    const queryCharac = "SELECT * FROM characteristics;"
+    const queryEffects = "SELECT * FROM effects;"
     let characsInfo = {};
+    let criteres = [];
     let effectsInfo = {};
     
     try {
@@ -54,15 +54,16 @@ async function fetchItemsAndInsertIntoDB(pool) {
                                     let splitDescription = effectInfo.description.split(' ');
                                     let description = `${splitDescription[3].slice(1, splitDescription[3].length)} ${splitDescription[4].slice(0, splitDescription[4].length-1)}`;
                                     let weaponDmgImg = ''
-                                    if (description == 'dommages Eau') {
+
+                                    if (description.includes('Eau')) {
                                         weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
-                                    } else if (description == 'dommages Air') {
+                                    } else if (description.includes('Air')) {
                                         weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_agility.png';
-                                    } else if (description == 'dommages Neutre') {
+                                    } else if (description.includes('Neutre')) {
                                         weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_neutral.png';
-                                    } else if (description == 'dommages Feu') {
+                                    } else if (description.includes('Feu')) {
                                         weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_intelligence.png';
-                                    } else if (description == 'dommages Terre') {
+                                    } else if (description.includes('Terre')) {
                                         weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
                                     } 
                                     itemWeaponDmg.push({'name': description, 'from': item.effects[i].from, 'to': item.effects[i].to, 'img': weaponDmgImg});
@@ -75,7 +76,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
                     const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, itemWeaponDmg || null, effects];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
-                    // console.error("Error inserting item:", error);
+                    console.error("Error inserting item:", error);
                 }
             }
         }
@@ -83,7 +84,6 @@ async function fetchItemsAndInsertIntoDB(pool) {
         console.error("Error fetching items:", error);
     }
 }
-
 
 
 async function fetchCharacteristicsAndInsertIntoDB(pool) {
@@ -144,40 +144,18 @@ async function fetchEffectsAndInsertIntoDB(pool) {
 }
 
 
-// async function fetchRecipesAndInsertIntoDB(pool) {
-//     let skip = 0;
-//     try {
-//         while (true) {
-//             const responseRecipes = await axios.get(`https://api.beta.dofusdb.fr/recipes?$limit=50&$skip=${skip}`);
-//             skip+=50;
-//             const recipes = responseRecipes.data.data;
+async function createCriteriaJson() {
 
-//             if (recipes.length === 0) {
-//                 console.log("No more characteristics to fetch.");
-//                 break;
-//             }
+}
 
-//             for (const recipe of recipes) {
-//                 try {
-//                     const insertRecipeQuery = "INSERT INTO recipes (characteristic_id, name, img_url) VALUES (?, ?, ?)";
-//                     const insertRecipeParams = [characteristic.id, characteristic.name.fr, `https://dofusdb.fr/icons/characteristics/${characteristic.asset}.png`];
-//                     await pool.execute(insertCharacteristicQuery, insertCharacteristicParams);
-//                 } catch (error) {
-//                     console.error("Error inserting item:", error);
-//                 }
-//             }
-//         } 
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
 
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
+        await createCriteriaJson();
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
-        await fetchItemsAndInsertIntoDB(pool);
+        // await fetchItemsAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);
@@ -185,49 +163,3 @@ async function main() {
 }
 
 main();
-
-// CREATE TABLE IF NOT EXISTS doftopia.items (
-// id INT AUTO_INCREMENT PRIMARY KEY,
-// name VARCHAR(255),
-// description TEXT,
-// type VARCHAR(50),
-// level INT,
-// img VARCHAR(255)
-// );
-
-// CREATE TABLE IF NOT EXISTS doftopia.effects (
-// item_id INT,
-// characteristic VARCHAR(255),
-// `from` INT,
-// `to` INT
-// );
-
-// create table items (
-// id int AUTO_INCREMENT PRIMARY KEY,
-// name varchar(255),
-// description text,
-// type varchar(50),
-// level int,
-// img varchar(255),
-// puuid varchar(50),
-// itemId varchar(50),
-// effects JSON
-// );
-
-// create table items (
-// id int AUTO_INCREMENT PRIMARY KEY,
-// name varchar(255),
-// description text,
-// type varchar(100),
-// level int,
-// img varchar(255),
-// puuid varchar(255),
-// itemId int,
-// criteria varchar(255),
-// apCost int,
-// maxRange int,
-// nmbCast int,
-// criticalHitProbability int,
-// minRange int,
-// effects JSON
-// );
