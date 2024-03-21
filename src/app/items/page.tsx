@@ -55,11 +55,10 @@ const Page: React.FC = () => {
                 </div>                  
                 <div>
                 </div>
-                    {item.itemDmg[0] && (
+                    {item.weaponDmg[0] && (   
                         <div className="text-sm">
                             <>
-                                {/* <p className="text-gray-500">Degats d'arme</p> */}
-                                {item.itemDmg.map((itemDmg: any) => (
+                                {item.weaponDmg.map((itemDmg: any) => (
                                     <div className="flex items-center">
                                         <img src={itemDmg.img} alt={itemDmg.name} className="mr-1" draggable='false'/>
                                         <p>{itemDmg.from} à {itemDmg.to} {itemDmg.name}</p>

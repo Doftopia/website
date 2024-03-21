@@ -38,7 +38,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
             for (const item of items) {
                 let itemWeaponDmg = [];
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, bigImg, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, effects, weaponDmg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     for (let i = 0; i < item.effects.length; i++) {
                         characsInfo[0].forEach(characInfo => {
                             if (characInfo.characteristic_id == item.effects[i].characteristic) {
@@ -72,7 +72,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
                     }
                     console.log(item.effects[0].from);
                     const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null];
+                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item.imgset[3].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, effects, itemWeaponDmg];
                     await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
                     console.error("Error inserting item:", error);
