@@ -4,16 +4,36 @@ import mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
 
 async function fetchItemsAndInsertIntoDB(pool) {
     let skip = 0;
+    let insertItemParams;
+    let effect = {};
+    let query = `CREATE TABLE IF NOT EXISTS items (
+        name VARCHAR(100),
+        description text,
+        level INT,
+        img VARCHAR(100),
+        imgHighRes VARCHAR(100),
+        id INT,
+        apCost INT,
+        maxRange INT,
+        minRange INT,
+        nmbCast INT,
+        criticalHitProbability INT,
+        weaponDmgFrom INT,
+        weaponDmgTo INT,
+        itemCharacteristics INT,
+        type VARCHAR(50)
+    );`
+    await pool.execute(query);
     try {
         while (true) {
-            const responseItems = await axios.get(`https://api.beta.dofusdb.fr/items?$limit=50&$skip=${skip}`);
+            const responseItems = await axios.get(`https://api.beta.dofusdb.fr/items?$limit=150&$skip=${skip}`);
             skip += 50;
             const items = responseItems.data.data;
 
@@ -24,10 +44,15 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
             for (const item of items) {
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, weaponDmgCharacteristic, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    for (const effect of item.effects) {
-                        const insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from, effect.to, effect.characteristic, item.type.name.fr];
+                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    if (item.effects.length == 0) {
+                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr];
                         await pool.execute(insertItemQuery, insertItemParams);
+                    } else {
+                        for (const effect of item.effects) {
+                            insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from || null, effect.to || null, effect.characteristic || null, item.type.name.fr];
+                            await pool.execute(insertItemQuery, insertItemParams);
+                        }
                     }
                 } catch (error) {
                     console.error("Error inserting item:", error);
@@ -42,6 +67,12 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
 async function fetchCharacteristicsAndInsertIntoDB(pool) {
     let skip = 0;
+    let query = `CREATE TABLE IF NOT EXISTS characteristics (
+        characteristic_id int NOT NULL,
+        name varchar(100) NOT NULL,
+        img_url varchar(100) NOT NULL
+    );`
+    await pool.execute(query);
     try {
         while (true) {
             const responseCharacteristics = await axios.get(`https://api.beta.dofusdb.fr/characteristics?$limit=50&$skip=${skip}`);
@@ -71,6 +102,12 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
 
 async function fetchEffectsAndInsertIntoDB(pool) {
     let skip = 0;
+    let query = `CREATE TABLE IF NOT EXISTS effects (
+        id int NOT NULL,
+        description text NOT NULL,
+        characteristic int NOT NULL
+    );`
+    await pool.execute(query);
     try {
         while (true) {
             const responseEffects = await axios.get(`https://api.beta.dofusdb.fr/effects?$limit=50&$skip=${skip}`);
@@ -102,11 +139,24 @@ async function fecthRecipesAndInsertIntoDB(pool) {
     let skip = 0;
     let ingredients = [];
     let quantities = [];
+    let query = `CREATE TABLE IF NOT EXISTS recipes (
+        resultId int NOT NULL,
+        quantities int NOT NULL,
+        ids int NOT NULL,
+        jobId int NOT NULL
+    );`
+    await pool.execute(query);
     try {
         while (true) {
             const responseRecipes = await axios.get(`https://api.beta.dofusdb.fr/recipes?$limit=50&$skip=${skip}`);
             skip+=50;
             let recipes = responseRecipes.data.data;
+
+            if (recipes.length == 0) {
+                console.log("no more recipes to fetch.");
+                break;
+            }
+
             for (const recipe of recipes) {
                 recipe.quantities.forEach(quantity => {
                     quantities.push(quantity);
@@ -115,8 +165,8 @@ async function fecthRecipesAndInsertIntoDB(pool) {
                     ingredients.push(ingredient);
                 });
                 for (let i = 0; i < ingredients.length; i++) {
-                    const insertRecipesQuery = "INSERT INTO recipes (resultName, quantities, ids, jobId) VALUES(?, ?, ?, ?)"
-                    const insertRecipesParams = [recipe.resultName.fr, quantities[i], ingredients[i], recipe.jobId];
+                    const insertRecipesQuery = "INSERT INTO recipes (resultId, quantities, ids, jobId) VALUES(?, ?, ?, ?)"
+                    const insertRecipesParams = [recipe.resultId, quantities[i], ingredients[i], recipe.jobId];
                     await pool.execute(insertRecipesQuery, insertRecipesParams)
                 }
                 ingredients = [];
@@ -128,76 +178,13 @@ async function fecthRecipesAndInsertIntoDB(pool) {
     }
 }
 
-
-//Criterias are only accessible from item.criteria. Then you have to use it on /criteria/[] therefore this will be a bit slow.
-async function fetchCriteriaAndInsertIntoDB(pool) {
-    let skip = 0;
-    let criterias = [];
-    let criteriaFilter;
-    while (true) {
-        const responseItems = await axios.get(`https://api.beta.dofusdb.fr/items?$limit=50&$skip=${skip}`);
-        skip+=50
-        let items = responseItems.data.data;
-
-        if (items.length == 0) {
-            console.log("No more criterias to fetch.");
-            break;
-        }
-
-        for (const item of items) {
-            if (item.criteria !== null && item.criteria != "") {
-                if (!criterias.includes(item.criteria)) {
-                    criterias.push(`${item.criteria}&`);
-                }   
-            }
-        }
-    }
-
-    let index = 0;
-    let criteriaResponse = "";
-    for (const criteria of criterias) {
-        criteriaFilter += criteria+'&'
-        if (index == 50) {
-            // console.log(`https://api.dofusdb.fr/criterion/${criteriaFilter}`);
-            criteriaResponse = await axios.get(`https://api.dofusdb.fr/criterion/${criteriaFilter}`)
-            // console.log(criteriaResponse.data);
-            // criteriaResponse.forEach(criteriaRes => {
-            //     try {
-            //         criteriaRes.forEach(cri => {
-            //             console.log(cri);
-            //         });
-            //         console.log("END\NEND\NEND\N"+criteria);
-            //         // const insertCriteriaQuery = "INSERT INTO criteria (criteriaId, description) VALUES (?, ?)";
-            //         // const insertQuerytParams = [cr];
-            //         // await pool.execute(insertCriteriaQuery, insertQuerytParams);
-
-            //         // console.log(`name ${criteria.name.fr}`);
-            //         // console.log(`rules ${criteria.rules.fr}`);
-            //         // console.log(`femaleName ${nameFemale.fr}`);
-            //         // console.log(`rules ${criteria.rules.fr}`);
-            //         // criteria.forEach(conditions => {
-            //         //     console.log(`conditions ${conditions}`);
-            //         // });
-            //     } catch (error) {
-            //     }
-            // });
-            index = 0;
-            criteriaFilter = "";
-            // name.fr nameMale.fr nameFemale.fr || foreach and get all || rules.fr
-        }
-        index += 1;
-    }
-}
-
-
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
-        // await fetchCriteriaAndInsertIntoDB(pool);
-        // await fetchCharacteristicsAndInsertIntoDB(pool);    
+        await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
-        await fetchItemsAndInsertIntoDB(pool);
         // await fecthRecipesAndInsertIntoDB(pool);
+        // await fetchItemsAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

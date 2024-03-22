@@ -30,71 +30,100 @@ connection.connect((err) => {
 })
 
 app.get("/items", (req, res) => {
-    let query = `SELECT 
-    items.name AS name,
-    GROUP_CONCAT(DISTINCT items.level) AS level,
-    GROUP_CONCAT(DISTINCT items.description) AS description,
-    GROUP_CONCAT(DISTINCT items.apCost) AS apCost,
-    GROUP_CONCAT(DISTINCT items.maxRange) AS maxRange,
-    GROUP_CONCAT(DISTINCT items.minRange) AS minRange,
-    GROUP_CONCAT(DISTINCT items.nmbCast) AS nmbCast,
-    GROUP_CONCAT(DISTINCT items.criticalHitProbability) AS criticalHitProbability,
-    GROUP_CONCAT(DISTINCT items.img) AS img,
-    GROUP_CONCAT(DISTINCT items.imgHighRes) AS imgHighRes,
-    GROUP_CONCAT(DISTINCT items.type) AS type,
-    JSON_ARRAYAGG(
-        JSON_OBJECT(
-            'from', items.weaponDmgFrom,
-            'to', items.weaponDmgTo,
-            'name', characteristics.name,
-            'img', characteristics.img_url
-        )
-    ) AS characs
-FROM 
-    items 
-JOIN 
-    characteristics ON items.weaponDmgCharacteristic = characteristics.characteristic_id 
-GROUP BY
-    items.name
-`;
+    let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id`;
+    let baselimit = 30;
+    
+    const queryParams = [];
+    
+    if (req.query.id) {
+        itemQuery += ` WHERE id = ?`;
+        queryParams.push(parseInt(req.query.id));
+    }
+    
+    if (req.query.name) {
+        itemQuery += ` WHERE items.name LIKE ?`;
+        queryParams.push(`%${req.query.name}%`);
+    }
+
+    if (req.query.effect) {
+        if (queryParams.length > 0) {
+            itemQuery += ` AND`;
+        } else {
+            itemQuery += ` WHERE`;
+        }
+        itemQuery += ` items.name IN (
+            SELECT DISTINCT
+                items.name
+            FROM
+                items
+            LEFT JOIN
+                characteristics ON items.itemCharacteristics = characteristics.characteristic_id
+            WHERE
+                characteristics.name LIKE ?
+                AND items.weaponDmgFrom > 0
+        )`;
+        queryParams.push(req.query.effect);
+    }
+    
+
+    if (req.query.limit) {
+        baselimit = req.query.limit;
+    }
+
+    itemQuery += ` LIMIT ${baselimit}`;
+
+    let groupedData = [];
+    connection.query(itemQuery, queryParams, (error, results) => {
+        if (error) {
+            console.error('Error fetching items:', error);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+        } else {
+            results.forEach(result => {
+                let existingItem = groupedData.find(item => item.itemName === result.itemName);
+                if (!existingItem) {
+                    existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.description, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, characteristics: [] };
+                    groupedData.push(existingItem);
+                }
+                existingItem.characteristics.push({ characName: result.characName, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId });
+            });
+            res.json({ limit: parseInt(baselimit), total: results.length, data: groupedData });
+        }
+    });
+});
+
+
+
+app.get("/characteristics", (req, res) => {
+    let baselimit = 10;
+    let itemQuery = `select * from characteristics`;
 
     const queryParams = [];
-    const conditions = [];
-
-    if (req.query.name) {
-        const nameFilter = `%${req.query.name}%`;
-        queryParams.push(nameFilter);
-        conditions.push(`items.name LIKE ?`);
-    }
-
-    if (req.query.effects) {
-        const effectsFilter = `%${req.query.effects}%`;
-        queryParams.push(effectsFilter);
-        conditions.push(`effects LIKE ?`);
-    }
 
     if (req.query.id) {
-        const itemIdFilter = req.query.id;
-        queryParams.push(itemIdFilter);
-        conditions.push(`itemId LIKE ?`);
+        query += `WHERE id = ?`;
+        queryParams.push(parseInt(req.query.id));
     }
 
-    if (conditions.length > 0) {
-        query += ` WHERE ${conditions.join(' AND ')}`;
+    if (req.query.name) {
+        query += `WHERE name like ?`;
+        queryParams.push(`%${req.query.name}%`);
     }
 
     if (req.query.limit) {
-        query += ` LIMIT ?`;
-        queryParams.push(parseInt(req.query.limit));
+        baselimit = req.query.limit
     }
 
-    connection.query(query, queryParams, (error, results) => {
+    itemQuery += ` limit ${baselimit}`
+
+
+    connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
             console.error('Error fetching items:', error);
             res.status(500).json({ error: "Internal Server Error" });
             return;
         }
-        res.json({ data: results });
+        res.json({ limit: parseInt(baselimit), total: results.length, data: results });
     });
 });
 
