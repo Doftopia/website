@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.mjs", "src/app/api_to_db.mjs", "src/app/api_to_db.mjs"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.mjs", "src/app/api_to_db.mjs", "src/app/api_to_db.mjs", "postcss.config.js"],
   "exclude": ["node_modules"]
 }

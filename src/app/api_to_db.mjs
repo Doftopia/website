@@ -10,19 +10,6 @@ const dbConfig = {
 };
 
 async function fetchItemsAndInsertIntoDB(pool) {
-    const queryCharac = "SELECT * FROM characteristics;"
-    const queryEffects = "SELECT * FROM effects;"
-    let characsInfo = {};
-    let effectsInfo = {};
-    
-    try {
-        const connection = await mysql.createConnection(dbConfig)
-        characsInfo = await connection.execute(queryCharac);
-        effectsInfo = await connection.execute(queryEffects);
-    } catch (error) {
-        console.error(error)
-    }
-
     let skip = 0;
     try {
         while (true) {
@@ -36,44 +23,12 @@ async function fetchItemsAndInsertIntoDB(pool) {
             }
 
             for (const item of items) {
-                let itemWeaponDmg = [];
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, type, level, img, bigImg, puuid, itemId, criteria, apCost, maxRange, nmbCast, criticalHitProbability, minRange, effects, weaponDmg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    for (let i = 0; i < item.effects.length; i++) {
-                        characsInfo[0].forEach(characInfo => {
-                            if (characInfo.characteristic_id == item.effects[i].characteristic) {
-                                item.effects[i]['characName'] = characInfo.name;
-                                item.effects[i]['characImg'] = characInfo.img_url;
-                            }
-                        });
-
-                        if (item.effects[i].characteristic == -1) {
-                            effectsInfo[0].forEach(effectInfo => {
-                                if (effectInfo.id == item.possibleEffects[i].effectId) {
-                                    let splitDescription = effectInfo.description.split(' ');
-                                    let description = `${splitDescription[3].slice(1, splitDescription[3].length)} ${splitDescription[4].slice(0, splitDescription[4].length-1)}`;
-                                    let weaponDmgImg = ''
-
-                                    if (description.includes('Eau')) {
-                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
-                                    } else if (description.includes('Air')) {
-                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_agility.png';
-                                    } else if (description.includes('Neutre')) {
-                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_neutral.png';
-                                    } else if (description.includes('Feu')) {
-                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_intelligence.png';
-                                    } else if (description.includes('Terre')) {
-                                        weaponDmgImg = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
-                                    } 
-                                    itemWeaponDmg.push({'name': description, 'from': item.effects[i].from, 'to': item.effects[i].to, 'img': weaponDmgImg});
-                                }
-                            });
-                        }
+                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, weaponDmgCharacteristic, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    for (const effect of item.effects) {
+                        const insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from, effect.to, effect.characteristic, item.type.name.fr];
+                        await pool.execute(insertItemQuery, insertItemParams);
                     }
-                    console.log(item.effects[0].from);
-                    const effects = JSON.stringify(item.effects);
-                    const insertItemParams = [item.name.fr, item.description.fr, item.type.name.fr, item.level, item.imgset[1].url, item.imgset[3].url, item._id, item.id, item.criteria || null, item.apCost || null, item.range || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.minRange || null, effects, itemWeaponDmg];
-                    await pool.execute(insertItemQuery, insertItemParams);
                 } catch (error) {
                     console.error("Error inserting item:", error);
                 }
@@ -138,7 +93,38 @@ async function fetchEffectsAndInsertIntoDB(pool) {
             }
         } 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
+    }
+}
+
+
+async function fecthRecipesAndInsertIntoDB(pool) {
+    let skip = 0;
+    let ingredients = [];
+    let quantities = [];
+    try {
+        while (true) {
+            const responseRecipes = await axios.get(`https://api.beta.dofusdb.fr/recipes?$limit=50&$skip=${skip}`);
+            skip+=50;
+            let recipes = responseRecipes.data.data;
+            for (const recipe of recipes) {
+                recipe.quantities.forEach(quantity => {
+                    quantities.push(quantity);
+                });
+                recipe.ingredientIds.forEach(ingredient => {
+                    ingredients.push(ingredient);
+                });
+                for (let i = 0; i < ingredients.length; i++) {
+                    const insertRecipesQuery = "INSERT INTO recipes (resultName, quantities, ids, jobId) VALUES(?, ?, ?, ?)"
+                    const insertRecipesParams = [recipe.resultName.fr, quantities[i], ingredients[i], recipe.jobId];
+                    await pool.execute(insertRecipesQuery, insertRecipesParams)
+                }
+                ingredients = [];
+                quantities = [];
+            };
+        } 
+    } catch (error) {
+        console.error(error);
     }
 }
 
@@ -172,7 +158,7 @@ async function fetchCriteriaAndInsertIntoDB(pool) {
     for (const criteria of criterias) {
         criteriaFilter += criteria+'&'
         if (index == 50) {
-            console.log(`https://api.dofusdb.fr/criterion/${criteriaFilter}`);
+            // console.log(`https://api.dofusdb.fr/criterion/${criteriaFilter}`);
             criteriaResponse = await axios.get(`https://api.dofusdb.fr/criterion/${criteriaFilter}`)
             // console.log(criteriaResponse.data);
             // criteriaResponse.forEach(criteriaRes => {
@@ -211,6 +197,7 @@ async function main() {
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
         await fetchItemsAndInsertIntoDB(pool);
+        // await fecthRecipesAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

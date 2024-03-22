@@ -48,14 +48,14 @@ const Page: React.FC = () => {
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border hover:brightness-150">
                 <div className="flex justify-between mt-4 pb-3 mb-4">
                   <div className="flex flex-col">
-                    <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.itemId)}>{item.name}</h2>
+                    <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.id)}>{item.name}</h2>
                     <h3 className="text-sm mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
                   </div>
                   <img src={item.img} alt={item.name} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
                 <div>
                 </div>
-                    {item.weaponDmg[0] && (   
+                    {/* {item.weaponDmg[0] && (   
                         <div className="text-sm">
                             <>
                                 {item.weaponDmg.map((itemDmg: any) => (
@@ -66,11 +66,11 @@ const Page: React.FC = () => {
                                 ))}
                             </>
                         </div>
-                        )}
-                    {item.effects[0] && (
+                        )} */}
+                    {item.characs[0] && (
                         <>
                         <div className="border-t border-gray-800 pt-3 mt-3">
-                            {item.effects.map((effect: any, idx: number) => (
+                            {item.characs.map((effect: any, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {effect.characteristic !== -1 && (
                                         <>
@@ -78,15 +78,15 @@ const Page: React.FC = () => {
                                                 {effect.to ? (
                                                     <>
                                                         <div className="flex">
-                                                            <img src={effect.characImg} alt={effect.characName} className="mr-1 size-6" draggable='false'/>
-                                                            <p>{effect.from} à {effect.to} {effect.characName}</p>
+                                                            <img src={effect.img} alt={effect.name} className="mr-1 size-6" draggable='false'/>
+                                                            <p>{effect.from} à {effect.to} {effect.name}</p>
                                                         </div>
                                                     </>
                                                 ) : (
                                                     <>
                                                         <div className="flex">
-                                                            <img src={effect.characImg} alt={effect.characName} className="mr-1 size-6" draggable='false'/>
-                                                            <p>{effect.from} {effect.characName}</p>
+                                                            <img src={effect.img} alt={effect.name} className="mr-1 size-6" draggable='false'/>
+                                                            <p>{effect.from} {effect.name}</p>
                                                         </div>
                                                     </>
                                                 )}

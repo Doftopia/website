@@ -30,7 +30,33 @@ connection.connect((err) => {
 })
 
 app.get("/items", (req, res) => {
-    let query = `SELECT * FROM items`;
+    let query = `SELECT 
+    items.name AS name,
+    GROUP_CONCAT(DISTINCT items.level) AS level,
+    GROUP_CONCAT(DISTINCT items.description) AS description,
+    GROUP_CONCAT(DISTINCT items.apCost) AS apCost,
+    GROUP_CONCAT(DISTINCT items.maxRange) AS maxRange,
+    GROUP_CONCAT(DISTINCT items.minRange) AS minRange,
+    GROUP_CONCAT(DISTINCT items.nmbCast) AS nmbCast,
+    GROUP_CONCAT(DISTINCT items.criticalHitProbability) AS criticalHitProbability,
+    GROUP_CONCAT(DISTINCT items.img) AS img,
+    GROUP_CONCAT(DISTINCT items.imgHighRes) AS imgHighRes,
+    GROUP_CONCAT(DISTINCT items.type) AS type,
+    JSON_ARRAYAGG(
+        JSON_OBJECT(
+            'from', items.weaponDmgFrom,
+            'to', items.weaponDmgTo,
+            'name', characteristics.name,
+            'img', characteristics.img_url
+        )
+    ) AS characs
+FROM 
+    items 
+JOIN 
+    characteristics ON items.weaponDmgCharacteristic = characteristics.characteristic_id 
+GROUP BY
+    items.name
+`;
 
     const queryParams = [];
     const conditions = [];
@@ -38,7 +64,7 @@ app.get("/items", (req, res) => {
     if (req.query.name) {
         const nameFilter = `%${req.query.name}%`;
         queryParams.push(nameFilter);
-        conditions.push(`name LIKE ?`);
+        conditions.push(`items.name LIKE ?`);
     }
 
     if (req.query.effects) {
@@ -50,7 +76,7 @@ app.get("/items", (req, res) => {
     if (req.query.id) {
         const itemIdFilter = req.query.id;
         queryParams.push(itemIdFilter);
-        conditions.push(`itemId = ?`);
+        conditions.push(`itemId LIKE ?`);
     }
 
     if (conditions.length > 0) {
