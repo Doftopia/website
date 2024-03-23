@@ -178,13 +178,40 @@ async function fecthRecipesAndInsertIntoDB(pool) {
     }
 }
 
+
+async function fetchJobsAndInsertIntoDB(pool) {
+    let query = `CREATE TABLE IF NOT EXISTS jobs (
+        jobId int,
+        jobName varchar(50)
+    );`
+    await pool.execute(query);
+    try {
+        while (true) {
+            const jobsResponse = await axios.get(`https://api.dofusdb.fr/jobs?$limit=22`);
+            let jobs = jobsResponse.data.data;
+
+            
+            for (const job of jobs) {
+                const insertJobsQuery = "INSERT INTO jobs (jobId, jobName) VALUES(?, ?)"
+                const insertJobsParams = [job.id, job.name.fr];
+                await pool.execute(insertJobsQuery, insertJobsParams);
+            }
+            console.log('no more jobs to fetch');
+            break;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
-        await fetchCharacteristicsAndInsertIntoDB(pool);    
+        // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
         // await fecthRecipesAndInsertIntoDB(pool);
-        // await fetchItemsAndInsertIntoDB(pool);
+        // await fetchItemsAndInsertIntoDB(pool );
+        await fetchJobsAndInsertIntoDB(pool); 
         await pool.end(); 
     } catch (error) {
         console.log(error);

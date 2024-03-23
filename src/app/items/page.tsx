@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 const Page: React.FC = () => {
     const [items, setItems] = useState<string[]>([]);
-    const [nameFilter, setNameFilter] = useState<string>(""); 
+    const [nameFilter, setNameFilter] = useState<string>(); 
     const router = useRouter();
     const [effectFilter, setEffectFilter] = useState<string[]>([]);
 
@@ -19,7 +19,7 @@ const Page: React.FC = () => {
             
             const responseItems = await axios.get(`http://localhost:3000/items`, {
                 params: {
-                    limit: 50,
+                    limit: 200,
                     name: nameFilter,
                     offset: items.length,
                     effect: effectFilter,
@@ -39,27 +39,172 @@ const Page: React.FC = () => {
         setNameFilter(event.target.value);
     };
 
-    const filterEffect = (effect: string) => {
-        if (effectFilter.includes(effect)) {
-            setEffectFilter(effectFilter.filter(item => item !== effect));
+    const filterEffect = (effect: number) => {
+        const button = document.getElementById(effect.toString());
+        console.log(button);
+        if (effectFilter.includes(effect.toString())) {
+            setEffectFilter(effectFilter.filter(item => item !== effect.toString()));
+            button.style.fontWeight = 'normal';
+            button.style.color = 'white';
         } else {
-            if (effectFilter.length > 1) {
-                setEffectFilter([...effectFilter, effect]);
-            } else {
-                setEffectFilter([...effectFilter, effect]);
-            }
+            button.style.fontWeight = 'bolder';
+            button.style.color = 'rgb(144,238,144)';
+            setEffectFilter([...effectFilter, effect.toString()]);
         }
         console.log(effectFilter);
     }
 
+
+    const clearFilterEffect = () => {
+        setEffectFilter([]);
+        const buttons = document.querySelectorAll('.filter-button')
+        buttons.forEach(button => {
+            button.style.color = '';
+            button.style.fontWeight = '';
+        });
+    }
+
     return (
-        <div className="bg-gray-800 min-h-screen flex justify-between pt-7">
-            <div className="flex w-96 h-96 justify-center bg-gray-900 mx-8 text-white">
-                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Filter by item name" className="rounded-lg w-13 h-7 mt-3 outline-none pl-3 bg-gray-700 text-white"/>
-                <button onClick={() => filterEffect('Points de mouvement (PM)')}>Filtrer par: PM</button>
-                <button onClick={() => filterEffect("Points d'action (PA)")}>Filtrer par: PA</button>
-                <button onClick={() => filterEffect("Force")}>Filtrer par: Force</button>
+        <div className="bg-gray-800 min-h-screen pt-7 flex">
+            <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm">
+                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
+                <div className="grid grid-cols-2 mt-6 w-fit">
+                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                        <p className="mb-2 mt-1">Primaires</p>
+                        <button onClick={() => filterEffect(1)} id='1' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            PA</button>
+                        <button onClick={() => filterEffect(23)} id="23" className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_movementPoints.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            PM
+                        </button>
+                        <button onClick={() => filterEffect(19)} id="19" className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_range.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            PO</button>
+                        <button onClick={() => filterEffect(11)} id="11" className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_vitality.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Vitalite</button>
+                        <button onClick={() => filterEffect(14)} id='14' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Agilite</button>
+                        <button onClick={() => filterEffect(13)} id='13' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_chance.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Chance</button>
+                        <button onClick={() => filterEffect(10)} id='10' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_strength.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Force</button>
+                        <button onClick={() => filterEffect(15)} id='15' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Intelligence</button>
+                        <button onClick={() => filterEffect(25)} id='25' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_damagesPercent.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Puissance</button>
+                        <button onClick={() => filterEffect(18)} id='18' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_crit.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Critique</button>
+                        <button onClick={() => filterEffect(12)} id='12' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_wisdom.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Sagesse</button>
+                    </div>
+                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                        <p className="mb-2 mt-1">Secondaires</p>
+                        <button onClick={() => filterEffect(82)} id='82' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_attackAP.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Retrait PA</button>
+                        <button onClick={() => filterEffect(27)} id='27' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_dodgeAP.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Esquive PA</button>
+                        <button onClick={() => filterEffect(83)} id='83' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_attackMP.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Retrait PM</button>
+                        <button onClick={() => filterEffect(28)} id='28' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_dodgeMP.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Retrait PA</button>
+                        <button onClick={() => filterEffect(49)} id='49' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_heal.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Soins</button>
+                        <button onClick={() => filterEffect(79)} id='79' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_tackle.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Tacle</button>
+                        <button onClick={() => filterEffect(78)} id='78' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_escape.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Fuite</button>
+                        <button onClick={() => filterEffect(44)} id='44' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_initiative.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Initiative</button>
+                        <button onClick={() => filterEffect(26)} id='26' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_summonableCreaturesBoost.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Invocation</button>
+                        <button onClick={() => filterEffect(48)} id='48' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_prospecting.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Prospection</button>
+                        <button onClick={() => filterEffect(40)} id='40' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_pods.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Pods</button>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 mt-6 w-fit">
+                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                        Dommages
+                        <button onClick={() => filterEffect(16)} id='16' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_damage.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dommages</button>
+                        <button onClick={() => filterEffect(86)} id='86' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_criticalDamage.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dommages critiques</button>
+                        <button onClick={() => filterEffect(92)} id='92' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dmg Neutre</button>
+                        <button onClick={() => filterEffect(88)} id='88' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_strength.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dmg Terre</button>
+                        <button onClick={() => filterEffect(89)} id='89' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dmg Feu</button>
+                        <button onClick={() => filterEffect(90)} id='90' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_chance.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dmg Eau</button>
+                        <button onClick={() => filterEffect(91)} id='91' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Dmg Air</button>
+                    </div>
+                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                        Resistances
+                        <button onClick={() => filterEffect(58)} id='58' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Neutre (fixe)</button>
+                        <button onClick={() => filterEffect(37)} id='37' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Neutre (%)</button>
+                        <button onClick={() => filterEffect(54)} id='54' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_strength.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Terre (fixe)</button>
+                        <button onClick={() => filterEffect(33)} id='33' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_strength.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Terre (%)</button>
+                        <button onClick={() => filterEffect(55)} id='55' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Feu (fixe)</button>
+                        <button onClick={() => filterEffect(34)} id='34' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Feu (%)</button>
+                        <button onClick={() => filterEffect(56)} id='56' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_chance.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Eau (fixe)</button>
+                        <button onClick={() => filterEffect(35)} id='35' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_chance.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Eau (%)</button>
+                        <button onClick={() => filterEffect(57)} id='57' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Air (fixe)</button>
+                        <button onClick={() => filterEffect(36)} id='36' className="filter-button flex hover:font-bold">
+                            <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-6 mr-1"></img>
+                            Air (%)</button>
+                    </div>
+                </div>
+                <button onClick={() => clearFilterEffect()} id='ResetFilters'>Reset filters</button>
             </div>
+            <div className="flex justify-end w-full mr-10">
             <div className="grid gap-3 mx-4 grid-cols-4">
               {items.map((item: any, index: number) => (
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border hover:brightness-150">
@@ -94,14 +239,14 @@ const Page: React.FC = () => {
                                             <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500 text-sm" : "text-sm"}> 
                                                 {charac.characTo ? (
                                                     <>
-                                                        <div className="flex">
+                                                        <div className="flex items-center">
                                                             <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
                                                             <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
                                                         </div>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <div className="flex">
+                                                        <div className="flex items-center">
                                                             <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
                                                             <p>{charac.characFrom} {charac.characName}</p>
                                                         </div>
@@ -138,6 +283,7 @@ const Page: React.FC = () => {
                     )}
                   </div>
               ))}
+              </div>
             </div>
         </div>
     );

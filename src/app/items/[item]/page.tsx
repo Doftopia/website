@@ -8,27 +8,40 @@ const Page: React.FC = () => {
     const searchParams = useSearchParams();
     const itemId = searchParams.get('id');
     const [item, setItem] = useState<any[]>([]);
+    const [recipes, setRecipes] = useState<any[]>([]);
+    const [job, setjob] = useState<any>([]);
 
     useEffect(() => {
-        fetchItem();
-    })
+        if (itemId) {
+            fetchItem();
+        }
+    }, [itemId]);
+    
 
     const fetchItem = async () => {
         const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
-        console.log(response.data.data);
-        
+        const recipesResponse = await axios.get(`http://localhost:3000/recipes?resultId=${itemId}`)
+        let jobsResponse: any;
+        try {
+            jobsResponse = await axios.get(`http://localhost:3000/jobs?id=${recipesResponse.data.data[0].jobId}`);
+            setjob(jobsResponse.data.data[0].jobName);
+        } catch (error) {
+            console.error(error);
+        }
+        setRecipes(recipesResponse.data.data);
         setItem(response.data.data);
     }
     
     return (
-        <div className='h-screen bg-gray-800 pt-10 flex justify-center'>
+        <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11'>
+        <div className='mt-10 w-1/2'>
               {item.map((item: any, index: number) => (
-                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border h-fit w-2/5 pb-3">
+                 <div key={index} className="bg-gray-900 text-white px-3 rounded-sm border-black border h-fit pb-3">
                  <div className="flex justify-between mt-4 pb-3 mb-4">
                      <div className="flex flex-col w-2/3 border-b border-gray-800">
                          <h2 className="font-bold">{item.itemName}</h2>
                          <h3 className=" mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
-                         <h3 className='mb-4 text-sm'>{item.description}</h3>
+                         <h3 className='mb-4'>{item.description}</h3>
                      </div>
                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-44 bg-gray-800 p-2 rounded-sm border border-black"/>
              </div>                  
@@ -38,18 +51,18 @@ const Page: React.FC = () => {
                                 <div key={idx} className="flex items-center">
                                     {charac.characId > 0 && (
                                         <>
-                                            <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500 text-sm" : "text-sm"}> 
+                                            <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500" : "text-sm"}> 
                                                 {charac.characTo ? (
                                                     <>
-                                                        <div className="flex">
-                                                            <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                                        <div className="flex items-center">
+                                                            <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
                                                             <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
                                                         </div>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <div className="flex">
-                                                            <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                                        <div className="flex items-center">
+                                                            <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
                                                             <p>{charac.characFrom} {charac.characName}</p>
                                                         </div>
                                                     </>
@@ -81,6 +94,23 @@ const Page: React.FC = () => {
                  )}
                </div>
               ))}
+        </div>
+            {recipes.map((recipe: any) => (
+                <div className='bg-gray-900 border border-black text-white mt-10 flex h-fit pt-3 pl-3 w-fit pr-10'>
+                    <div key={recipe.resultItemId}>
+                        <p className='mb-2 font-bold'>{job}</p>
+                        {recipe.recipe.map((item: any, index: number) => (
+                            <div key={index} className='flex flex-row items-center'>
+                                <img src={item.itemImg} alt={item.itemName} className='size-11' draggable='false'/>
+                                <p className='ml-3'>
+                                    {item.quantity} {item.itemName}
+                                </p>
+                            </div>
+                        ))}
+                        <br></br>
+                    </div>
+                </div>
+            ))}
         </div>
     )
 };
