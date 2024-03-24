@@ -1,8 +1,9 @@
 "use client";
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
-import { any } from 'prop-types';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
@@ -16,7 +17,11 @@ const Page: React.FC = () => {
             fetchItem();
         }
     }, [itemId]);
-    
+
+    const router = useRouter();
+    const redirectSet = (setId: string) => {
+        router.push(`/set?id=${setId}`);
+    }
 
     const fetchItem = async () => {
         const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
@@ -41,6 +46,8 @@ const Page: React.FC = () => {
                      <div className="flex flex-col w-2/3 border-b border-gray-800">
                          <h2 className="font-bold">{item.itemName}</h2>
                          <h3 className=" mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
+                        <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
+
                          <h3 className='mb-4'>{item.description}</h3>
                      </div>
                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-44 bg-gray-800 p-2 rounded-sm border border-black"/>

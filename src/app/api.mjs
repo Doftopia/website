@@ -1,6 +1,7 @@
 import express from "express";
 import mysql from "mysql2";
 import cors from "cors";
+import { getPriority } from "os";
 
 const app = express();
 const port = 3000;
@@ -30,9 +31,8 @@ connection.connect((err) => {
 })
 
 app.get("/items", (req, res) => {
-    let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id`;
-    let baselimit = 30;
-    
+    let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id`;
+
     const queryParams = [];
     
     if (req.query.id) {
@@ -43,6 +43,11 @@ app.get("/items", (req, res) => {
     if (req.query.name) {
         itemQuery += ` WHERE items.name LIKE ?`;
         queryParams.push(`%${req.query.name}%`);
+    }
+
+    if (req.query.setId) {
+        itemQuery += ` WHERE items.setId = ?`;
+        queryParams.push(req.query.setId);
     }
 
     if (req.query.effect) {
@@ -69,11 +74,10 @@ app.get("/items", (req, res) => {
         });
     }
     if (req.query.limit) {
-        baselimit = req.query.limit;
+        itemQuery += ` LIMIT ?`
+        queryParams.push(parseInt(req.query.limit));
     }
 
-    itemQuery += ` LIMIT ${baselimit}`;
-    
     let groupedData = [];
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
@@ -85,7 +89,7 @@ app.get("/items", (req, res) => {
                 try {
                     let existingItem = groupedData.find(item => item.itemName === result.itemName);
                     if (!existingItem) {
-                        existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.description, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, characteristics: [] };
+                        existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.description, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, setName: result.setName, setID: result.setId, characteristics: [] };
                         groupedData.push(existingItem);
                     }
                     existingItem.characteristics.push({ characName: result.characName, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId });
@@ -93,9 +97,30 @@ app.get("/items", (req, res) => {
                     console.error(error)
                 }
             });
-            res.json({ limit: parseInt(baselimit), total: results.length, data: groupedData });
+            res.json({ total: results.length, data: groupedData });
         }
     });
+});
+
+
+app.get('/jobs', (req, res) => {
+    let itemQuery = `SELECT * from jobs`
+    const queryParams = [];
+    
+    if (req.query.id) {
+        itemQuery += ` WHERE jobs.jobId = ?`;
+        queryParams.push(parseInt(req.query.id));
+    }
+    
+    connection.query(itemQuery, queryParams, (error, results) => {
+        if (error) {
+            console.error(`Error fetching jobs: ${error}`);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+        } else {
+            res.json({data: results})
+        }
+    })
 });
 
 app.get('/recipes', (req, res) => {
@@ -121,10 +146,12 @@ app.get('/recipes', (req, res) => {
     }
 
     itemQuery += ` GROUP BY 
-    recipes.resultId, 
-    recipes.quantities, 
-    recipes.ids, 
-    recipes.jobId`
+        recipes.resultId, 
+        recipes.quantities, 
+        recipes.ids, 
+        recipes.jobId 
+    ORDER BY
+        recipes.quantities DESC `
 
     let groupedData = [];
     let subData = []
@@ -161,25 +188,60 @@ app.get('/recipes', (req, res) => {
     })
 });
 
-app.get('/jobs', (req, res) => {
-    let itemQuery = `SELECT * from jobs`
+app._router.get('/itemSets', (req, res) => {
+    let itemQuery = `SELECT * from itemsets
+    join characteristics on itemsets.charac = characteristics.characteristic_id`;
     const queryParams = [];
 
     if (req.query.id) {
-        itemQuery += ` WHERE jobs.jobId = ?`;
-        queryParams.push(parseInt(req.query.id));
+        itemQuery += ` WHERE itemsets.setId = ?`;
+        queryParams.push(req.query.id);
     }
+
+    let groupedData = [];
+    let subData = []
+    let nmbItems = [];
+    let previousSetId;
+    let previousNmbItems;
 
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
-            console.error(`Error fetching jobs: ${error}`);
+            console.error(`Error fetching sets: ${error}`);
             res.status(500).json({ error: "Internal Server Error" });
             return;
         } else {
-            res.json({data: results})
+            if (results.length > 0) {
+                previousSetId = results[0].setId;
+                previousNmbItems = results[0].numberItem;
+            }
+            results.forEach((result, index) => {
+                try {
+                    if (previousNmbItems != result.numberItem || index == results.length-1) {
+                        if (index == results.length-1) {
+                            subData.push({characName: result.name, characValue: result.characValue, characImg: result.img_url});
+                            nmbItems.push({characs: subData, nmbItems: previousNmbItems});
+                        } else {
+                            nmbItems.push({characs: subData, nmbItems: previousNmbItems});
+                        }
+                        previousNmbItems = result.numberItem;
+                        subData = []; 
+                    } 
+                    
+                    if (previousSetId != result.setId) {
+                        groupedData.push({nmbItems: nmbItems, setName: result.setName, setId: result.setId, setLevel: result.setLevel});
+                        previousSetId = result.setId;
+                        nmbItems = [];
+                    }
+                    subData.push({characName: result.name, characValue: result.characValue, characImg: result.img_url});
+                } catch (error) {
+                    console.error(`error parsing set ${error}`);
+                }
+            });
+            groupedData.push({nmbItems: nmbItems, setName: results[results.length-1].setName, setId: results[results.length-1].setId, setLevel: results[results.length-1].setLevel});
+            res.json({data: groupedData})
         }
     })
-});
+})
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

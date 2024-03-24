@@ -13,6 +13,10 @@ const Page: React.FC = () => {
         router.push(`/items/item?id=${itemId}`);
     }
 
+    const redirectSet = (setId: string) => {
+        router.push(`/set?id=${setId}`);
+    }
+
     const fetchItems = async () => {
         try {
             console.log(effectFilter);
@@ -66,7 +70,7 @@ const Page: React.FC = () => {
 
     return (
         <div className="bg-gray-800 min-h-screen pt-7 flex">
-            <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm">
+            <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm transition-all">
                 <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
                 <div className="grid grid-cols-2 mt-6 w-fit">
                     <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
@@ -205,33 +209,22 @@ const Page: React.FC = () => {
                 <button onClick={() => clearFilterEffect()} id='ResetFilters'>Reset filters</button>
             </div>
             <div className="flex justify-end w-full mr-10">
-            <div className="grid gap-3 mx-4 grid-cols-4">
+            <div className="grid gap-3 mx-4 grid-cols-3">
               {items.map((item: any, index: number) => (
-                <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border hover:brightness-150">
-                <div className="flex justify-between pt-3 pb-3 mb-4 w-72">
-                  <div className="flex flex-col">
-                    <h2 className="font-bold cursor-pointer" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
-                    <h3 className="text-sm mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
+                <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
+                <div className="flex justify-between pt-3 pb-3 mb-4 w-96">
+                  <div className="flex flex-col transition-all">
+                    <h2 className="font-bold cursor-pointer hover:text-gray-300" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
+                    <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
+                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
                   </div>
                   <img src={item.img} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
                 <div>
                 </div>
-                    {/* {item.weaponDmg[0] && (   
-                        <div className="text-sm">
-                            <>
-                                {item.weaponDmg.map((itemDmg: any) => (
-                                    <div className="flex items-center">
-                                        <img src={itemDmg.img} alt={itemDmg.name} className="mr-1" draggable='false'/>
-                                        <p>{itemDmg.from} à {itemDmg.to} {itemDmg.name}</p>
-                                    </div>
-                                ))}
-                            </>
-                        </div>
-                        )} */}
                     {item.characteristics[0] && (
                         <>
-                        <div className="">
+                        <div className="border-t border-gray-800 pt-3">
                             {item.characteristics.map((charac: any, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {charac.characId > 0 && (
@@ -274,12 +267,6 @@ const Page: React.FC = () => {
                                     <p className="flex"><p className="text-gray-500 mr-1">Critique </p>{item.criticalHitProbability}%</p>
                                 </div>
                         </>
-                    )}
-                    
-                    {item.criteria && (
-                        <div className="text-sm border-t border-gray-800 mt-3 pt-2 mb-1">
-                            {item.criteria}
-                        </div>
                     )}
                   </div>
               ))}

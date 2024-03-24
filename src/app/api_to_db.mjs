@@ -28,7 +28,9 @@ async function fetchItemsAndInsertIntoDB(pool) {
         weaponDmgFrom INT,
         weaponDmgTo INT,
         itemCharacteristics INT,
-        type VARCHAR(50)
+        type VARCHAR(50),
+        setName VARCHAR(100),
+        setId INT
     );`
     await pool.execute(query);
     try {
@@ -44,18 +46,18 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
             for (const item of items) {
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type, setName, setId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     if (item.effects.length == 0) {
-                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr];
+                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null];
                         await pool.execute(insertItemQuery, insertItemParams);
                     } else {
                         for (const effect of item.effects) {
-                            insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from || null, effect.to || null, effect.characteristic || null, item.type.name.fr];
+                            insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from || null, effect.to || null, effect.characteristic || null, item.type.name.fr, item.itemSet.name.fr || null, item.itemSet.name.id || null];
                             await pool.execute(insertItemQuery, insertItemParams);
                         }
                     }
                 } catch (error) {
-                    console.error("Error inserting item:", error);
+                    // console.error("Error inserting item:", error);
                 }
             }
         }
@@ -144,7 +146,7 @@ async function fecthRecipesAndInsertIntoDB(pool) {
         quantities int NOT NULL,
         ids int NOT NULL,
         jobId int NOT NULL
-    );`
+    );`;
     await pool.execute(query);
     try {
         while (true) {
@@ -183,14 +185,13 @@ async function fetchJobsAndInsertIntoDB(pool) {
     let query = `CREATE TABLE IF NOT EXISTS jobs (
         jobId int,
         jobName varchar(50)
-    );`
+    );`;
     await pool.execute(query);
     try {
         while (true) {
-            const jobsResponse = await axios.get(`https://api.dofusdb.fr/jobs?$limit=22`);
+            const jobsResponse = await axios.get(`https://api.beta.dofusdb.fr/jobs?$limit=22`);
             let jobs = jobsResponse.data.data;
 
-            
             for (const job of jobs) {
                 const insertJobsQuery = "INSERT INTO jobs (jobId, jobName) VALUES(?, ?)"
                 const insertJobsParams = [job.id, job.name.fr];
@@ -204,6 +205,44 @@ async function fetchJobsAndInsertIntoDB(pool) {
     }
 }
 
+
+async function fetchItemSetsAndInsertIntoDB(pool) {
+    let query = `CREATE TABLE IF NOT EXISTS itemSets (
+        setName varchar(100),
+        setId int,
+        numberItem int,
+        charac int,
+        characValue int,
+        setLevel int
+    );`;
+    await pool.execute(query);
+    let skip = 0;
+    try {
+        while (true) {
+            const itemSetsResponse = await axios.get(`https://api.beta.dofusdb.fr/item-sets?$limit=50&$skip=${skip}`);
+            skip += 50;
+            let itemSets = itemSetsResponse.data.data;
+
+            if (itemSets.length == 0) {
+                console.log("finished fetching itemSets.");
+                break;
+            }
+
+            for (const itemSet of itemSets) {
+                for (let i = 0; i < itemSet.effects.length; i++) {
+                    const insertJobsQuery = "INSERT INTO itemSets (setName, setId, numberItem, charac, characValue, setLevel) VALUES(?, ?, ?, ?, ?, ?)"
+                    for (const itemEffect of itemSet.effects[i]) {
+                        const insertJobsParams = [itemSet.name.fr, itemSet.name.id, i+1, itemEffect.characteristic || null, itemEffect.from || null, itemSet.items[0].level];
+                        await pool.execute(insertJobsQuery, insertJobsParams);
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
@@ -211,7 +250,8 @@ async function main() {
         // await fetchEffectsAndInsertIntoDB(pool);
         // await fecthRecipesAndInsertIntoDB(pool);
         // await fetchItemsAndInsertIntoDB(pool );
-        await fetchJobsAndInsertIntoDB(pool); 
+        // await fetchJobsAndInsertIntoDB(pool); 
+        await fetchItemSetsAndInsertIntoDB(pool); 
         await pool.end(); 
     } catch (error) {
         console.log(error);
