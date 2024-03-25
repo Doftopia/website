@@ -1,7 +1,6 @@
 import express from "express";
 import mysql from "mysql2";
 import cors from "cors";
-import { getPriority } from "os";
 
 const app = express();
 const port = 3000;
@@ -31,7 +30,7 @@ connection.connect((err) => {
 })
 
 app.get("/items", (req, res) => {
-    let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id`;
+    let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId, effectId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id`;
 
     const queryParams = [];
     
@@ -92,7 +91,7 @@ app.get("/items", (req, res) => {
                         existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.description, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, setName: result.setName, setID: result.setId, characteristics: [] };
                         groupedData.push(existingItem);
                     }
-                    existingItem.characteristics.push({ characName: result.characName, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId });
+                    existingItem.characteristics.push({ characName: result.characName, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId});
                 } catch (error) {
                     console.error(error)
                 }
@@ -189,12 +188,12 @@ app.get('/recipes', (req, res) => {
 });
 
 app._router.get('/itemSets', (req, res) => {
-    let itemQuery = `SELECT * from itemsets
-    join characteristics on itemsets.charac = characteristics.characteristic_id`;
+    let itemQuery = `SELECT * from itemSets
+    join characteristics on itemSets.charac = characteristics.characteristic_id`;
     const queryParams = [];
 
     if (req.query.id) {
-        itemQuery += ` WHERE itemsets.setId = ?`;
+        itemQuery += ` WHERE itemSets.setId = ?`;
         queryParams.push(req.query.id);
     }
 

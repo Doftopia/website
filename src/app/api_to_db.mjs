@@ -4,7 +4,7 @@ import mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -30,7 +30,8 @@ async function fetchItemsAndInsertIntoDB(pool) {
         itemCharacteristics INT,
         type VARCHAR(50),
         setName VARCHAR(100),
-        setId INT
+        setId INT,
+        effectId INT
     );`
     await pool.execute(query);
     try {
@@ -46,18 +47,22 @@ async function fetchItemsAndInsertIntoDB(pool) {
 
             for (const item of items) {
                 try {
-                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type, setName, setId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type, setName, setId, effectId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     if (item.effects.length == 0) {
-                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null];
+                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null, null];
                         await pool.execute(insertItemQuery, insertItemParams);
                     } else {
-                        for (const effect of item.effects) {
-                            insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, effect.from || null, effect.to || null, effect.characteristic || null, item.type.name.fr, item.itemSet.name.fr || null, item.itemSet.name.id || null];
-                            await pool.execute(insertItemQuery, insertItemParams);
+                        for (let i = 0; i < item.effects.length-1; i++) {
+                            try {
+                                insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null || undefined, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
+                                await pool.execute(insertItemQuery, insertItemParams);
+                            } catch (error) {
+                                console.error('error in itemInsertParams ', error, item.possibleEffects[i][0].effectId);
+                            }
                         }
                     }
                 } catch (error) {
-                    // console.error("Error inserting item:", error);
+                    console.log('error in item loop ', error);
                 }
             }
         }
@@ -249,9 +254,9 @@ async function main() {
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
         // await fecthRecipesAndInsertIntoDB(pool);
-        // await fetchItemsAndInsertIntoDB(pool );
         // await fetchJobsAndInsertIntoDB(pool); 
-        await fetchItemSetsAndInsertIntoDB(pool); 
+        // await fetchItemSetsAndInsertIntoDB(pool); 
+        await fetchItemsAndInsertIntoDB(pool );
         await pool.end(); 
     } catch (error) {
         console.log(error);

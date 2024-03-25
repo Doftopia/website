@@ -19,8 +19,6 @@ const Page: React.FC = () => {
 
     const fetchItems = async () => {
         try {
-            console.log(effectFilter);
-            
             const responseItems = await axios.get(`http://localhost:3000/items`, {
                 params: {
                     limit: 200,
@@ -45,7 +43,6 @@ const Page: React.FC = () => {
 
     const filterEffect = (effect: number) => {
         const button = document.getElementById(effect.toString());
-        console.log(button);
         if (effectFilter.includes(effect.toString())) {
             setEffectFilter(effectFilter.filter(item => item !== effect.toString()));
             button.style.fontWeight = 'normal';
@@ -55,7 +52,6 @@ const Page: React.FC = () => {
             button.style.color = 'rgb(144,238,144)';
             setEffectFilter([...effectFilter, effect.toString()]);
         }
-        console.log(effectFilter);
     }
 
 

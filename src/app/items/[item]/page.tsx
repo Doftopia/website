@@ -56,7 +56,7 @@ const Page: React.FC = () => {
              </div>
              {item.characteristics.map((charac: any, idx: number) => (
                                 <div key={idx} className="flex items-center">
-                                    {charac.characId > 0 && (
+                                    {charac.characId > 0 ? (
                                         <>
                                             <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500" : "text-sm"}> 
                                                 {charac.characTo ? (
@@ -76,10 +76,15 @@ const Page: React.FC = () => {
                                                 )}
                                             </p>
                                         </>
+                                    ) : (
+                                        <>
+                                            <div>
+                                                <p>{charac.effectId}</p> 
+                                            </div>
+                                        </>
                                     )}
                                 </div>
                             ))}
-                 
                  {item.apCost && (
                      <>
                              <div className="text-sm border-t border-gray-800 mt-3 pt-3 mb-1">
