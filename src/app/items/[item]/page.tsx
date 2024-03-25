@@ -79,7 +79,7 @@ const Page: React.FC = () => {
                                     ) : (
                                         <>
                                             <div>
-                                                <p>{charac.effectId}</p> 
+                                                <p className=''>{charac.characName}</p> 
                                             </div>
                                         </>
                                     )}

@@ -52,12 +52,12 @@ async function fetchItemsAndInsertIntoDB(pool) {
                         insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null, null];
                         await pool.execute(insertItemQuery, insertItemParams);
                     } else {
-                        for (let i = 0; i < item.effects.length-1; i++) {
+                        for (let i = 0; i < item.effects.length; i++) {
                             try {
                                 insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null || undefined, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
                                 await pool.execute(insertItemQuery, insertItemParams);
                             } catch (error) {
-                                console.error('error in itemInsertParams ', error, item.possibleEffects[i][0].effectId);
+                                // console.error('error in itemInsertParams ', error);
                             }
                         }
                     }
