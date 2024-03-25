@@ -1,18 +1,17 @@
-import React from "react";
 import Navbar from "../components/Navbar/navbar";
+import AchievementsList from "../components/tools/Lists/AchievementsList";
 
-const FolderComponent: React.FC<{ folderName: string }> = ({ folderName }) => {
-  return <div>{folderName}</div>;
-};
-
-const page: React.FC = () => {
+const Page: React.FC = () => {
   return (
     <>
       <header>
         <Navbar />
       </header>
+      <div className="w-fit">
+        <AchievementsList />
+      </div>
     </>
   );
 };
 
-export default page;
+export default Page;

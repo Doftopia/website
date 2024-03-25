@@ -38,28 +38,46 @@ const XpCalculator = () => {
       <Frame>
         <h1 className="ml-2 mt-2 text-center text-white">XP Calculator</h1>
         <div className="flex justify-center">
-          <select className="w-30 h-8 mt-2 ml-2 rounded-sm" defaultValue="">
-            {jobs.map((job, index) => (
-              <option key={index} value={job}>
-                {job}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="number"
-            key={"level"}
-            className="w-20 h-8 mt-2 ml-2 rounded-md"
-            placeholder="Niveau"
-            min={1}
-          />
-          <input
-            type="text"
-            key={"item"}
-            className="w-32 h-8 mt-2 ml-2 rounded-md"
-            placeholder="Objet"
-            min={1}
-          />
+          <div className="grid grid-cols-3 mt-20 gap-4">
+            <div className="flex flex-col items-center">
+              <label className="text-white" htmlFor="job">
+                Metier
+              </label>
+              <select id="job" className="w-30 h-8 mt-2 rounded-sm">
+                {jobs.map((job, index) => (
+                  <option key={index} value={job}>
+                    {job}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col items-center">
+              <label className="text-white" htmlFor="level">
+                Niveau
+              </label>
+              <input
+                type="number"
+                id="level"
+                key={"level"}
+                className="w-20 h-8 mt-2 rounded-md"
+                placeholder="Niveau"
+                min={1}
+              />
+            </div>
+            <div className="flex flex-col items-center">
+              <label className="text-white" htmlFor="item">
+                Objet
+              </label>
+              <input
+                type="text"
+                id="item"
+                key={"item"}
+                className="w-32 h-8 mt-2 rounded-md"
+                placeholder="Objet"
+                min={1}
+              />
+            </div>
+          </div>
         </div>
 
         <Button

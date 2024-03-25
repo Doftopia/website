@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar/navbar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import DailyAlmanax from "./components/tools/Almanax/DailyAlmanax";
+import Characters from "./components/Characters";
 
 const Home: React.FC = async () => {
   // const [items, setItems] = useState<any[]>([]);
@@ -89,6 +90,7 @@ const Home: React.FC = async () => {
         )}
       </div>
       <DailyAlmanax />
+      <Characters />
     </>
   );
 };

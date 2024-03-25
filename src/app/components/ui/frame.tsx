@@ -5,9 +5,16 @@ interface FrameProps {
   size?: "sm" | "md" | "lg";
   width?: string;
   height?: string;
+  className?: string;
 }
 
-const Frame: React.FC<FrameProps> = ({ children, size, width, height }) => {
+const Frame: React.FC<FrameProps> = ({
+  children,
+  size,
+  width,
+  height,
+  className,
+}) => {
   const defaultWidth =
     size === "sm" ? "19rem" : size === "md" ? "28rem" : "32rem";
   const defaultHeight = "18rem";
@@ -18,7 +25,10 @@ const Frame: React.FC<FrameProps> = ({ children, size, width, height }) => {
   };
 
   return (
-    <div className="flex flex-col bg-slate-600 m-2" style={containerStyle}>
+    <div
+      className={`flex flex-col dark:bg-slate-900 dark:bg-opacity-60 m-2 ${className}`}
+      style={containerStyle}
+    >
       {children}
     </div>
   );

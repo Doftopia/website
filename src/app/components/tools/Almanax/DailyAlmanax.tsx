@@ -43,17 +43,21 @@ const DailyAlmanax: React.FC = () => {
               alt=""
             />
             <div id="col-2" className="col-span-2">
-              <p className="text-sm my-auto">
-                {almanaxData.tribute.quantity} {almanaxData.tribute.item.name}
+              <p className="text-sm text-slate-600 my-auto">
+                {almanaxData.tribute.quantity}x {almanaxData.tribute.item.name}
               </p>
-              <p className="text-xs mb-1 ml-4">
+              <p className="text-xs text-slate-600 mb-1 ml-4">
                 {almanaxData.tribute.item.subtype}
               </p>
             </div>
           </div>
           <p className="text-[#779643] font-bold">Bonus</p>
-          <p className="text-xs font-bold">{almanaxData.bonus.type.name}</p>
-          <p className="text-sm">{almanaxData.bonus.description}</p>
+          <p className="text-xs text-slate-600 font-bold">
+            {almanaxData.bonus.type.name}
+          </p>
+          <p className="text-sm text-slate-600">
+            {almanaxData.bonus.description}
+          </p>
         </>
       )}
     </Frame>

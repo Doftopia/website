@@ -19,21 +19,28 @@ const FormSchema = z
   .object({
     username: z
       .string()
-      .min(1, "Username is required")
-      .min(5, { message: "Username must be at least 5 characters long" })
-      .max(32, { message: "Username must be at most 32 characters long" }),
-    email: z.string().min(1, "Email is required").email("Invalid email"),
+      .min(1, "Un pseudo est requis")
+      .min(5, {
+        message: "Le pseudo doit faire au moins 5 caractères",
+      })
+      .max(32, { message: "Le pseudo doit faire moins de 32 caractères" }),
+    email: z
+      .string()
+      .min(1, "Un email est requis")
+      .email("L'email n'est pas valide"),
     password: z
       .string()
-      .min(1, "Password is required")
-      .min(8, "Password must be at least 8 characters long")
-      .max(32, "Password must be at most 32 characters long"),
-    confirmPassword: z.string().min(1, "Confirm Password is required"),
+      .min(1, "Un mot de passe est requis")
+      .min(8, "Le mot de passe doit faire au moins 8 caractères")
+      .max(32, "Le mot de passe doit faire moins de 32 caractères"),
+    confirmPassword: z
+      .string()
+      .min(1, "La confirmation du mot de passe est requise"),
     ankamaUsername: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
-    message: "Passwords do not match",
+    message: "Les mots de passe ne correspondent pas",
   });
 
 const SignUpForm = () => {
@@ -45,6 +52,7 @@ const SignUpForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      ankamaUsername: "",
     },
   });
 
@@ -71,14 +79,14 @@ const SignUpForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-fit">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Nom d&apos;utilisateur</FormLabel>
                 <FormControl>
                   <Input placeholder="johndoe" {...field} />
                 </FormControl>
@@ -91,7 +99,7 @@ const SignUpForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Adresse email</FormLabel>
                 <FormControl>
                   <Input placeholder="mail@example.com" {...field} />
                 </FormControl>
@@ -104,11 +112,11 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Mot de passe</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="•••••••••••••"
                     {...field}
                   />
                 </FormControl>
@@ -121,10 +129,10 @@ const SignUpForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Re-Enter your password</FormLabel>
+                <FormLabel>Confirmation</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Re-Enter your password"
+                    placeholder="••••••••••••"
                     type="password"
                     {...field}
                   />
@@ -133,19 +141,35 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ton ID Ankama</FormLabel>
+                <FormControl>
+                  <Input placeholder="pseudo#1234" type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-        <Button className="w-full text-white bg-slate-900 mt-6" type="submit">
-          Sign up
+        <Button
+          className="w-full text-white bg-slate-900 hover:bg-[#779643] hover:text-black hover:font-bold mt-6"
+          type="submit"
+        >
+          S&apos;inscrire
         </Button>
       </form>
       <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
-        or
+        ou
       </div>
       {/* <GoogleSignInButton>Sign up with Google</GoogleSignInButton> */}
       <p className="text-center text-sm text-gray-600 mt-2">
-        If you don&apos;t have an account, please&nbsp;
+        Si tu as déjà un compte, tu peux te{" "}
         <Link className="text-blue-500 hover:underline" href="/sign-in">
-          Sign in
+          connecter
         </Link>
       </p>
     </Form>
