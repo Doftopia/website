@@ -72,8 +72,19 @@ app.get("/items", (req, res) => {
             queryParams.push(effect);
         });
     }
+
+    if (req.query.minLevel) {
+        itemQuery += ` WHERE ? <= items.level`;
+        queryParams.push(parseInt(req.query.minLevel));
+    }
+
+    if (req.query.maxLevel) {
+        itemQuery += ` WHERE ? >= items.level`;
+        queryParams.push(parseInt(req.query.maxLevel));
+    }
+
     if (req.query.limit) {
-        itemQuery += ` LIMIT ?`
+        itemQuery += ` LIMIT ?`;
         queryParams.push(parseInt(req.query.limit));
     }
 
@@ -86,7 +97,29 @@ app.get("/items", (req, res) => {
         } else {
             results.forEach(result => {
                 try {
+                    if (result.characId == -1) {
+                        if (result.effectDescription.includes('Neutre')) {
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_neutral.png';
+                        } else if (result.effectDescription.includes('Feu')) {
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_intelligence.png';
+                        } else if (result.effectDescription.includes('Eau')) {
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
+                        } else if (result.effectDescription.includes('Terre')) {
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
+                        } else if (result.effectDescription.includes('Air')) {
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_agility.png';
+                        }
+                    }
+
                     let existingItem = groupedData.find(item => item.itemName === result.itemName);
+                    if (result.effectDescription !== null) {
+                        result.effectDescription = result.effectDescription.split('2')[2];
+                            if (result.effectDescription !== undefined) {
+                                if (result.effectDescription.includes('{~ps}{~zs}')) {
+                                    result.effectDescription = `${result.effectDescription.split('{')[0]} ${result.effectDescription.split('}')[2]}`  
+                                }
+                            }
+                        }
                     if (!existingItem) {
                         existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.itemDescription, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, setName: result.setName, setID: result.setId, characteristics: [] };
                         groupedData.push(existingItem);
@@ -187,7 +220,7 @@ app.get('/recipes', (req, res) => {
     })
 });
 
-app._router.get('/itemSets', (req, res) => {
+app.get('/itemSets', (req, res) => {
     let itemQuery = `SELECT * from itemSets
     join characteristics on itemSets.charac = characteristics.characteristic_id`;
     const queryParams = [];

@@ -54,10 +54,24 @@ const Page: React.FC = () => {
              </div>                  
              <div>
              </div>
+             {item.characteristics.map((charac: any) => (
+                <div>
+                    {charac.characId < 0 && (
+                        <div>
+                            <div className="flex items-center">
+                                <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
+                                <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+             ))}
+             {item.characteristics[0].characId == -1 && (
+                <div className='border-b border-gray-800 mb-2 pb-3 w-2/3'></div>
+             )}
              {item.characteristics.map((charac: any, idx: number) => (
                                 <div key={idx} className="flex items-center">
-                                    {charac.characId > 0 ? (
-                                        <>
+                                    {charac.characId >= 0 && (
                                             <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500" : "text-sm"}> 
                                                 {charac.characTo ? (
                                                     <>
@@ -75,13 +89,6 @@ const Page: React.FC = () => {
                                                     </>
                                                 )}
                                             </p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div>
-                                                <p className=''>{charac.characName}</p> 
-                                            </div>
-                                        </>
                                     )}
                                 </div>
                             ))}

@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 const Page: React.FC = () => {
     const [items, setItems] = useState<string[]>([]);
     const [nameFilter, setNameFilter] = useState<string>(); 
+    const [minLvl, setminLvl] = useState<string>(); 
+    const [maxLvl, setmaxLvl] = useState<string>(); 
     const router = useRouter();
     const [effectFilter, setEffectFilter] = useState<string[]>([]);
 
@@ -41,6 +43,14 @@ const Page: React.FC = () => {
         setNameFilter(event.target.value);
     };
 
+    const handleMinLevelInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setminLvl(event.target.value);
+    };
+
+    const handleMaxLevelInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setmaxLvl(event.target.value);
+    };
+
     const filterEffect = (effect: number) => {
         const button = document.getElementById(effect.toString());
         if (effectFilter.includes(effect.toString())) {
@@ -66,10 +76,14 @@ const Page: React.FC = () => {
 
     return (
         <div className="bg-gray-800 min-h-screen pt-7 flex">
-            <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm transition-all">
+            <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm transition-all border border-black">
                 <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
-                <div className="grid grid-cols-2 mt-6 w-fit">
-                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                <div className="w-full flex justify-center gap-2 mt-1">
+                    <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
+                    <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
+                </div>
+                <div className="flex mt-6 w-full justify-between gap-2">
+                    <div className="bg-gray-800 border border-black pl-2 py-1 w-full pb-2 mb-2">
                         <p className="mb-2 mt-1">Primaires</p>
                         <button onClick={() => filterEffect(1)} id='1' className="filter-button flex hover:font-bold">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png" alt="lifePoints" className="size-6 mr-1"></img>
@@ -106,7 +120,7 @@ const Page: React.FC = () => {
                             <img src="https://dofusdb.fr/icons/characteristics/tx_wisdom.png" alt="lifePoints" className="size-6 mr-1"></img>
                             Sagesse</button>
                     </div>
-                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
+                    <div className="bg-gray-800 border border-black pl-2 py-1 w-full pb-2 mb-2">
                         <p className="mb-2 mt-1">Secondaires</p>
                         <button onClick={() => filterEffect(82)} id='82' className="filter-button flex hover:font-bold">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_attackAP.png" alt="lifePoints" className="size-6 mr-1"></img>
@@ -143,9 +157,9 @@ const Page: React.FC = () => {
                             Pods</button>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 mt-6 w-fit">
-                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
-                        Dommages
+                <div className="grid grid-cols-2 pt-2 w-full gap-2">
+                    <div className="bg-gray-800 border border-black w-full pl-2 py-1 pb-2 mb-2">
+                        <p className="mb-2 mt-1">Dommage</p>
                         <button onClick={() => filterEffect(16)} id='16' className="filter-button flex hover:font-bold">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_damage.png" alt="lifePoints" className="size-6 mr-1"></img>
                             Dommages</button>
@@ -168,8 +182,8 @@ const Page: React.FC = () => {
                             <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-6 mr-1"></img>
                             Dmg Air</button>
                     </div>
-                    <div className="bg-gray-800 border border-black w-fit pl-2 pr-8 py-1">
-                        Resistances
+                    <div className="bg-gray-800 border border-black w-full pl-2 py-1 pb-2 mb-2">
+                    <p className="mb-2 mt-1">Resistances</p>
                         <button onClick={() => filterEffect(58)} id='58' className="filter-button flex hover:font-bold">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-6 mr-1"></img>
                             Neutre (fixe)</button>
@@ -218,9 +232,24 @@ const Page: React.FC = () => {
                 </div>                  
                 <div>
                 </div>
+                {item.characteristics[0].characId == -1 && (
+                <div className='border-t border-gray-800 mb-2 pb-3'></div>
+             )}
+                {item.characteristics.map((charac: any) => (
+                <div>
+                    {charac.characId < 0 && (
+                        <div>
+                            <div className="flex items-center text-sm">
+                                <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+             ))}
                     {item.characteristics[0] && (
                         <>
-                        <div className="border-t border-gray-800 pt-3">
+                        <div className="mt-3 pt-3 border-t border-gray-800">
                             {item.characteristics.map((charac: any, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {charac.characId > 0 && (

@@ -70,6 +70,18 @@ const Page: React.FC = () => {
                 </div>                  
                 <div>
                 </div>
+                {item.characteristics.map((charac: any) => (
+                <div>
+                    {charac.characId < 0 && (
+                        <div>
+                            <div className="flex items-center">
+                                <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
+                                <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+             ))}
                     {item.characteristics[0] && (
                         <>
                         <div className="border-t border-gray-800 pt-3">

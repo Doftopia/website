@@ -54,7 +54,11 @@ async function fetchItemsAndInsertIntoDB(pool) {
                     } else {
                         for (let i = 0; i < item.effects.length; i++) {
                             try {
-                                insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null || undefined, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
+                                if (item.itemSet == null) {
+                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, null, null, item.possibleEffects[i].effectId || null || undefined];
+                                } else {
+                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
+                                }
                                 await pool.execute(insertItemQuery, insertItemParams);
                             } catch (error) {
                                 // console.error('error in itemInsertParams ', error);
