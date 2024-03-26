@@ -37,8 +37,8 @@ const Page: React.FC = () => {
                     <div className="bg-gray-900 w-fit rounded-sm border border-black pl-2 pr-6 pb-3 pt-3">
                         <p className="font-bold">{itemSet.setName} - niveau {itemSet.setLevel} </p>
                         {items.map((item: any) => (
-                            <div className="mt-3 flex items-center" onClick={() => redirectItem(item.itemId)}>
-                                <img src={item.img} alt={item.itemName} draggable='false' className="size-16 mr-2"/>
+                            <div className="mt-3 flex items-center cursor-pointer hover:font-bold hover:bg-gray-700 pb-1 pl-1" onClick={() => redirectItem(item.itemId)}>
+                                <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-16 mr-2"/>
                                 <h3>{item.type}</h3>
                             </div>
                         ))}
@@ -66,7 +66,7 @@ const Page: React.FC = () => {
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
                     <h3 className="text-sm mb-5 text-green-300 cursor-pointer">{item.setName}</h3>
                   </div>
-                  <img src={item.img} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
+                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
                 <div>
                 </div>

@@ -49,15 +49,15 @@ async function fetchItemsAndInsertIntoDB(pool) {
                 try {
                     const insertItemQuery = "INSERT INTO items (name, description, level, img, imgHighRes, id, apCost, maxRange, minRange, nmbCast, criticalHitProbability, weaponDmgFrom, weaponDmgTo, itemCharacteristics, type, setName, setId, effectId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     if (item.effects.length == 0) {
-                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null, null];
+                        insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[0].url, item.imgset[2].url, item.id, null, null ,null, null, null, null, null, null, item.type.name.fr, null, null, null];
                         await pool.execute(insertItemQuery, insertItemParams);
                     } else {
                         for (let i = 0; i < item.effects.length; i++) {
                             try {
                                 if (item.itemSet == null) {
-                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, null, null, item.possibleEffects[i].effectId || null || undefined];
+                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[0].url, item.imgset[2].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, null, null, item.possibleEffects[i].effectId || null || undefined];
                                 } else {
-                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[2].url, item.imgset[3].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
+                                    insertItemParams = [item.name.fr, item.description.fr, item.level, item.imgset[0].url, item.imgset[2].url, item.id, item.apCost || null, item.range || null , item.minRange || null, item.maxCastPerTurn || null, item.criticalHitProbability || null, item.effects[i].from || null, item.effects[i].to || null, item.effects[i].characteristic || null, item.type.name.fr, item.itemSet.name.fr || null, item.itemSet.name.id || null, item.possibleEffects[i].effectId || null || undefined];
                                 }
                                 await pool.execute(insertItemQuery, insertItemParams);
                             } catch (error) {
@@ -294,8 +294,8 @@ async function main() {
         // await fecthRecipesAndInsertIntoDB(pool);
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
-        // await fetchItemsAndInsertIntoDB(pool);
-        await fetchItemsTypeAndInsertIntoDB(pool);
+        await fetchItemsAndInsertIntoDB(pool);
+        // await fetchItemsTypeAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

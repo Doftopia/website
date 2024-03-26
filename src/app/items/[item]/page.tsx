@@ -36,6 +36,10 @@ const Page: React.FC = () => {
         setRecipes(recipesResponse.data.data);
         setItem(response.data.data);
     }
+
+    const redirectRecipeItem = async (id: number) => {
+        router.push(`/items/item?id=${id}`)
+    }
     
     return (
         <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11'>
@@ -48,7 +52,7 @@ const Page: React.FC = () => {
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
                     <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
                   </div>
-                  <img src={item.img} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
+                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
                 <h3 className="mb-6">{item.description}</h3>
                 {item.characteristics[0].characId == -1 && (
@@ -149,9 +153,9 @@ const Page: React.FC = () => {
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
                         {recipe.recipe.map((item: any, index: number) => (
-                            <div key={index} className='flex flex-row items-center'>
+                            <div key={index} className='flex flex-row items-center cursor-pointer hover:font-bold hover:bg-gray-700 pr-4 w-80' onClick={() => redirectRecipeItem(item.itemId)}>
                                 <img src={item.itemImg} alt={item.itemName} className='size-11' draggable='false'/>
-                                <p className='ml-3'>
+                                <p className='ml-2'>
                                     {item.quantity} {item.itemName}
                                 </p>
                             </div>

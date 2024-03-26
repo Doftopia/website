@@ -33,8 +33,8 @@ app.get("/items", (req, res) => {
     let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description as itemDescription, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, effects.description as effectDescription, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId, effectId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id LEFT JOIN effects on items.effectId = effects.id`;
 
     const queryParams = [];
-
     const filters = [];
+
     if (req.query.id) {
         filters.push(`items.id = ?`);
         queryParams.push(parseInt(req.query.id));
@@ -75,9 +75,14 @@ app.get("/items", (req, res) => {
     }
 
     if (req.query.category) {
-        filters.push(`items.type like ?`);
-        queryParams.push(req.query.category);
+        const categories = Array.isArray(req.query.category) ? req.query.category : [req.query.category];
+        const categoryFilters = categories.map(category => `items.type like ?`).join(' OR ');
+        filters.push(`(${categoryFilters})`);
+        categories.forEach(category => {
+            queryParams.push(category);
+        });
     }
+    
     
     if (filters.length > 0) {
         itemQuery += ` WHERE ${filters.join(' AND ')}`;

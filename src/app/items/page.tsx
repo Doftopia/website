@@ -8,9 +8,9 @@ const Page: React.FC = () => {
     const [nameFilter, setNameFilter] = useState<string>(); 
     const [minLvl, setminLvl] = useState<string>(); 
     const [maxLvl, setmaxLvl] = useState<string>(); 
-    const [category, setCategory] = useState<string>(); 
     const router = useRouter();
     const [effectFilter, setEffectFilter] = useState<string[]>([]);
+    const [category, setCategory] = useState<string[]>([]); 
     const [categories, setCategories] = useState<string[]>([]);
 
     const redirectItem = (itemId: string) => {
@@ -84,9 +84,14 @@ const Page: React.FC = () => {
         setNameFilter('');
         setminLvl('');
         setmaxLvl('');
-        setCategory('');
-        const buttons = document.querySelectorAll('.filter-button')
-        buttons.forEach(button => {
+        setCategory([]);
+        const buttons = document.querySelectorAll('.filter-button');
+        const categories = document.querySelectorAll('.categories');
+        categories.forEach((category: Element) => {
+            category.style.color = '';
+            category.style.fontWeight = '';
+        });
+        buttons.forEach((button: Element) => {
             button.style.color = '';
             button.style.fontWeight = '';
         });
@@ -103,8 +108,15 @@ const Page: React.FC = () => {
 
     const filterCategory = (categoryName: string) => {
         const categoryDiv = document.getElementById(categoryName);
-        categoryDiv!.style.color = 'rgb(144,238,144)';
-        setCategory(categoryName);
+        if (category.includes(categoryName)) {
+            categoryDiv!.style.color = '';
+            categoryDiv!.style.fontWeight = '';
+            setCategory(category.filter(item => item !== categoryName));
+        } else {
+            categoryDiv!.style.fontWeight = 'bold';
+            categoryDiv!.style.color = 'rgb(144,238,144)';
+            setCategory([...category, categoryName]);
+        }
     }
 
     return (
@@ -116,17 +128,17 @@ const Page: React.FC = () => {
                     <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
                 </div>
                 <div className="w-full bg-gray-700 flex justify-center rounded-lg h-9 mt-2 pl-3 items-center cursor-pointer hover:font-bold" onClick={() => filterCategoriesDiv()}>Categories</div>
-                <div className="text-white border border-black mt-1 rounded-sm hidden overflow-visible bg-gray-800" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
+                <div className="text-white border-black rounded-sm hidden overflow-visible bg-gray-800" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
                     <input type="text" placeholder="Chercher categories" className="w-full h-9 outline-none pl-3 bg-gray-700 border border-black mb-2 rounded-t-sm text-white"/>
                     {categories.map((category: any) => (
-                        <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-gray-700" id={category.name} onClick={() => filterCategory(category.name)}>
+                        <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-gray-700 categories" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
                         </div>
                     ))}
                 </div>
                 <div>
                 </div>
-                
+                <button onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold mt-3">Reset filters</button>
                 <div className="flex mt-3 w-full justify-between gap-2">
                     <div className="bg-gray-800 border border-black pl-2 py-1 w-full pb-2 mb-2">
                         <p className="mb-2 mt-1 font-bold">Primaires</p>
@@ -261,7 +273,6 @@ const Page: React.FC = () => {
                             Air (%)</button>
                     </div>
                 </div>
-                <button onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold">Reset filters</button>
             </div>
             <div className="flex justify-end w-full">
             <div className="grid gap-3 mx-4 grid-cols-3">
@@ -269,11 +280,11 @@ const Page: React.FC = () => {
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
                 <div className="flex justify-between pt-3 pb-3 mb-4 w-96">
                   <div className="flex flex-col transition-all">
-                    <h2 className="font-bold cursor-pointer hover:text-gray-300" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
+                    <h2 className="font-bold cursor-pointer hover:text-gray-400" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
                     <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
                   </div>
-                  <img src={item.img} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
+                  <img src={item.img} alt={item.itemName} draggable='false' className=" bg-gray-800 p-1 size-16 rounded-sm border border-black"/>
                 </div>                  
                 <div>
                 </div>
@@ -285,7 +296,7 @@ const Page: React.FC = () => {
                     {charac.characId < 0 && (
                         <div>
                             <div className="flex items-center text-sm">
-                                <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                <img src={charac.characImg} alt='x' className="mr-1 size-34" draggable='false'/>
                                 <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
                             </div>
                         </div>
