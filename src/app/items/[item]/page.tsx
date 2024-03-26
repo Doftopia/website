@@ -40,26 +40,26 @@ const Page: React.FC = () => {
     return (
         <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11'>
         <div className='mt-10 w-1/2'>
-              {item.map((item: any, index: number) => (
-                 <div key={index} className="bg-gray-900 text-white px-3 rounded-sm border-black border h-fit pb-3">
-                 <div className="flex justify-between mt-4 pb-3 mb-4">
-                     <div className="flex flex-col w-2/3 border-b border-gray-800">
-                         <h2 className="font-bold">{item.itemName}</h2>
-                         <h3 className=" mb-5 text-gray-500">{item.type} - niveau {item.level}</h3>
-                        <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
-
-                         <h3 className='mb-4'>{item.description}</h3>
-                     </div>
-                 <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-44 bg-gray-800 p-2 rounded-sm border border-black"/>
-             </div>                  
-             <div>
-             </div>
-             {item.characteristics.map((charac: any) => (
+        {item.map((item: any, index: number) => (
+                <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
+                <div className="flex justify-between pt-3 pb-3 mb-4">
+                  <div className="flex flex-col transition-all">
+                    <h2 className="font-bold cursor-pointer hover:text-gray-300">{item.itemName}</h2>
+                    <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
+                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
+                  </div>
+                  <img src={item.img} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
+                </div>                  
+                <h3 className="mb-6">{item.description}</h3>
+                {item.characteristics[0].characId == -1 && (
+                <div className='border-t border-gray-800 mb-2 pb-3'></div>
+             )}
+                {item.characteristics.map((charac: any) => (
                 <div>
                     {charac.characId < 0 && (
                         <div>
-                            <div className="flex items-center">
-                                <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
+                            <div className="flex items-center text-sm">
+                                <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
                                 <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
                             </div>
                         </div>
@@ -76,42 +76,72 @@ const Page: React.FC = () => {
                                                 {charac.characTo ? (
                                                     <>
                                                         <div className="flex items-center">
-                                                            <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
-                                                            <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
+                                                            {charac.characFrom === null ? (
+                                                                <div className="flex">
+                                                                    <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                                                    <p>{charac.characTo} {charac.characName}</p>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex">
+                                                                    {charac.effectId != 983 && (
+                                                                        <div className="flex">
+                                                                            <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                                                            <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </>
                                                 ) : (
                                                     <>
+                                                    {charac.effectId !== null && (
                                                         <div className="flex items-center">
-                                                            <img src={charac.characImg} alt='x' className="mr-1 size-8" draggable='false'/>
-                                                            <p>{charac.characFrom} {charac.characName}</p>
+                                                            {charac.effectId == 110 || charac.effectId == 139 ? (
+                                                                <>
+                                                                <div className="flex items-center text-sm">
+                                                                    <p>rend {charac.characFrom} {charac.characName}</p>
+                                                                    </div>
+                                                                </>
+                                                            ) : (
+                                                                <div className="flex items-center text-sm">
+                                                                    {charac.effectId == 795 ? (
+                                                                        <p className=" text-orange-400">Arme de chasse</p>
+                                                                    ) : (
+                                                                        <div className="flex items-center text-sm">
+                                                                            {charac.effectId != 984 && charac.effectId != 981 && (
+                                                                                <div className="flex">
+                                                                                    <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
+                                                                                    <p>{charac.characFrom} {charac.characName}</p>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
+                                                    )}
                                                     </>
                                                 )}
                                             </p>
                                     )}
                                 </div>
                             ))}
-                 {item.apCost && (
-                     <>
-                             <div className="text-sm border-t border-gray-800 mt-3 pt-3 mb-1">
-                                 <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
-                                 {item.minRange !== item.maxRange ? (
-                                     <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
-                                 ) : (
-                                     <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.maxRange}</p>
-                                 )}
-                                 <p className="flex"><p className="text-gray-500 mr-1">Utilisation par tour </p>{item.nmbCast}</p>
-                                 <p className="flex"><p className="text-gray-500 mr-1">Critique </p>{item.criticalHitProbability}%</p>
-                             </div>
-                     </>
-                 )}
-                 {item.criteria && (
-                     <div className=" border-t border-gray-800 mt-3 pt-2 mb-1">
-                         {item.criteria}
-                     </div>
-                 )}
-               </div>
+                    {item.apCost && (
+                        <>
+                                <div className="text-sm border-t border-gray-800 mt-3 pt-3 mb-1">
+                                    <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
+                                    {item.minRange !== item.maxRange ? (
+                                        <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
+                                    ) : (
+                                        <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.maxRange}</p>
+                                    )}
+                                    <p className="flex"><p className="text-gray-500 mr-1">Utilisation par tour </p>{item.nmbCast}</p>
+                                    <p className="flex"><p className="text-gray-500 mr-1">Critique </p>{item.criticalHitProbability}%</p>
+                                </div>
+                        </>
+                    )}
+                  </div>
               ))}
         </div>
             {recipes.map((recipe: any) => (

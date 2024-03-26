@@ -4,7 +4,7 @@ import mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -252,6 +252,40 @@ async function fetchItemSetsAndInsertIntoDB(pool) {
     }
 }
 
+
+async function fetchItemsTypeAndInsertIntoDB(pool) {
+    let skip = 0;
+    let query = `CREATE TABLE IF NOT EXISTS itemsType (
+        name varchar(100),
+        id int
+    )`;
+    await pool.execute(query);
+    try {
+        while (true) {
+            const response = await axios.get(`https://api.dofusdb.fr/item-types?$limit=50&$skip=${skip}`)
+            skip+=50;
+            let itemsType = response.data.data;
+
+            if (itemsType.length == 0) {
+                console.log('Finished fetching items type.');
+                break;
+            }
+
+            for (const itemType of itemsType) {
+                try {
+                    const insertIntoItemTypeQuery = "INSERT INTO itemsType (name, id) VALUES(?, ?)";
+                    const insertItemsTypeParams = [itemType.name.fr, itemType.id];
+                    await pool.execute(insertIntoItemTypeQuery, insertItemsTypeParams);
+                } catch (error) {
+                    console.error(`error inserting itemtype ${error}`)
+                }
+            }
+        }
+    } catch (error) {
+        console.error(`error fetching items-type: ${error}`)
+    }
+}
+
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
@@ -260,7 +294,8 @@ async function main() {
         // await fecthRecipesAndInsertIntoDB(pool);
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
-        await fetchItemsAndInsertIntoDB(pool );
+        // await fetchItemsAndInsertIntoDB(pool);
+        await fetchItemsTypeAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

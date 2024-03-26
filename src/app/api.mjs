@@ -15,7 +15,7 @@ app.use(
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -33,61 +33,61 @@ app.get("/items", (req, res) => {
     let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description as itemDescription, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, effects.description as effectDescription, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId, effectId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id LEFT JOIN effects on items.effectId = effects.id`;
 
     const queryParams = [];
-    
+
+    const filters = [];
     if (req.query.id) {
-        itemQuery += ` WHERE items.id = ?`;
+        filters.push(`items.id = ?`);
         queryParams.push(parseInt(req.query.id));
     }
-    
     if (req.query.name) {
-        itemQuery += ` WHERE items.name LIKE ?`;
+        filters.push(`items.name LIKE ?`);
         queryParams.push(`%${req.query.name}%`);
     }
-
     if (req.query.setId) {
-        itemQuery += ` WHERE items.setId = ?`;
+        filters.push(`items.setId = ?`);
         queryParams.push(req.query.setId);
     }
-
+    if (req.query.minLevel) {
+        filters.push(`items.level >= ?`);
+        queryParams.push(parseInt(req.query.minLevel));
+    }
+    if (req.query.maxLevel) {
+        filters.push(`items.level <= ?`);
+        queryParams.push(parseInt(req.query.maxLevel));
+    }
+    
     if (req.query.effect) {
         const effects = Array.isArray(req.query.effect) ? req.query.effect : [req.query.effect];
         effects.forEach(effect => {
-            if (queryParams.length > 0) {
-                itemQuery += ` AND`;
-            } else {
-                itemQuery += ` WHERE`;
-            }
-            itemQuery += `
-            items.name IN (
+            filters.push(`items.name IN (
                 SELECT DISTINCT
-                    items.name
+                items.name
                 FROM
-                    items
+                items
                 LEFT JOIN
-                    characteristics ON items.itemCharacteristics = characteristics.characteristic_id
+                characteristics ON items.itemCharacteristics = characteristics.characteristic_id
                 WHERE
-                    characteristics.characteristic_id LIKE ?
-                    AND items.weaponDmgFrom > 0
-            )`;
+                characteristics.characteristic_id LIKE ?
+                AND items.weaponDmgFrom > 0
+                )`);
             queryParams.push(effect);
         });
     }
 
-    if (req.query.minLevel) {
-        itemQuery += ` WHERE ? <= items.level`;
-        queryParams.push(parseInt(req.query.minLevel));
+    if (req.query.category) {
+        filters.push(`items.type like ?`);
+        queryParams.push(req.query.category);
     }
-
-    if (req.query.maxLevel) {
-        itemQuery += ` WHERE ? >= items.level`;
-        queryParams.push(parseInt(req.query.maxLevel));
+    
+    if (filters.length > 0) {
+        itemQuery += ` WHERE ${filters.join(' AND ')}`;
     }
-
+    
     if (req.query.limit) {
         itemQuery += ` LIMIT ?`;
         queryParams.push(parseInt(req.query.limit));
     }
-
+    
     let groupedData = [];
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
@@ -105,7 +105,7 @@ app.get("/items", (req, res) => {
                         } else if (result.effectDescription.includes('Eau')) {
                             result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
                         } else if (result.effectDescription.includes('Terre')) {
-                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_chance.png';
+                            result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_strength.png';
                         } else if (result.effectDescription.includes('Air')) {
                             result.characImg = 'https://dofusdb.fr/icons/characteristics/tx_agility.png';
                         }
@@ -147,6 +147,20 @@ app.get('/jobs', (req, res) => {
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
             console.error(`Error fetching jobs: ${error}`);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+        } else {
+            res.json({data: results})
+        }
+    })
+});
+
+app.get('/items-type', (req, res) => {
+    let itemQuery = `SELECT * from itemsType`
+    
+    connection.query(itemQuery, (error, results) => {
+        if (error) {
+            console.error(`Error fetching items-type: ${error}`);
             res.status(500).json({ error: "Internal Server Error" });
             return;
         } else {
