@@ -1,12 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 import NavbarLinks from "./NavbarLinks";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
-import { Button } from "../ui/button";
-import { buttonVariants } from "../ui/button";
-import { signOut } from "next-auth/react";
+import { buttonVariants } from "../ui/Button";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import SignOutButton from "./signOutButton";
+import SignOutButton from "./SignOutButton";
+import Image from "next/image";
 
 interface NavbarProps {
   pageName: string;
@@ -16,9 +16,14 @@ const Navbar = async () => {
   const session = await getServerSession(authOptions);
 
   return (
-    <nav className="bg-[#796f5a] dark:bg-[#303024] w-full p-2">
+    <nav className="bg-[#796f5a] shadow-lg dark:bg-[#2f2f25] w-full p-2">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <NavbarLinks />
+        <div className="w-[12rem] grid grid-cols-2">
+          <a href="/">
+            <Image src="/doftopia_logo.png" alt="logo" height={56} width={56} />
+          </a>
+          <NavbarLinks />
+        </div>
         <div className="flex items-center space-x-4">
           {session?.user ? (
             <SignOutButton />

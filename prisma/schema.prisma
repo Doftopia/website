@@ -30,11 +30,12 @@ model Personnage {
   user       User   @relation(fields: [userId], references: [id])
   userId     Int
   name       String
-  race       String
-  level      Int
+  race       String?
+  level      String
   server     String
-  stuff      String
-  completion Int
+  link       String
+  stuff      String?
+  completion Int?
   Panoplie   Panoplie[]
 }
 

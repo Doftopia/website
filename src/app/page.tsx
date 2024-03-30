@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
 import { error } from "console";
-import Navbar from "./components/Navbar/navbar";
+import Navbar from "./components/Navbar/Navbar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
-import DailyAlmanax from "./components/tools/Almanax/DailyAlmanax";
-import Characters from "./components/Characters";
+import DailyAlmanax from "./components/Elements/Almanax/DailyAlmanax";
+import Characters from "./components/Elements/Lists/Characters";
 
 const Home: React.FC = async () => {
   // const [items, setItems] = useState<any[]>([]);
@@ -86,11 +86,19 @@ const Home: React.FC = async () => {
       ))} */}
       <div>
         {session && (
-          <h1 className="dark:text-white ">Bonjour {session.user.username}</h1>
+          <h1 className="dark:text-white text-center my-5 font-bold ">
+            Bonjour {session.user.username}
+          </h1>
         )}
       </div>
-      <DailyAlmanax />
-      <Characters />
+      <div className="grid grid-cols-2">
+        <div className="ml-3 grid-cols-1">
+          <DailyAlmanax />
+        </div>
+        <div className="sm:grid-cols-1 lg:grid-cols-2">
+          <Characters />
+        </div>
+      </div>
     </>
   );
 };

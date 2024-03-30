@@ -1,16 +1,9 @@
-import axios from "axios";
-import * as cheerio from "cheerio";
 import { NextResponse } from "next/server";
 import { authOptions } from "../../../../lib/auth";
 import { getServerSession } from "next-auth";
 import { prisma } from "../../../../lib/prisma";
-
-interface Character {
-  name: string;
-  level: string;
-  server: string;
-  link?: string;
-}
+import { fetchCharacterData } from "./fetcher/fetchCharacterData";
+import { fetchCompletionData } from "./fetcher/challs/fetchCompletionData";
 
 export const GET = async (req: Request) => {
   const session = await getServerSession({ ...authOptions });
@@ -24,25 +17,12 @@ export const GET = async (req: Request) => {
     console.log("No user found");
     return;
   }
-  const ankamaUsername = user.ankamaUsername?.toString();
 
-  const url = `https://account.ankama.com/fr/profil-ankama/${ankamaUsername?.toUpperCase()}`;
-  const headers = {
-    "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-  };
-  const response = await axios.get(url, { headers });
-  const $ = cheerio.load(response.data);
-  const charactersTable = $(".ak-block-persos tbody tr");
-  const characters: Character[] = [];
+  fetchCharacterData(req);
+  fetchCompletionData(req);
 
-  charactersTable.each((_, element) => {
-    const name = $(element).find("td:nth-child(1) a").text();
-    const level = $(element).find("td:nth-child(3)").text();
-    const server = $(element).find("td:nth-child(4)").text();
-    const link = $(element).find("td:nth-child(1) a").attr("href");
-
-    characters.push({ name, level, server, link });
+  const characters = await prisma.personnage.findMany({
+    where: { userId: user.id },
   });
 
   return NextResponse.json({ characters: characters });

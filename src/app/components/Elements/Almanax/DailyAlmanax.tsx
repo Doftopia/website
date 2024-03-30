@@ -2,7 +2,7 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
-import Frame from "../../ui/frame";
+import Frame from "../../ui/Frame";
 import axios from "axios";
 
 const DailyAlmanax: React.FC = () => {
@@ -43,19 +43,19 @@ const DailyAlmanax: React.FC = () => {
               alt=""
             />
             <div id="col-2" className="col-span-2">
-              <p className="text-sm text-slate-600 my-auto">
+              <p className="text-sm text-slate-500 my-auto">
                 {almanaxData.tribute.quantity}x {almanaxData.tribute.item.name}
               </p>
-              <p className="text-xs text-slate-600 mb-1 ml-4">
+              <p className="text-xs text-slate-600 mb-1 ml-2">
                 {almanaxData.tribute.item.subtype}
               </p>
             </div>
           </div>
-          <p className="text-[#779643] font-bold">Bonus</p>
-          <p className="text-xs text-slate-600 font-bold">
+          <p className="text-[#779643] font-bold ml-2">Bonus</p>
+          <p className="text-xs text-slate-600 ml-2 font-bold">
             {almanaxData.bonus.type.name}
           </p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-500 ml-2">
             {almanaxData.bonus.description}
           </p>
         </>

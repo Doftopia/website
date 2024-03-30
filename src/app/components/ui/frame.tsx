@@ -26,7 +26,7 @@ const Frame: React.FC<FrameProps> = ({
 
   return (
     <div
-      className={`flex flex-col dark:bg-slate-900 dark:bg-opacity-60 m-2 ${className}`}
+      className={`flex flex-col dark:bg-[#131312] border border-black shadow-lg dark:bg-opacity-70 m-2 ${className}`}
       style={containerStyle}
     >
       {children}

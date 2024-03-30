@@ -6,14 +6,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "../../ui/Form";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/Input";
+import { Button } from "../../ui/Button";
 import Link from "next/link";
-import router, { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z
   .object({
@@ -143,12 +143,12 @@ const SignUpForm = () => {
           />
           <FormField
             control={form.control}
-            name="confirmPassword"
+            name="ankamaUsername"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ton ID Ankama</FormLabel>
                 <FormControl>
-                  <Input placeholder="pseudo#1234" type="password" {...field} />
+                  <Input placeholder="PSEUDO-1234" type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

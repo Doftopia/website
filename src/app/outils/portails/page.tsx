@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-import Navbar from "@/app/components/Navbar/navbar";
+import Navbar from "@/app/components/Navbar/Navbar";
 import { prisma } from "../../../../lib/prisma";
-import Portal from "@/app/components/tools/Portal/Portal";
+import Portal from "@/app/components/Elements/Portals/Portal";
 
 const Page = async () => {
   const portals = await prisma.portail.findMany({

@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Frame from "../../ui/frame";
-import router from "next/router";
+import Frame from "../../ui/Frame";
 
 const AchievementsList: React.FC = () => {
   const [achievements, setAchievements] = useState<any[]>([]);
