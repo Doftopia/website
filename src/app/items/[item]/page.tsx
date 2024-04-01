@@ -16,7 +16,7 @@ const Page: React.FC = () => {
         if (itemId) {
             fetchItem();
         }
-    }, [itemId]);
+    }, [itemId]);   
 
     const router = useRouter();
     const redirectSet = (setId: string) => {

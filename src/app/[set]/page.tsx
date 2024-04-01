@@ -30,7 +30,8 @@ const Page: React.FC = () => {
     }
 
     return (
-        <div className="bg-gray-800 h-screen text-white pt-10">
+        <div className="bg-gray-800 h-full pb-10">
+        <div className=" text-white pt-10">
             {itemsSet.map((itemSet: any) => (
                 <div>
                   <div className="flex gap-8 justify-center">
@@ -131,6 +132,7 @@ const Page: React.FC = () => {
                   </div>
               ))}
               </div>
+        </div>
         </div>
     )
 };

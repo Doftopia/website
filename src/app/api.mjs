@@ -32,6 +32,7 @@ connection.connect((err) => {
 app.get("/items", (req, res) => {
     let itemQuery = `SELECT items.name AS itemName, characteristics.name AS characName, items.id as itemId, characteristics.img_url as characImg, items.description as itemDescription, items.level, items.type, items.img, items.imgHighRes, items.apCost, items.maxRange, items.minRange, effects.description as effectDescription, items.nmbCast, items.criticalHitProbability, items.weaponDmgFrom as characFrom, items.weaponDmgTo as characTo, items.itemCharacteristics as characId, setName, setId, effectId FROM items LEFT JOIN characteristics ON items.itemCharacteristics = characteristics.characteristic_id LEFT JOIN effects on items.effectId = effects.id`;
 
+    let base_limit = 10;
     const queryParams = [];
     const filters = [];
 
@@ -39,18 +40,22 @@ app.get("/items", (req, res) => {
         filters.push(`items.id = ?`);
         queryParams.push(parseInt(req.query.id));
     }
+    
     if (req.query.name) {
         filters.push(`items.name LIKE ?`);
         queryParams.push(`%${req.query.name}%`);
     }
+
     if (req.query.setId) {
         filters.push(`items.setId = ?`);
         queryParams.push(req.query.setId);
     }
+
     if (req.query.minLevel) {
         filters.push(`items.level >= ?`);
         queryParams.push(parseInt(req.query.minLevel));
     }
+
     if (req.query.maxLevel) {
         filters.push(`items.level <= ?`);
         queryParams.push(parseInt(req.query.maxLevel));
@@ -83,16 +88,19 @@ app.get("/items", (req, res) => {
         });
     }
     
-    
     if (filters.length > 0) {
         itemQuery += ` WHERE ${filters.join(' AND ')}`;
     }
     
     if (req.query.limit) {
-        itemQuery += ` LIMIT ?`;
-        queryParams.push(parseInt(req.query.limit));
+        base_limit = parseInt(req.query.limit);
     }
-    
+
+    if (req.query.skip) {
+        base_skip = parseInt(req.query.skip);
+    }
+
+    let item_limit = base_limit;
     let groupedData = [];
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
@@ -100,7 +108,10 @@ app.get("/items", (req, res) => {
             res.status(500).json({ error: "Internal Server Error" });
             return;
         } else {
-            results.forEach(result => {
+            results.forEach((result, index) => {
+                if (index >= base_limit) {
+                    return;
+                }
                 try {
                     if (result.characId == -1) {
                         if (result.effectDescription.includes('Neutre')) {
@@ -121,20 +132,22 @@ app.get("/items", (req, res) => {
                         result.effectDescription = result.effectDescription.split('2')[2];
                             if (result.effectDescription !== undefined) {
                                 if (result.effectDescription.includes('{~ps}{~zs}')) {
-                                    result.effectDescription = `${result.effectDescription.split('{')[0]} ${result.effectDescription.split('}')[2]}`  
+                                    result.effectDescription = `${result.effectDescription.split('{')[0]} ${result.effectDescription.split('}')[2]}`;
                                 }
                             }
                         }
                     if (!existingItem) {
                         existingItem = { itemName: result.itemName, itemId: result.itemId, description: result.itemDescription, level: result.level, type: result.type, img: result.img, imgHighRes: result.imgHighRes, apCost: result.apCost, minRange: result.minRange, maxRange: result.maxRange, nmbCast: result.nmbCast, criticalHitProbability: result.criticalHitProbability, setName: result.setName, setID: result.setId, characteristics: [] };
                         groupedData.push(existingItem);
+                    } else {
+                        base_limit += 1;
                     }
                     existingItem.characteristics.push({ characName: result.effectDescription, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId});
                 } catch (error) {
                     console.error(error)
                 }
             });
-            res.json({ total: results.length, data: groupedData });
+            res.json({ limit: item_limit, total: 18775, data: groupedData });
         }
     });
 });
@@ -160,10 +173,19 @@ app.get('/jobs', (req, res) => {
     })
 });
 
+
 app.get('/items-type', (req, res) => {
-    let itemQuery = `SELECT * from itemsType`
+    let itemQuery = `SELECT * from itemstype`
+    const queryParams = [];
+
+    if (req.query.category) {
+        itemQuery += ` WHERE itemstype.name LIKE ?`;
+        queryParams.push(`%${req.query.category}%`)
+    }
     
-    connection.query(itemQuery, (error, results) => {
+    console.log(itemQuery);
+    console.log(queryParams);
+    connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
             console.error(`Error fetching items-type: ${error}`);
             res.status(500).json({ error: "Internal Server Error" });
@@ -173,6 +195,7 @@ app.get('/items-type', (req, res) => {
         }
     })
 });
+
 
 app.get('/recipes', (req, res) => {
     let itemQuery = `SELECT 
@@ -239,6 +262,7 @@ app.get('/recipes', (req, res) => {
     })
 });
 
+
 app.get('/itemSets', (req, res) => {
     let itemQuery = `SELECT * from itemSets
     join characteristics on itemSets.charac = characteristics.characteristic_id`;
@@ -292,7 +316,49 @@ app.get('/itemSets', (req, res) => {
             res.json({data: groupedData})
         }
     })
-})
+});
+
+
+app.get('/mobs', (req, res) => {
+    let groupedData = [];
+    let itemQuery = `SELECT * from mobs LIMIT 200`
+    const queryParams = [];
+    let previousMobID = 0;
+    let previousMobName = "";
+    let mobCharac = [];
+    
+    if (req.query.id) {
+        itemQuery += ` WHERE mobs.id = ?`;
+        queryParams.push(parseInt(req.query.id));
+    }
+    
+    connection.query(itemQuery, queryParams, (error, results) => {
+        if (error) {
+            console.error(`Error fetching mobs: ${error}`);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+        } else {
+            if (results.length != 0) {
+                previousMobID = results[0].id;
+                previousMobName = results[0].name;
+            }
+
+            results.forEach(result => {
+                if (result.id != previousMobID) {
+                    groupedData.push({name: result.name, id: previousMobID, characs: mobCharac, img: result.img});
+                    previousMobID = result.id;
+                    previousMobName = result.name;
+                    mobCharac = [];
+                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility})
+                } else {
+                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility})
+                }
+            });
+            res.json({data: groupedData})
+        }
+    })
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

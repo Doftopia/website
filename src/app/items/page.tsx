@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
 const Page: React.FC = () => {
+    let limit = 50;
     const [items, setItems] = useState<string[]>([]);
     const [nameFilter, setNameFilter] = useState<string>(); 
     const [minLvl, setminLvl] = useState<string>(); 
     const [maxLvl, setmaxLvl] = useState<string>(); 
     const router = useRouter();
     const [effectFilter, setEffectFilter] = useState<string[]>([]);
+    const [categoriesFilter, setcategoriesFilter] = useState<string>();
     const [category, setCategory] = useState<string[]>([]); 
     const [categories, setCategories] = useState<string[]>([]);
 
@@ -30,7 +32,7 @@ const Page: React.FC = () => {
                     minLevel: minLvl,
                     maxLevel: maxLvl,
                     category: category,
-                    limit: 200,
+                    limit: limit,
                 },
             });
             console.log(responseItems);
@@ -42,7 +44,11 @@ const Page: React.FC = () => {
 
     const fetchCategories = async () => {
         try {
-            const responseCategories = await axios.get(`http://localhost:3000/items-type`);
+            const responseCategories = await axios.get(`http://localhost:3000/items-type`, {
+                params: {
+                    category: categoriesFilter,
+                }
+            });
             setCategories(responseCategories.data.data)
         } catch (error) {
             console.error(`Error fetching catories ${error}`);
@@ -52,7 +58,43 @@ const Page: React.FC = () => {
     useEffect(() => {
         fetchItems();
         fetchCategories();
-    }, [nameFilter, effectFilter, minLvl, maxLvl, category]); 
+    }, [nameFilter, effectFilter, minLvl, maxLvl, category, categoriesFilter]); 
+
+    const fetchMoreItems = async () => {
+        try {
+            const responseItems = await axios.get(`http://localhost:3000/items`, {
+                params: {
+                    name: nameFilter,
+                    effect: effectFilter,
+                    minLevel: minLvl,
+                    maxLevel: maxLvl,
+                    category: category,
+                    limit: limit + 50, 
+                },
+            });
+            setItems([...responseItems.data.data]); 
+        } catch (error) {
+            console.log("Error fetching more items:", error);
+        }
+    }
+
+    const handleScroll = () => {
+        const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+        const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight || window.innerHeight;
+        const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+        if (scrollPercentage > 80) {
+            fetchMoreItems();
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [items]);
 
     const handleNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNameFilter(event.target.value);
@@ -64,6 +106,10 @@ const Page: React.FC = () => {
 
     const handleMaxLevelInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setmaxLvl(event.target.value);
+    };
+
+    const cateorgyNameFilterInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setcategoriesFilter(event.target.value);
     };
 
     const filterEffect = (effect: number) => {
@@ -127,9 +173,10 @@ const Page: React.FC = () => {
                     <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
                     <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
                 </div>
-                <div className="w-full bg-gray-700 flex justify-center rounded-lg h-9 mt-2 pl-3 items-center cursor-pointer hover:font-bold" onClick={() => filterCategoriesDiv()}>Categories</div>
+                    <button onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold mt-3">Reset filters</button>
+                <div className="w-full bg-gray-700 flex justify-center rounded-t-lg h-9 mt-2 pl-3 items-center cursor-pointer hover:font-bold" onClick={() => filterCategoriesDiv()}>Categories</div>
                 <div className="text-white border-black rounded-sm hidden overflow-visible bg-gray-800" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
-                    <input type="text" placeholder="Chercher categories" className="w-full h-9 outline-none pl-3 bg-gray-700 border border-black mb-2 rounded-t-sm text-white"/>
+                    {/* <input type="text" placeholder="Chercher categories" className="w-full h-9 outline-none pl-3 bg-gray-700 border border-black mb-2 rounded-t-sm text-white" value={categoriesFilter} onChange={cateorgyNameFilterInput}/> */}
                     {categories.map((category: any) => (
                         <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-gray-700 categories" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
@@ -138,7 +185,6 @@ const Page: React.FC = () => {
                 </div>
                 <div>
                 </div>
-                <button onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold mt-3">Reset filters</button>
                 <div className="flex mt-3 w-full justify-between gap-2">
                     <div className="bg-gray-800 border border-black pl-2 py-1 w-full pb-2 mb-2">
                         <p className="mb-2 mt-1 font-bold">Primaires</p>
@@ -346,7 +392,7 @@ const Page: React.FC = () => {
                                                                         <p className=" text-orange-400">Arme de chasse</p>
                                                                     ) : (
                                                                         <div className="flex items-center text-sm">
-                                                                            {charac.effectId != 984 && charac.effectId != 981 && (
+                                                                            {charac.effectId != 984 && charac.effectId != 981 && charac.effectId != 826 && charac.effectId != 600 && charac.effectId != 193 && charac.effectId != 206 && charac.effectId != 1155 &&  charac.effectId != 149 && charac.effectId != 732 &&  charac.effectId != 649 && charac.effectId != 731 && charac.effectId != 760 && charac.effectId != 146 && charac.effectId != 811 && charac.effectId != 724 && charac.effectId != 705 && charac.effectId != 623 && charac.effectId != 2818 && charac.effectId != 620 && charac.effectId != 30 &&(
                                                                                 <div className="flex">
                                                                                     <img src={charac.characImg} alt='x' className="mr-1 size-6" draggable='false'/>
                                                                                     <p>{charac.characFrom} {charac.characName}</p>
