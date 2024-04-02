@@ -3,6 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Navbar from "../components/Navbar/Navbar";
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
@@ -30,6 +31,10 @@ const Page: React.FC = () => {
     }
 
     return (
+        <div>
+
+        <Navbar pageName="Home"/>
+
         <div className="bg-gray-800 h-full pb-10">
         <div className=" text-white pt-10">
             {itemsSet.map((itemSet: any) => (
@@ -38,7 +43,7 @@ const Page: React.FC = () => {
                     <div className="bg-gray-900 w-fit rounded-sm border border-black pl-2 pr-6 pb-3 pt-3">
                         <p className="font-bold">{itemSet.setName} - niveau {itemSet.setLevel} </p>
                         {items.map((item: any) => (
-                            <div className="mt-3 flex items-center cursor-pointer hover:font-bold hover:bg-gray-700 pb-1 pl-1" onClick={() => redirectItem(item.itemId)}>
+                            <div className="mt-3 flex items-center cursor-pointer hover:font-bold hover:bg-[#779643]" onClick={() => redirectItem(item.itemId)}>
                                 <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-16 mr-2"/>
                                 <h3>{item.type}</h3>
                             </div>
@@ -65,7 +70,7 @@ const Page: React.FC = () => {
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-gray-300" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer">{item.setName}</h3>
+                    <h3 className="text-sm mb-5 text-[#779643] cursor-pointer">{item.setName}</h3>
                   </div>
                   <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
@@ -134,6 +139,8 @@ const Page: React.FC = () => {
               </div>
         </div>
         </div>
+        </div>
+
     )
 };
 

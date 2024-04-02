@@ -4,29 +4,29 @@ import { authOptions } from "../../../../lib/auth";
 import { buttonVariants } from "../ui/Button";
 import Link from "next/link";
 import ThemeSwitcher from "./ThemeSwitcher";
-import SignOutButton from "./SignOutButton";
-import ProfileButton from "./ProfileButton";
+// import SignOutButton from "./SignOutButton";
+// import ProfileButton from "./ProfileButton";
 import Image from "next/image";
-import { prisma } from "../../../../lib/prisma";
+// import { prisma } from "../../../../lib/prisma";
 
 interface NavbarProps {
   pageName: string;
 }
 
-const Navbar = async ({ pageName }: NavbarProps) => {
-  const session = await getServerSession({ ...authOptions });
-  if (!session) {
-    return;
-  }
-  const user = await prisma.user.findUnique({
-    where: { username: session.user.username },
-  });
-  if (!user) {
-    return;
-  }
+const Navbar = ({ pageName }: NavbarProps) => {
+  // const session = await getServerSession({ ...authOptions });
+  // if (!session) {
+  //   return;
+  // }
+  // const user = await prisma.user.findUnique({
+  //   where: { username: session.user.username },
+  // });
+  // if (!user) {
+  //   return;
+  // }
 
   return (
-    <nav className="bg-[#796f5a] shadow-xl border-dark-focus border-b dark:bg-dark-1 w-full p-2">
+    <nav className="bg-gray-900 shadow-xl border-black border-b dark:bg-dark-1 w-full p-2 fixed">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="w-[12rem] grid grid-cols-2">
           <a href="/">
@@ -37,7 +37,7 @@ const Navbar = async ({ pageName }: NavbarProps) => {
 
         <div className="flex items-center space-x-4">
           <p></p>
-          {session?.user ? (
+          {/* {session?.user ? (
             pageName === "profil" ? (
               <SignOutButton />
             ) : (
@@ -50,7 +50,7 @@ const Navbar = async ({ pageName }: NavbarProps) => {
             >
               Sign in
             </Link>
-          )}
+          )} */}
           <ThemeSwitcher />
         </div>
       </div>

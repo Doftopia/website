@@ -9,7 +9,7 @@ const page: React.FC = () => {
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar/>
       </header>
     </>
   );

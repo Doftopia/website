@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Navbar from '../components/Navbar/Navbar';
 
 const Page: React.FC = () => {
     const [mobs, setMobs] = useState<any[]>([]);
@@ -24,7 +25,10 @@ const Page: React.FC = () => {
     }, [])
 
     return (
-        <div className='bg-gray-800 h-full text-white'>
+        <div>
+        <Navbar pageName="Home"/>
+
+        <div className='bg-gray-800 h-full text-white pt-20'>
             <div className='grid-cols-2 grid mx-6 pt-6 gap-3 pb-6'>
                 {mobs.map((mob: any) => (
                     <div className='border-black border rounded-sm text-sm bg-gray-900 pl-4 pt-2'>
@@ -54,6 +58,7 @@ const Page: React.FC = () => {
                     </div>
                 ))}
             </div>
+        </div>
         </div>
     )
 }

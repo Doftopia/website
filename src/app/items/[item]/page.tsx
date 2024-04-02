@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import Navbar from '@/app/components/Navbar/Navbar';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
@@ -42,7 +42,9 @@ const Page: React.FC = () => {
     }
     
     return (
-        <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11'>
+        <div>
+        <Navbar pageName="Home"/>
+        <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11 pt-16'>
         <div className='mt-10 w-1/2'>
         {item.map((item: any, index: number) => (
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
@@ -50,7 +52,7 @@ const Page: React.FC = () => {
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-gray-300">{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
+                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
                   </div>
                   <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
@@ -153,7 +155,7 @@ const Page: React.FC = () => {
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
                         {recipe.recipe.map((item: any, index: number) => (
-                            <div key={index} className='flex flex-row items-center cursor-pointer hover:font-bold hover:bg-gray-700 pr-4 w-80' onClick={() => redirectRecipeItem(item.itemId)}>
+                            <div key={index} className='flex flex-row items-center cursor-pointer hover:font-bold hover:bg-[#779643] pr-4 w-80' onClick={() => redirectRecipeItem(item.itemId)}>
                                 <img src={item.itemImg} alt={item.itemName} className='size-11' draggable='false'/>
                                 <p className='ml-2'>
                                     {item.quantity} {item.itemName}
@@ -164,6 +166,7 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             ))}
+        </div>
         </div>
     )
 };
