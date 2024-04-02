@@ -86,7 +86,9 @@ const SignUpForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nom d&apos;utilisateur</FormLabel>
+                <FormLabel className="text-blue">
+                  Nom d&apos;utilisateur
+                </FormLabel>
                 <FormControl>
                   <Input placeholder="johndoe" {...field} />
                 </FormControl>
@@ -98,7 +100,7 @@ const SignUpForm = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="">
                 <FormLabel>Adresse email</FormLabel>
                 <FormControl>
                   <Input placeholder="mail@example.com" {...field} />
@@ -112,7 +114,7 @@ const SignUpForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mot de passe</FormLabel>
+                <FormLabel className="text-primary">Mot de passe</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
@@ -129,7 +131,7 @@ const SignUpForm = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirmation</FormLabel>
+                <FormLabel className="text-primary">Confirmation</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="••••••••••••"
@@ -146,7 +148,7 @@ const SignUpForm = () => {
             name="ankamaUsername"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ton ID Ankama</FormLabel>
+                <FormLabel className="text-blue">Ton ID Ankama</FormLabel>
                 <FormControl>
                   <Input placeholder="PSEUDO-1234" type="text" {...field} />
                 </FormControl>
@@ -156,19 +158,19 @@ const SignUpForm = () => {
           />
         </div>
         <Button
-          className="w-full text-white bg-slate-900 hover:bg-[#779643] hover:text-black hover:font-bold mt-6"
+          className="w-full text-white dark:bg-dark-2 dark:hover:bg-green hover:text-black hover:font-bold mt-6"
           type="submit"
         >
           S&apos;inscrire
         </Button>
       </form>
-      <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+      <div className="mx-auto my-4 text-primary flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-green after:ml-4 after:block after:h-px after:flex-grow after:bg-green">
         ou
       </div>
       {/* <GoogleSignInButton>Sign up with Google</GoogleSignInButton> */}
-      <p className="text-center text-sm text-gray-600 mt-2">
+      <p className="text-center text-sm text-primary mt-2">
         Si tu as déjà un compte, tu peux te{" "}
-        <Link className="text-blue-500 hover:underline" href="/sign-in">
+        <Link className="text-blue hover:underline" href="/sign-in">
           connecter
         </Link>
       </p>

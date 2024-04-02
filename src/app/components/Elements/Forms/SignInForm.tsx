@@ -59,7 +59,7 @@ const SignInForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-green">Email</FormLabel>
                 <FormControl>
                   <Input placeholder="mail@example.com" {...field} />
                 </FormControl>
@@ -72,7 +72,7 @@ const SignInForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mot de passe</FormLabel>
+                <FormLabel className="text-primary">Mot de passe</FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="••••••••••" {...field} />
                 </FormControl>
@@ -82,19 +82,19 @@ const SignInForm = () => {
           />
         </div>
         <Button
-          className="w-full text-white bg-slate-900 hover:bg-[#779643] hover:text-black hover:font-bold mt-6"
+          className="w-full text-white dark:bg-dark-2 dark:hover:bg-green dark:hover:text-black hover:font-bold mt-6"
           type="submit"
         >
           Se connecter
         </Button>
       </form>
-      <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+      <div className="mx-auto my-4 text-primary flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-green after:ml-4 after:block after:h-px after:flex-grow after:bg-green">
         ou
       </div>
       {/* <GoogleSignInButton>Sign in with Google</GoogleSignInButton> */}
-      <p className="text-center text-sm text-gray-600 mt-2">
+      <p className="text-center text-sm text-primary mt-2">
         si tu n&apos;as pas de compte tu peux{" "}
-        <Link className="text-blue-500 hover:underline" href="/sign-up">
+        <Link className="text-blue hover:underline" href="/sign-up">
           en créer un
         </Link>
       </p>

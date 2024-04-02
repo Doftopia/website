@@ -6,7 +6,7 @@ interface AuthLayoutProps {
 
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div className="bg-slate-200 p-10 rounded-md w-[23rem] mt-11 mx-auto">
+    <div className="dark:bg-dark-3 p-10 rounded-md w-[23rem] mt-11 mx-auto">
       {children}
     </div>
   );

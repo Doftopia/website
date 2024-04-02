@@ -7,7 +7,6 @@ import Frame from "../../ui/Frame";
 import { Button } from "../../ui/Button";
 import { Input } from "../../ui/Input";
 import axios from "axios";
-import { prisma } from "../../../../../lib/prisma";
 
 interface PortalProps {
   PortalName: string;
@@ -61,15 +60,22 @@ const Portal: React.FC<PortalProps> = ({
   };
 
   return (
-    <Frame width="sm" height="sm" key={PortalName}>
-      <h1 className="font-bold text-white ml-4 mt-2">Dimension {PortalName}</h1>
-      <h2 className="text-gray-400 ml-3">{Position}</h2>
-      <p className="text-gray-600 ml-[15rem]">
+    <Frame
+      width="sm"
+      height="sm"
+      className="border border-black"
+      key={PortalName}
+    >
+      <h1 className="font-bold text-primary ml-4 mt-2">
+        Dimension {PortalName}
+      </h1>
+      <h2 className="text-blue ml-3">{Position}</h2>
+      <p className="text-secondary ml-[15rem]">
         mis à jour {LastUpdate.toString().slice(15, 21)}
       </p>
-      <p className="text-gray-600 ml-[15rem]">par : {UpdaterName}</p>
+      <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
       <div className="grid grid-cols-3 w-fit">
-        <Button className="bg-[#779643] w-fit mx-auto">
+        <Button className="dark:bg-green w-fit mx-auto">
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"

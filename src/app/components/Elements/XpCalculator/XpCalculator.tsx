@@ -35,10 +35,14 @@ const XpCalculator = () => {
 
   return (
     <>
-      <Frame>
+      <Frame
+        size="lg"
+        height="16rem"
+        className="border border-secondary shadow-xl"
+      >
         <h1 className="ml-2 mt-2 text-center text-white">XP Calculator</h1>
         <div className="flex justify-center">
-          <div className="grid grid-cols-3 mt-20 gap-4">
+          <div className="grid grid-cols-4 mt-20 gap-4">
             <div className="flex flex-col items-center">
               <label className="text-white" htmlFor="job">
                 Metier
@@ -77,13 +81,26 @@ const XpCalculator = () => {
                 min={1}
               />
             </div>
+            <div className="flex flex-col items-center">
+              <label className="text-white" htmlFor="qty">
+                Quantité
+              </label>
+              <input
+                type="number"
+                id="qty"
+                key="qty"
+                className="w-14 h-8 mt-2 rounded-md"
+                placeholder="Qté"
+                min={0}
+              />
+            </div>
           </div>
         </div>
 
         <Button
-          variant={"defaultBold"}
+          variant={"default"}
           onClick={clicked}
-          className="mx-auto mt-2 font-bold"
+          className="mx-auto mt-2 bg-[#779643] font-bold bg-"
         >
           Calculer
         </Button>

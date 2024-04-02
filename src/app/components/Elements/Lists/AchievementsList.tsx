@@ -33,7 +33,18 @@ const AchievementsList: React.FC = () => {
               className="m-2"
             >
               <a
-                href={`/succes/${achievement.name.fr.toLowerCase()}`}
+                href={`/succes/${achievement.name.fr
+                  .toLowerCase()
+                  .replace("é", "e")
+                  .replace("ê", "e")
+                  .replace("è", "e")
+                  .replace("à", "a")
+                  .replace("â", "a")
+                  .replace("ô", "o")
+                  .replace("î", "i")
+                  .replace("û", "u")
+                  .replace("ç", "c")
+                  .replace(" ", "-")}`}
                 key={achievement.id}
                 className="text-white w-fit"
               >

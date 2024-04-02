@@ -17,7 +17,7 @@ const Frame: React.FC<FrameProps> = ({
 }) => {
   const defaultWidth =
     size === "sm" ? "19rem" : size === "md" ? "28rem" : "32rem";
-  const defaultHeight = "18rem";
+  const defaultHeight = "8rem";
 
   const containerStyle: React.CSSProperties = {
     width: width || defaultWidth,
@@ -26,7 +26,7 @@ const Frame: React.FC<FrameProps> = ({
 
   return (
     <div
-      className={`flex flex-col dark:bg-[#131312] border border-black shadow-lg dark:bg-opacity-70 m-2 ${className}`}
+      className={`flex flex-col dark:bg-dark-3 dark:bg-opacity-60 m-2 ${className}`}
       style={containerStyle}
     >
       {children}

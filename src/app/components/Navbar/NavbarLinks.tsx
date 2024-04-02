@@ -28,20 +28,20 @@ const NavbarLinks = () => {
   };
 
   return (
-    <div className="flex items-center space-x-4">
-      <a href="/objets" className="text-white hover:text-gray-300">
+    <div className="dark:text-white flex items-center space-x-4">
+      <a href="/objets" className="hover:text-primary">
         Objets
       </a>
-      <a href="/panoplies" className="text-white hover:text-gray-300">
+      <a href="/panoplies" className="dark:hover:text-primary">
         Panoplies
       </a>
-      <a href="/quetes" className="text-white hover:text-gray-300">
+      <a href="/quetes" className="hover:text-primary">
         Quêtes
       </a>
-      <a href="/succes" className="text-white hover:text-gray-300">
+      <a href="/succes" className="hover:text-primary">
         Succès
       </a>
-      <a href="/donjons" className="text-white hover:text-gray-300">
+      <a href="/donjons" className="hover:text-primary">
         Donjons
       </a>
       <div
@@ -50,7 +50,7 @@ const NavbarLinks = () => {
         onMouseLeave={handleMouseLeave}
       >
         <a
-          className="text-white hover:text-gray-300 focus:outline-none"
+          className="text-white hover:text-primary focus:outline-none"
           onMouseEnter={handleMenuMouseEnter}
           onMouseLeave={handleMenuMouseLeave}
           href="/outils"
@@ -59,7 +59,7 @@ const NavbarLinks = () => {
         </a>
         {(isHovered || isMenuHovered) && (
           <div
-            className="absolute bg-[#a7a18d] dark:bg-[#494944] rounded-md py-2 mt-4 space-y-2 w-48 z-10"
+            className="absolute bg-[#a7a18d] dark:bg-dark-3 rounded-md py-2 mt-4 space-y-2 w-48 z-10"
             onMouseEnter={handleMenuMouseEnter}
             onMouseLeave={handleMenuMouseLeave}
           >
