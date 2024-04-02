@@ -319,15 +319,18 @@ app.get('/itemSets', (req, res) => {
 
 app.get('/mobs', (req, res) => {
     let groupedData = [];
-    let itemQuery = `SELECT * from mobs LIMIT 200`
+    let itemQuery = `SELECT * from mobs`;
+    let base_limit = 10;
     const queryParams = [];
     let previousMobID = 0;
     let previousMobName = "";
+    let previousMobImg = ""; 
     let mobCharac = [];
+    let limit = base_limit;
     
     if (req.query.id) {
-        itemQuery += ` WHERE mobs.id = ?`;
-        queryParams.push(parseInt(req.query.id));
+        itemQuery += ` WHERE id = ?`;
+        queryParams.push(req.query.id);
     }
     
     connection.query(itemQuery, queryParams, (error, results) => {
@@ -339,20 +342,26 @@ app.get('/mobs', (req, res) => {
             if (results.length != 0) {
                 previousMobID = results[0].id;
                 previousMobName = results[0].name;
+                previousMobImg = results[0].img;
             }
 
-            results.forEach(result => {
-                if (result.id != previousMobID) {
-                    groupedData.push({name: result.name, id: previousMobID, characs: mobCharac, img: result.img});
+            results.forEach((result, index) => {
+                if (index >= limit) {
+                    return;
+                }
+                if (result.id != previousMobID || result.id == results[results.length-1].id && result.lifePoints == results[results.length-1].lifePoints) {
+                    groupedData.push({name: previousMobName, id: previousMobID, characs: mobCharac, img: previousMobImg});
                     previousMobID = result.id;
                     previousMobName = result.name;
+                    previousMobImg = result.img
                     mobCharac = [];
-                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility})
+                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility});
                 } else {
-                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility})
+                    limit+=1
+                    mobCharac.push({level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility});
                 }
             });
-            res.json({data: groupedData})
+            res.json({limit: base_limit, total: results.length, data: groupedData})
         }
     })
 });

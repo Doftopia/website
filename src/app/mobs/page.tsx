@@ -33,9 +33,9 @@ const Page: React.FC = () => {
                 {mobs.map((mob: any) => (
                     <div className='border-black border rounded-sm text-sm bg-gray-900 pl-4 pt-2'>
                         <p className='cursor-pointer' onClick={() => redirectMob(mob.id)}>
-                        {mob.name}
+                            {mob.name}
+                            <img src={mob.img} alt={mob.name} />
                         </p>
-                        <img src={mob.img} alt={mob.name} />
                         <p>Niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
                         {stats.map((stat: any, index: number) => (
                             <div>

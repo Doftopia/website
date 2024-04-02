@@ -35,7 +35,7 @@ const Page: React.FC = () => {
 
         <Navbar pageName="Home"/>
 
-        <div className="bg-gray-800 h-full pb-10">
+        <div className="bg-gray-800 h-full pb-10 pt-14">
         <div className=" text-white pt-10">
             {itemsSet.map((itemSet: any) => (
                 <div>

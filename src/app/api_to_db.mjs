@@ -380,6 +380,11 @@ async function fetchSpellsAndInsertIntoDB(pool) {
 }
 
 
+// async function fetchMobsDropAndInsertIntoDB(pool) {
+
+// } 
+
+
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
@@ -391,6 +396,7 @@ async function main() {
         // await fetchItemsAndInsertIntoDB(pool);
         // await fetchMobsAndInsertIntoDB(pool);
         // await fetchItemsTypeAndInsertIntoDB(pool);
+        // await fetchMobsDropAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);
