@@ -334,7 +334,7 @@ async function fetchMobsAndInsertIntoDB(pool) {
             for (const mob of mobs) {
                 for (const grade of mob.grades) {
                     try {
-                        const insertMobsParams = [mob.name.fr, mob.name.id, grade.level, mob.img, grade.lifePoints, grade.actionPoints, grade.movementPoints, grade.vitality, grade.paDodge, grade.pmDodge, grade.wisdom, grade.earthResistance, grade.airResistance, grade.fireResistance, grade.waterResistance, grade.neutralResistance, grade.strength, grade.intelligence, grade.chance, grade.agility];
+                        const insertMobsParams = [mob.name.fr, mob.id, grade.level, mob.img, grade.lifePoints, grade.actionPoints, grade.movementPoints, grade.vitality, grade.paDodge, grade.pmDodge, grade.wisdom, grade.earthResistance, grade.airResistance, grade.fireResistance, grade.waterResistance, grade.neutralResistance, grade.strength, grade.intelligence, grade.chance, grade.agility];
                         await pool.execute(insertMobsQuery, insertMobsParams)
                     } catch (error) {
                         console.error(`error insterting into mobs${error}`);
@@ -346,23 +346,6 @@ async function fetchMobsAndInsertIntoDB(pool) {
         console.error(`error in while true ${error}`)
     }
 }
-
-
-async function fetchDropsAndInsertIntoDB(pool) {
-    let query = `CREATE TABLE IF NOT EXISTS drops (
-        itemName VARCHAR(100),
-        dropMobName VARCHAR(100),
-        dropMobId INT
-    );`;
-    pool.execute(query);
-    try {
-        while (true) {
-        }
-    } catch (error) {
-        console.error(error)
-    }
-}
-
 
 async function fetchSpellsAndInsertIntoDB(pool) {
     let query = `CREATE TABLE IF NOT EXISTS spells (
@@ -380,9 +363,40 @@ async function fetchSpellsAndInsertIntoDB(pool) {
 }
 
 
-// async function fetchMobsDropAndInsertIntoDB(pool) {
+async function fetchMobsDropAndInsertIntoDB(pool) {
+    let query = `CREATE TABLE IF NOT EXISTS mobsDrop (
+        mobId INT,
+        dropId INT
+    );`
+    pool.execute(query);
+    let skip = 0;
+    const insertDropsQuery = "INSERT INTO mobsDrop (mobId, dropId) VALUES (?, ?)";
+    try {
+        while (true) {
+            const dropsReponse = await axios.get(`https://api.dofusdb.fr/monsters?$limit=50&$skip=${skip}`);
+            skip += 50;
+            let mobs = dropsReponse.data.data;
 
-// } 
+            if (mobs.length == 0) {
+                console.log('finished fetching drops.');
+                return;
+            }
+
+            for (const mob of mobs) {
+                try {
+                    for (const drop of mob.drops) {
+                        const insertDropsParams = [drop.monsterId, drop.dropId];
+                        await pool.execute(insertDropsQuery, insertDropsParams);
+                    }
+                } catch (error) {
+                    // console.log(`No drop${error}`);
+                }
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+} 
 
 
 async function main() {
@@ -394,7 +408,7 @@ async function main() {
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
         // await fetchItemsAndInsertIntoDB(pool);
-        // await fetchMobsAndInsertIntoDB(pool);
+        await fetchMobsAndInsertIntoDB(pool);
         // await fetchItemsTypeAndInsertIntoDB(pool);
         // await fetchMobsDropAndInsertIntoDB(pool);
         await pool.end(); 
