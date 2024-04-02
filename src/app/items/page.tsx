@@ -166,7 +166,7 @@ const Page: React.FC = () => {
     }
 
     return (
-        <div className="bg-gray-800 min-h-screen pt-7 flex">
+        <div className="min-h-screen pt-7 flex bg-gray-800">
             <div className="flex w-3/12 h-fit py-3 px-4 bg-gray-900 mx-8 text-white flex-col fixed text-sm transition-all border border-black">
                 <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-gray-700 text-white"/>
                 <div className="w-full flex justify-center gap-2 mt-1">
