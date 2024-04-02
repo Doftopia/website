@@ -108,7 +108,7 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
             }
         } 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 }
 
@@ -334,7 +334,6 @@ async function fetchMobsAndInsertIntoDB(pool) {
             for (const mob of mobs) {
                 for (const grade of mob.grades) {
                     try {
-                        console.log(grade);
                         const insertMobsParams = [mob.name.fr, mob.name.id, grade.level, mob.img, grade.lifePoints, grade.actionPoints, grade.movementPoints, grade.vitality, grade.paDodge, grade.pmDodge, grade.wisdom, grade.earthResistance, grade.airResistance, grade.fireResistance, grade.waterResistance, grade.neutralResistance, grade.strength, grade.intelligence, grade.chance, grade.agility];
                         await pool.execute(insertMobsQuery, insertMobsParams)
                     } catch (error) {
@@ -390,7 +389,7 @@ async function main() {
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
         // await fetchItemsAndInsertIntoDB(pool);
-        await fetchMobsAndInsertIntoDB(pool);
+        // await fetchMobsAndInsertIntoDB(pool);
         // await fetchItemsTypeAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {

@@ -183,8 +183,6 @@ app.get('/items-type', (req, res) => {
         queryParams.push(`%${req.query.category}%`)
     }
     
-    console.log(itemQuery);
-    console.log(queryParams);
     connection.query(itemQuery, queryParams, (error, results) => {
         if (error) {
             console.error(`Error fetching items-type: ${error}`);
