@@ -1,15 +1,15 @@
 "use client";
 import axios from "axios";
-import mysql from "mysql2/promise"; 
+import * as mysql from "mysql2/promise"; 
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
 
-async function fetchItemsAndInsertIntoDB(pool) {
+async function fetchItemsAndInsertIntoDB(pool: mysql.Pool) {
     let skip = 0;
     let insertItemParams;
     let effect = {};
@@ -77,7 +77,7 @@ async function fetchItemsAndInsertIntoDB(pool) {
 }
 
 
-async function fetchCharacteristicsAndInsertIntoDB(pool) {
+async function fetchCharacteristicsAndInsertIntoDB(pool: mysql.Pool) {
     let skip = 0;
     let query = `CREATE TABLE IF NOT EXISTS characteristics (
         characteristic_id int NOT NULL,
@@ -113,7 +113,7 @@ async function fetchCharacteristicsAndInsertIntoDB(pool) {
 }
 
 
-async function fetchEffectsAndInsertIntoDB(pool) {
+async function fetchEffectsAndInsertIntoDB(pool: mysql.Pool) {
     let skip = 0;
     let query = `CREATE TABLE IF NOT EXISTS effects (
         id int NOT NULL,
@@ -149,10 +149,10 @@ async function fetchEffectsAndInsertIntoDB(pool) {
 }
 
 
-async function fecthRecipesAndInsertIntoDB(pool) {
+async function fetchRecipesAndInsertIntoDB(pool: mysql.Pool) {
     let skip = 0;
-    let ingredients = [];
-    let quantities = [];
+    let ingredients: String[] = [];
+    let quantities: String[] = [];
     let query = `CREATE TABLE IF NOT EXISTS recipes (
         resultId INT NOT NULL,
         quantities INT NOT NULL,
@@ -174,11 +174,11 @@ async function fecthRecipesAndInsertIntoDB(pool) {
             }
 
             for (const recipe of recipes) {
-                recipe.quantities.forEach(quantity => {
-                    quantities.push(quantity);
+                recipe.quantities.forEach((quantity: any) => {
+                    quantities.push(quantity.toString());
                 });
-                recipe.ingredientIds.forEach(ingredient => {
-                    ingredients.push(ingredient);
+                recipe.ingredientIds.forEach((ingredient: any) => {
+                    ingredients.push(ingredient.toString());
                 });
                 for (let i = 0; i < ingredients.length; i++) {
                     const insertRecipesParams = [recipe.resultId, quantities[i], ingredients[i], recipe.jobId];
@@ -194,7 +194,7 @@ async function fecthRecipesAndInsertIntoDB(pool) {
 }
 
 
-async function fetchJobsAndInsertIntoDB(pool) {
+async function fetchJobsAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS jobs (
         jobId int,
         jobName varchar(50)
@@ -220,7 +220,7 @@ async function fetchJobsAndInsertIntoDB(pool) {
 }
 
 
-async function fetchItemSetsAndInsertIntoDB(pool) {
+async function fetchItemSetsAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS itemSets (
         setName VARCHAR(100),
         setId INT,
@@ -259,7 +259,7 @@ async function fetchItemSetsAndInsertIntoDB(pool) {
 }
 
 
-async function fetchItemsTypeAndInsertIntoDB(pool) {
+async function fetchItemsTypeAndInsertIntoDB(pool: mysql.Pool) {
     let skip = 0;
     let query = `CREATE TABLE IF NOT EXISTS itemsType (
         name varchar(100),
@@ -294,7 +294,7 @@ async function fetchItemsTypeAndInsertIntoDB(pool) {
 }
 
 
-async function fetchMobsAndInsertIntoDB(pool) {
+async function fetchMobsAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS mobs (
         name VARCHAR(100),
         id INT,
@@ -347,7 +347,7 @@ async function fetchMobsAndInsertIntoDB(pool) {
     }
 }
 
-async function fetchSpellsAndInsertIntoDB(pool) {
+async function fetchSpellsAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS spells (
         spellName VARCHAR(100),
         spellId INT,
@@ -363,7 +363,7 @@ async function fetchSpellsAndInsertIntoDB(pool) {
 }
 
 
-async function fetchMobsDropAndInsertIntoDB(pool) {
+async function fetchMobsDropAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS mobsDrop (
         mobId INT,
         dropId INT
@@ -404,11 +404,11 @@ async function main() {
         const pool = await mysql.createPool(dbConfig);
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
-        // await fecthRecipesAndInsertIntoDB(pool);
+        await fetchRecipesAndInsertIntoDB(pool);
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
         // await fetchItemsAndInsertIntoDB(pool);
-        await fetchMobsAndInsertIntoDB(pool);
+        // await fetchMobsAndInsertIntoDB(pool);
         // await fetchItemsTypeAndInsertIntoDB(pool);
         // await fetchMobsDropAndInsertIntoDB(pool);
         await pool.end(); 
