@@ -4,13 +4,15 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar/Navbar';
+import * as mysql from "mysql2/promise";
+import { Characteristic, GroupedItems, GroupedRecipes, Item, Jobs, Recipe } from '@/app/interfaces';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
     const itemId = searchParams.get('id');
-    const [item, setItem] = useState<any[]>([]);
-    const [recipes, setRecipes] = useState<any[]>([]);
-    const [job, setjob] = useState<any>([]);
+    const [item, setItem] = useState<GroupedItems[]>([]);
+    const [recipes, setRecipes] = useState<GroupedRecipes[]>([]);
+    const [job, setjob] = useState<String[]>([]);
 
     useEffect(() => {
         if (itemId) {
@@ -26,7 +28,7 @@ const Page: React.FC = () => {
     const fetchItem = async () => {
         const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
         const recipesResponse = await axios.get(`http://localhost:3000/recipes?resultId=${itemId}`)
-        let jobsResponse: any;
+        let jobsResponse: Jobs | any;
         try {
             jobsResponse = await axios.get(`http://localhost:3000/jobs?id=${recipesResponse.data.data[0].jobId}`);
             setjob(jobsResponse.data.data[0].jobName);
@@ -46,13 +48,13 @@ const Page: React.FC = () => {
         <Navbar pageName="Home"/>
         <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11 pt-16'>
         <div className='mt-10 w-1/2'>
-        {item.map((item: any, index: number) => (
+        {item.map((item: GroupedItems, index: number) => (
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
                 <div className="flex justify-between pt-3 pb-3 mb-4">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-gray-300">{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
+                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
                   </div>
                   <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
                 </div>                  
@@ -60,7 +62,7 @@ const Page: React.FC = () => {
                 {item.characteristics[0].characId == -1 && (
                 <div className='border-t border-gray-800 mb-2 pb-3'></div>
              )}
-                {item.characteristics.map((charac: any) => (
+                {item.characteristics.map((charac: Characteristic) => (
                 <div>
                     {charac.characId < 0 && (
                         <div>
@@ -75,10 +77,10 @@ const Page: React.FC = () => {
              {item.characteristics[0].characId == -1 && (
                 <div className='border-b border-gray-800 mb-2 pb-3 w-2/3'></div>
              )}
-             {item.characteristics.map((charac: any, idx: number) => (
+             {item.characteristics.map((charac: Characteristic, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {charac.characId >= 0 && (
-                                            <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500" : "text-sm"}> 
+                                            <p className={charac.characFrom < 0 || charac.characTo < 0 ? "text-red-500" : "text-sm"}> 
                                                 {charac.characTo ? (
                                                     <>
                                                         <div className="flex items-center">
@@ -150,11 +152,11 @@ const Page: React.FC = () => {
                   </div>
               ))}
         </div>
-            {recipes.map((recipe: any) => (
+            {recipes.map((recipe: GroupedRecipes) => (
                 <div className='bg-gray-900 border border-black text-white mt-10 flex h-fit pt-3 pl-3 w-fit pr-10'>
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
-                        {recipe.recipe.map((item: any, index: number) => (
+                        {recipe.recipe.map((item: Recipe, index: number) => (
                             <div key={index} className='flex flex-row items-center cursor-pointer hover:font-bold hover:bg-[#779643] pr-4 w-80' onClick={() => redirectRecipeItem(item.itemId)}>
                                 <img src={item.itemImg} alt={item.itemName} className='size-11' draggable='false'/>
                                 <p className='ml-2'>

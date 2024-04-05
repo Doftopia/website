@@ -4,7 +4,7 @@ import * as mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -174,10 +174,10 @@ async function fetchRecipesAndInsertIntoDB(pool: mysql.Pool) {
             }
 
             for (const recipe of recipes) {
-                recipe.quantities.forEach((quantity: any) => {
+                recipe.quantities.forEach((quantity: Number) => {
                     quantities.push(quantity.toString());
                 });
-                recipe.ingredientIds.forEach((ingredient: any) => {
+                recipe.ingredientIds.forEach((ingredient: Number) => {
                     ingredients.push(ingredient.toString());
                 });
                 for (let i = 0; i < ingredients.length; i++) {
@@ -404,7 +404,7 @@ async function main() {
         const pool = await mysql.createPool(dbConfig);
         // await fetchCharacteristicsAndInsertIntoDB(pool);    
         // await fetchEffectsAndInsertIntoDB(pool);
-        await fetchRecipesAndInsertIntoDB(pool);
+        // await fetchRecipesAndInsertIntoDB(pool);
         // await fetchJobsAndInsertIntoDB(pool); 
         // await fetchItemSetsAndInsertIntoDB(pool); 
         // await fetchItemsAndInsertIntoDB(pool);

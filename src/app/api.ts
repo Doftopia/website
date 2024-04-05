@@ -3,6 +3,7 @@ import * as cors from 'cors';
 import * as mysql from "mysql2/promise";
 import { Request, Response } from 'express';
 import { ParsedQs } from 'qs';
+import { Item, GroupedItems, GroupedRecipes, RecipeResult, GroupedNmbItems, NmbItems, Recipe, Charac, Mob, MobCharac, GroupedMob } from './interfaces';
 
 const app = express();
 const port = 3000;
@@ -17,7 +18,7 @@ app.use(
 
 const dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -97,58 +98,7 @@ app.get("/items", async (req: Request, res: Response) => {
         base_skip = Number(req.query.skip);
     }
 
-    interface Item {
-        itemName: string;
-        characName: string;
-        itemId: number;
-        characImg: string;
-        itemDescription: string;
-        level: number;
-        type: string;
-        img: string;
-        imgHighRes: string;
-        apCost: number;
-        maxRange: number;
-        minRange: number;
-        effectDescription: string;
-        nmbCast: number;
-        criticalHitProbability: number;
-        characFrom: number;
-        characTo: number;
-        characId: number;
-        setName: string;
-        setId: number;
-        effectId: number;
-    }
-
-    interface GroupedItem {
-        itemName: string;
-        itemId: number;
-        description: string;
-        level: number;
-        type: string;
-        img: string;
-        imgHighRes: string;
-        apCost: number;
-        minRange: number;
-        maxRange: number;
-        nmbCast: number;
-        criticalHitProbability: number;
-        setName: string;
-        setID: number;
-        characteristics: Characteristic[];
-    }
-
-    interface Characteristic {
-        characName: string;
-        characFrom: number;
-        characTo: number;
-        characImg: string;
-        characId: number;
-        effectId: number;
-    }
-
-    let groupedData: GroupedItem[] = [];
+    let groupedData: GroupedItems[] = [];
 
     item_limit = base_limit;
     skip_limit = base_skip;
@@ -276,34 +226,9 @@ app.get('/recipes', async (req: Request, res: Response) => {
     ORDER BY
         recipes.quantities DESC `
 
-    let groupedData: GroupedData[] = [];
-    let recipe: Recipes[] = []
+    let groupedData: GroupedRecipes[] = [];
+    let recipe: Recipe[] = []
     let previousItemId: number = 0;
-
-    interface Recipes {
-        quantity: number;
-        itemName: string;
-        itemId: number;
-        itemImg: string;
-    };
-
-    interface Recipe {
-        resultId: number;
-        quantities: number;
-        ids: number;
-        jobId: number;
-        itemName: string;
-        itemImg: string; 
-        itemLevel: string;
-        itemId: number;
-    };
-
-    interface GroupedData {
-        resultItemId: number;
-        jobId: number;
-        itemLevel: string;
-        recipe: Recipes[];
-    };
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
@@ -313,7 +238,7 @@ app.get('/recipes', async (req: Request, res: Response) => {
             previousItemId = rows[0].resultId;
         }
 
-        (results as mysql.RowDataPacket).forEach((result: Recipe) => {
+        (results as mysql.RowDataPacket).forEach((result: RecipeResult) => {
             try {
                 if (previousItemId != result.resultId) {
                     groupedData.push({resultItemId: previousItemId, jobId: result.jobId, itemLevel: result.itemLevel, recipe: recipe});
@@ -351,39 +276,11 @@ app.get('/itemSets', async (req: Request, res: Response) => {
         queryParams.push(req.query.id);
     }
 
-    let groupedData: GroupedData[] = [];
+    let groupedData: GroupedNmbItems[] = [];
     let charac: Charac[] = []
     let nmbItems: NmbItems[] = [];
     let previousSetId: number = 0;
     let previousNmbItems: number = 0;
-
-    interface Item {
-        setId: number;
-        setName: string;
-        setLevel: number;
-        numberItem: number;
-        name: string;
-        characValue: number;
-        img_url: string;
-    };
-
-    interface Charac {
-        characName: string;
-        characValue: number;
-        characImg: string;
-    };
-
-    interface NmbItems {
-        characs: Charac[];
-        nmbItems: number;
-    };
-
-    interface GroupedData {
-        nmbItems: NmbItems[];
-        setName: string;
-        setId: number;
-        setLevel: number;
-    };
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
@@ -429,7 +326,7 @@ app.get('/itemSets', async (req: Request, res: Response) => {
 
 
 app.get('/mobs', async (req: Request, res: Response) => {
-    let groupedData: GroupedData[] = [];
+    let groupedData: GroupedMob[] = [];
     let mobCharac: MobCharac[] = [];
     let base_limit = 10;
     let previousMobID = 0;
@@ -443,56 +340,6 @@ app.get('/mobs', async (req: Request, res: Response) => {
         itemQuery += ` WHERE id = ?`;
         queryParams.push(req.query.id);
     }
-
-    interface Mob {
-        id: number;
-        name: string;
-        level: number;
-        lifePoints: number;
-        actionPoints: number;
-        mouvementPoints: number;
-        vitality: number;
-        paDodge: number;
-        pmDodge: number;
-        wisdom: number;
-        earthResistance: number;
-        fireResistance: number;
-        airResistance: number;
-        waterResistance: number;
-        neutralResistance: number;
-        strength: number;
-        intelligence: number;
-        chance: number;
-        agility: number;
-        img: string;
-    };
-
-    interface MobCharac {
-        level: number;
-        lifePoints: number;
-        ap: number;
-        mp: number;
-        vitality: number;
-        paDodge: number;
-        pmDodge: number;
-        wisdom: number;
-        earthResistance: number;
-        fireResistance: number;
-        airResistance: number;
-        waterResistance: number;
-        neutralResistance: number;
-        strength: number;
-        intelligence: number;
-        chance: number;
-        agility: number;
-    };
-
-    interface GroupedData {
-        name: string;
-        id: number;
-        characs: MobCharac[];
-        img: string;
-    };
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);

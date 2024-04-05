@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import Navbar from '@/app/components/Navbar/Navbar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { GroupedMob, Mob } from '@/app/interfaces';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
@@ -24,7 +25,7 @@ const Page: React.FC = () => {
                 <Navbar pageName="Home"/>
             </header>
             <div className='bg-gray-800 text-white h-screen pt-24'>
-                {mob.map((mob: any) => (
+                {mob.map((mob: GroupedMob) => (
                     <div>
                         {mob.name}
                         <img src={mob.img} alt={mob.name}/>

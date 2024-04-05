@@ -41,7 +41,7 @@ var axios_1 = require("axios");
 var mysql = require("mysql2/promise");
 var dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -277,8 +277,6 @@ function fetchRecipesAndInsertIntoDB(pool) {
                     if (!(_i < recipes_1.length)) return [3 /*break*/, 11];
                     recipe = recipes_1[_i];
                     recipe.quantities.forEach(function (quantity) {
-                        console.log(quantity.toString());
-                        console.log(typeof (quantity.toString()));
                         quantities.push(quantity.toString());
                     });
                     recipe.ingredientIds.forEach(function (ingredient) {
@@ -288,7 +286,6 @@ function fetchRecipesAndInsertIntoDB(pool) {
                     _a.label = 6;
                 case 6:
                     if (!(i < ingredients.length)) return [3 /*break*/, 9];
-                    console.log(quantities[i]);
                     insertRecipesParams = [recipe.resultId, quantities[i], ingredients[i], recipe.jobId];
                     return [4 /*yield*/, pool.execute(insertRecipesQuery, insertRecipesParams)];
                 case 7:

@@ -47,7 +47,7 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -242,9 +242,6 @@ app.get('/recipes', function (req, res) { return __awaiter(void 0, void 0, void 
                 groupedData = [];
                 recipe = [];
                 previousItemId = 0;
-                ;
-                ;
-                ;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
@@ -301,10 +298,6 @@ app.get('/itemSets', function (req, res) { return __awaiter(void 0, void 0, void
                 nmbItems = [];
                 previousSetId = 0;
                 previousNmbItems = 0;
-                ;
-                ;
-                ;
-                ;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
@@ -373,9 +366,6 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     itemQuery += " WHERE id = ?";
                     queryParams.push(req.query.id);
                 }
-                ;
-                ;
-                ;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);

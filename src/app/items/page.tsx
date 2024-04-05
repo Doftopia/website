@@ -3,6 +3,11 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import Navbar from "../components/Navbar/Navbar";
+import { HtmlContext } from "next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints";
+import { ButtonProps } from "../components/ui/Button";
+import { Category, Characteristic, GroupedItems } from "../interfaces";
+import * as mysql from "mysql2/promise";
+
 
 const Page: React.FC = () => {
     let limit = 50;
@@ -36,7 +41,6 @@ const Page: React.FC = () => {
                     limit: limit,
                 },
             });
-            console.log(responseItems);
             setItems(responseItems.data.data); 
         } catch (error) {
             console.log("Error fetching items:", error);
@@ -134,11 +138,11 @@ const Page: React.FC = () => {
         setCategory([]);
         const buttons = document.querySelectorAll('.filter-button');
         const categories = document.querySelectorAll('.categories');
-        categories.forEach((category: Element) => {
+        categories.forEach((category: any) => {
             category.style.color = '';
             category.style.fontWeight = '';
         });
-        buttons.forEach((button: Element) => {
+        buttons.forEach((button: any) => {
             button.style.color = '';
             button.style.fontWeight = '';
         });
@@ -180,7 +184,7 @@ const Page: React.FC = () => {
                 <div className="w-full bg-gray-700 flex justify-center rounded-t-lg h-9 mt-2 pl-3 items-center cursor-pointer hover:font-bold" onClick={() => filterCategoriesDiv()}>Categories</div>
                 <div className="text-white border-black rounded-sm hidden overflow-visible bg-gray-800" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
                     {/* <input type="text" placeholder="Chercher categories" className="w-full h-9 outline-none pl-3 bg-gray-700 border border-black mb-2 rounded-t-sm text-white" value={categoriesFilter} onChange={cateorgyNameFilterInput}/> */}
-                    {categories.map((category: any) => (
+                    {(categories as mysql.RowDataPacket).map((category: Category) => (
                         <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
                         </div>
@@ -325,13 +329,13 @@ const Page: React.FC = () => {
             </div>
             <div className="flex justify-end w-full">
             <div className="grid gap-3 mx-4 grid-cols-3">
-              {items.map((item: any, index: number) => (
+              {(items as mysql.RowDataPacket).map((item: GroupedItems, index: number) => (
                 <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
                 <div className="flex justify-between pt-3 pb-3 mb-4 w-96">
                   <div className="flex flex-col transition-all">
-                    <h2 className="font-bold cursor-pointer hover:text-gray-400" onClick={() => redirectItem(item.itemId)}>{item.itemName}</h2>
+                    <h2 className="font-bold cursor-pointer hover:text-gray-400" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID)}>{item.setName}</h3>
+                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-green-600" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
                   </div>
                   <img src={item.img} alt={item.itemName} draggable='false' className=" bg-gray-800 p-1 size-16 rounded-sm border border-black"/>
                 </div>                  
@@ -340,7 +344,7 @@ const Page: React.FC = () => {
                 {item.characteristics[0].characId == -1 && (
                 <div className='border-t border-gray-800 mb-2 pb-3'></div>
              )}
-                {item.characteristics.map((charac: any) => (
+                {item.characteristics.map((charac: Characteristic) => (
                 <div>
                     {charac.characId < 0 && (
                         <div>
@@ -355,10 +359,10 @@ const Page: React.FC = () => {
              {item.characteristics[0].characId == -1 && (
                 <div className='border-b border-gray-800 mb-2 pb-3 w-2/3'></div>
              )}
-             {item.characteristics.map((charac: any, idx: number) => (
+             {item.characteristics.map((charac: Characteristic, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {charac.characId >= 0 && (
-                                            <p className={charac.characFrom < 0 || charac.chracTo < 0 ? "text-red-500" : "text-sm"}> 
+                                            <p className={charac.characFrom < 0 || charac.characTo < 0 ? "text-red-500" : "text-sm"}> 
                                                 {charac.characTo ? (
                                                     <>
                                                         <div className="flex items-center">
