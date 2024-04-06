@@ -39,7 +39,7 @@ const Profile: React.FC<ProfileProps> = async () => {
             {" "}
             <p>Mon pseudonyme : {user.username}</p>
             <p>Mon Adresse mail : {user.email} </p>
-            <p>Mon mot de passe : ahahaha</p>
+            <p>Mon mot de passe : ahahahh</p>
             <p>Mon pseudo Ankama : {user.ankamaUsername?.replace("-", "#")}</p>
             <Button>Modifier mes informations</Button>
           </Frame>

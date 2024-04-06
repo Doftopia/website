@@ -2,7 +2,7 @@
 
 "use client";
 import React, { useEffect, useState } from "react";
-import Frame from "../../ui/Frame";
+import Frame from "../ui/Frame";
 import axios from "axios";
 
 const DailyAlmanax: React.FC = () => {

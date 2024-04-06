@@ -26,11 +26,17 @@ const Navbar = async ({ pageName }: NavbarProps) => {
   }
 
   return (
-    <nav className="bg-[#796f5a] shadow-xl border-dark-focus border-b dark:bg-dark-1 w-full p-2">
+    <nav className="bg-[#796f5a] shadow-xl border-green border-b dark:bg-dark-1 w-full p-2">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="w-[12rem] grid grid-cols-2">
           <a href="/">
-            <Image src="/doftopia_logo.png" alt="logo" height={56} width={56} />
+            <Image
+              src="/logo_notext.png"
+              alt="logo"
+              height={96}
+              width={96}
+              className="absolute top-0 left-0"
+            />
           </a>
           <NavbarLinks />
         </div>

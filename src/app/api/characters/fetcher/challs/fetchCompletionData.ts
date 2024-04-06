@@ -8,6 +8,9 @@ interface CharacterChalls {
   success_points: string;
   success_progress: string;
   success_categories: { [key: string]: string };
+  last_success: string;
+  imagelink: string;
+  title: string;
 }
 
 export const fetchCompletionData = async (req: Request) => {
@@ -44,7 +47,13 @@ export const fetchCompletionData = async (req: Request) => {
 
           await prisma.personnage.update({
             where: { id: character.id },
-            data: { completion: parseInt(data.success_progress) },
+            data: {
+              completion: parseInt(data.success_progress),
+              successPts: parseInt(data.success_points),
+              imagelink: data.image,
+              title: data.titre,
+              lastSucces: data.last_succes,
+            },
           });
         }
       );

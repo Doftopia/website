@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import Frame from "../../ui/Frame";
-import { Button } from "../../ui/Button";
+import Frame from "../ui/Frame";
+import { Button } from "../ui/Button";
 
 const XpCalculator = () => {
   const jobs = [

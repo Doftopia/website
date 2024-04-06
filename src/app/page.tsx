@@ -4,8 +4,8 @@ import { error } from "console";
 import Navbar from "./components/Navbar/Navbar";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
-import DailyAlmanax from "./components/Elements/Almanax/DailyAlmanax";
-import Characters from "./components/Elements/Lists/CharactersList";
+import DailyAlmanax from "./components/Elements/DailyAlmanax";
+import MainCharacter from "./components/Elements/MainCharacter";
 
 const Home: React.FC = async () => {
   // const [items, setItems] = useState<any[]>([]);
@@ -100,6 +100,9 @@ const Home: React.FC = async () => {
         <div className="ml-3 mt-[4rem] grid-cols-1">
           <DailyAlmanax />
         </div>
+      </div>
+      <div className="ml-3">
+        <MainCharacter />
       </div>
     </>
   );

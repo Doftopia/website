@@ -3,9 +3,9 @@
 
 import React from "react";
 import { useState } from "react";
-import Frame from "../../ui/Frame";
-import { Button } from "../../ui/Button";
-import { Input } from "../../ui/Input";
+import Frame from "../ui/Frame";
+import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
 import axios from "axios";
 
 interface PortalProps {

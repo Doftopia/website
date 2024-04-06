@@ -36,7 +36,12 @@ model Personnage {
   link       String
   stuff      String?
   completion Int?
+  successPts Int?
   Panoplie   Panoplie[]
+  mainChar   Boolean  @default(false)
+  imagelink  String?  @db.Text
+  title      String?
+  lastSucces String?
 }
 
 model Panoplie {

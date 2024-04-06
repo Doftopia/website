@@ -2,7 +2,7 @@
 import React from "react";
 import Navbar from "@/app/components/Navbar/Navbar";
 import { prisma } from "../../../../lib/prisma";
-import Portal from "@/app/components/Elements/Portals/Portal";
+import Portal from "@/app/components/Elements/Portal";
 
 const Page = async () => {
   const portals = await prisma.portail.findMany({
