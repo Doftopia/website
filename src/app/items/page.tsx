@@ -173,12 +173,12 @@ const Page: React.FC = () => {
     return (
         <div>
         <Navbar pageName="Home"/>
-        <div className="min-h-screen flex bg-[#E0CBA8] pt-24">
-            <div className="flex w-3/12 h-fit py-3 px-4 mx-8 text-black flex-col fixed text-sm transition-all border border-white rounded-lg">
-                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3  text-black"/>
+        <div className="min-h-screen flex bg-[#a7a18d] pt-24">
+            <div className="flex w-3/12 h-fit py-3 px-4 mx-8 text-black flex-col fixed text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] ">
+                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-[#a7a18d] text-white placeholder-white"/>
                 <div className="w-full flex justify-center gap-2 mt-1">
-                    <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3  text-black"/>
-                    <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3  text-black"/>
+                    <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-white text-black"/>
+                    <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-white text-black"/>
                 </div>
                 <div className="flex items-center">
                     <img src="/bin.svg" onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold mt-3 size-5 cursor-pointer mb-2 mr-4"/>
@@ -189,7 +189,7 @@ const Page: React.FC = () => {
                         </button>
                     </div>
                 </div>
-                <div className="text-black border-white border rounded-sm hidden overflow-visible" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
+                <div className="text-white border-white border rounded-sm hidden overflow-visible" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
                     {(categories as Category[]).map((category: Category) => (
                         <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
@@ -197,7 +197,7 @@ const Page: React.FC = () => {
                     ))}
                 </div>
                 <div className="flex mt-3 w-full justify-between gap-2">
-                    <div className=" pl-2 py-1 w-full pb-2 mb-2">
+                    <div className=" pl-2 py-1 w-full pb-2 mb-2 border-[#a7a18d] border-2 rounded-sm">
                         <p className="mb-2 mt-1 font-bold">Primaires</p>
                         <button onClick={() => filterEffect(1)} id='1' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png" alt="lifePoints" className="size-5 mr-1"></img>
@@ -334,14 +334,14 @@ const Page: React.FC = () => {
             <div className="flex justify-end w-full">
             <div className="grid gap-3 mx-4 grid-cols-4">
               {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
-                <div key={index} className=" text-black px-3 rounded-lg flex flex-col border-white border pb-4">
+                <div key={index} className=" text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] shadow-lg border">
                 <div className="flex justify-between pt-3 w-72">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
-                    <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
+                    <h3 className="text-sm text-[#796f5a]">{item.type} - niveau {item.level}</h3>
                     <h3 className="text-sm mb-5 bg-[#779643 cursor-pointer hover:text-[#779643] text-gray-500" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
                   </div>
-                  <img src={item.img} alt={item.itemName} draggable='false' className="p-1 size-16 rounded-sm"/>
+                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="p-1 size-20"/>
                 </div>                  
                 <div>
                 {item.characteristics[0].characId == -1 && (
@@ -350,14 +350,14 @@ const Page: React.FC = () => {
                           {item.apCost && (
     <>
             <div className="text-sm mb-1">
-                <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
+                <p className="flex"><p className="text-[#796f5a] mr-1">Coût </p>{item.apCost} PA</p>
                 {item.minRange !== item.maxRange ? (
-                    <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
+                    <p className="flex"><p className="text-[#796f5a] mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
                 ) : (
-                    <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.maxRange}</p>
+                    <p className="flex"><p className="text-[#796f5a] mr-1">Portée </p>{item.maxRange}</p>
                 )}
-                <p className="flex"><p className="text-gray-500 mr-1">Utilisation par tour </p>{item.nmbCast}</p>
-                <p className="flex"><p className="text-gray-500 mr-1">Critique </p>{item.criticalHitProbability}%</p>
+                <p className="flex"><p className="text-[#796f5a] mr-1">Utilisation par tour </p>{item.nmbCast}</p>
+                <p className="flex"><p className="text-[#796f5a] mr-1">Critique </p>{item.criticalHitProbability}%</p>
             </div>
     </>
 )}
@@ -392,7 +392,7 @@ const Page: React.FC = () => {
              {item.characteristics.map((charac: Characteristic, idx: number) => (
                                 <div key={idx} className="flex">
                                     {charac.characId >= 0 && (
-                                            <p className={charac.characFrom < 0 || charac.characTo < 0 ? "text-red-500 text-sm" : "text-sm"}> 
+                                            <p className={charac.characFrom < 0 || charac.characTo < 0 ? "text-red-500 text-sm" : "text-sm "}> 
                                                 {charac.characTo ? (
                                                     <>
                                                         <div>
