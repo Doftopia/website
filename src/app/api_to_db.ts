@@ -4,7 +4,7 @@ import * as mysql from "mysql2/promise";
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -366,11 +366,13 @@ async function fetchSpellsAndInsertIntoDB(pool: mysql.Pool) {
 async function fetchMobsDropAndInsertIntoDB(pool: mysql.Pool) {
     let query = `CREATE TABLE IF NOT EXISTS mobsDrop (
         mobId INT,
-        dropId INT
+        dropId INT,
+        pourcentageDrop INT,
+        criteria BOOLEAN
     );`
     pool.execute(query);
     let skip = 0;
-    const insertDropsQuery = "INSERT INTO mobsDrop (mobId, dropId) VALUES (?, ?)";
+    const insertDropsQuery = "INSERT INTO mobsDrop (mobId, dropId, pourcentageDrop, criteria) VALUES (?, ?, ?, ?)";
     try {
         while (true) {
             const dropsReponse = await axios.get(`https://api.dofusdb.fr/monsters?$limit=50&$skip=${skip}`);
@@ -382,10 +384,11 @@ async function fetchMobsDropAndInsertIntoDB(pool: mysql.Pool) {
                 return;
             }
 
+            
             for (const mob of mobs) {
                 try {
                     for (const drop of mob.drops) {
-                        const insertDropsParams = [drop.monsterId, drop.dropId];
+                        const insertDropsParams = [drop.monsterId, drop.objectId, drop.percentDropForGrade1, drop.hasCriteria];
                         await pool.execute(insertDropsQuery, insertDropsParams);
                     }
                 } catch (error) {
@@ -410,7 +413,7 @@ async function main() {
         // await fetchItemsAndInsertIntoDB(pool);
         // await fetchMobsAndInsertIntoDB(pool);
         // await fetchItemsTypeAndInsertIntoDB(pool);
-        // await fetchMobsDropAndInsertIntoDB(pool);
+        await fetchMobsDropAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
         console.log(error);

@@ -26,17 +26,12 @@ const Navbar = ({ pageName }: NavbarProps) => {
   // }
 
   return (
-    <nav className="bg-gray-900 shadow-xl border-black border-b dark:bg-dark-1 w-full p-2 fixed">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="w-[12rem] grid grid-cols-2">
-          <a href="/">
-            <Image src="/doftopia_logo.png" alt="logo" height={56} width={56} />
-          </a>
+    <nav className="bg-[#cfc4ab] shadow-xl border-white border-b dark:bg-dark-1 py-1 fixed w-full justify-center gap-10 flex items-center text-black text-sm">
+          <a href="/"><Image src="/doftopia_logo.png" alt="logo" height={56} width={56} /></a>
           <NavbarLinks />
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <p></p>
+          <ThemeSwitcher />
+        {/* <div className="flex items-center space-x-4">
+          <p></p> */}
           {/* {session?.user ? (
             pageName === "profil" ? (
               <SignOutButton />
@@ -51,9 +46,7 @@ const Navbar = ({ pageName }: NavbarProps) => {
               Sign in
             </Link>
           )} */}
-          <ThemeSwitcher />
-        </div>
-      </div>
+        {/* </div> */}
     </nav>
   );
 };

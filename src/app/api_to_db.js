@@ -41,7 +41,7 @@ var axios_1 = require("axios");
 var mysql = require("mysql2/promise");
 var dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -574,10 +574,10 @@ function fetchMobsDropAndInsertIntoDB(pool) {
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    query = "CREATE TABLE IF NOT EXISTS mobsDrop (\n        mobId INT,\n        dropId INT\n    );";
+                    query = "CREATE TABLE IF NOT EXISTS mobsDrop (\n        mobId INT,\n        dropId INT,\n        pourcentageDrop INT,\n        criteria BOOLEAN\n    );";
                     pool.execute(query);
                     skip = 0;
-                    insertDropsQuery = "INSERT INTO mobsDrop (mobId, dropId) VALUES (?, ?)";
+                    insertDropsQuery = "INSERT INTO mobsDrop (mobId, dropId, pourcentageDrop, criteria) VALUES (?, ?, ?, ?)";
                     _c.label = 1;
                 case 1:
                     _c.trys.push([1, 14, , 15]);
@@ -606,7 +606,7 @@ function fetchMobsDropAndInsertIntoDB(pool) {
                 case 6:
                     if (!(_a < _b.length)) return [3 /*break*/, 9];
                     drop = _b[_a];
-                    insertDropsParams = [drop.monsterId, drop.dropId];
+                    insertDropsParams = [drop.monsterId, drop.objectId, drop.percentDropForGrade1, drop.hasCriteria];
                     return [4 /*yield*/, pool.execute(insertDropsQuery, insertDropsParams)];
                 case 7:
                     _c.sent();
@@ -644,25 +644,25 @@ function main() {
                     pool = _a.sent();
                     // await fetchCharacteristicsAndInsertIntoDB(pool);    
                     // await fetchEffectsAndInsertIntoDB(pool);
-                    return [4 /*yield*/, fetchRecipesAndInsertIntoDB(pool)];
+                    // await fetchRecipesAndInsertIntoDB(pool);
+                    // await fetchJobsAndInsertIntoDB(pool); 
+                    // await fetchItemSetsAndInsertIntoDB(pool); 
+                    // await fetchItemsAndInsertIntoDB(pool);
+                    // await fetchMobsAndInsertIntoDB(pool);
+                    // await fetchItemsTypeAndInsertIntoDB(pool);
+                    return [4 /*yield*/, fetchMobsDropAndInsertIntoDB(pool)];
                 case 2:
                     // await fetchCharacteristicsAndInsertIntoDB(pool);    
                     // await fetchEffectsAndInsertIntoDB(pool);
-                    _a.sent();
+                    // await fetchRecipesAndInsertIntoDB(pool);
                     // await fetchJobsAndInsertIntoDB(pool); 
                     // await fetchItemSetsAndInsertIntoDB(pool); 
                     // await fetchItemsAndInsertIntoDB(pool);
                     // await fetchMobsAndInsertIntoDB(pool);
                     // await fetchItemsTypeAndInsertIntoDB(pool);
-                    // await fetchMobsDropAndInsertIntoDB(pool);
+                    _a.sent();
                     return [4 /*yield*/, pool.end()];
                 case 3:
-                    // await fetchJobsAndInsertIntoDB(pool); 
-                    // await fetchItemSetsAndInsertIntoDB(pool); 
-                    // await fetchItemsAndInsertIntoDB(pool);
-                    // await fetchMobsAndInsertIntoDB(pool);
-                    // await fetchItemsTypeAndInsertIntoDB(pool);
-                    // await fetchMobsDropAndInsertIntoDB(pool);
                     _a.sent();
                     return [3 /*break*/, 5];
                 case 4:

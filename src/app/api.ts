@@ -3,7 +3,7 @@ import * as cors from 'cors';
 import * as mysql from "mysql2/promise";
 import { Request, Response } from 'express';
 import { ParsedQs } from 'qs';
-import { Item, GroupedItems, GroupedRecipes, RecipeResult, GroupedNmbItems, NmbItems, Recipe, Charac, Mob, MobCharac, GroupedMob } from './interfaces';
+import { Item, GroupedItems, GroupedRecipes, RecipeResult, GroupedNmbItems, NmbItems, Recipe, Charac, Mob, MobCharac, GroupedMob, DropsByMob, Drop, MobDrop } from './interfaces';
 
 const app = express();
 const port = 3000;
@@ -18,7 +18,7 @@ app.use(
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -232,13 +232,13 @@ app.get('/recipes', async (req: Request, res: Response) => {
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
-        const rows = results as mysql.RowDataPacket[];
+        const rows = results as RecipeResult[];
 
         if (rows.length > 0) {
             previousItemId = rows[0].resultId;
         }
 
-        (results as mysql.RowDataPacket).forEach((result: RecipeResult) => {
+        (results as RecipeResult[]).forEach((result: RecipeResult) => {
             try {
                 if (previousItemId != result.resultId) {
                     groupedData.push({resultItemId: previousItemId, jobId: result.jobId, itemLevel: result.itemLevel, recipe: recipe});
@@ -284,7 +284,7 @@ app.get('/itemSets', async (req: Request, res: Response) => {
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
-        const rows = results as mysql.RowDataPacket[];
+        const rows = results as Item[];
         console.log(fields);
 
         if (rows.length > 0) {
@@ -292,7 +292,7 @@ app.get('/itemSets', async (req: Request, res: Response) => {
             previousNmbItems = rows[0].numberItem;
         }
 
-        (results as mysql.RowDataPacket).forEach((result: Item, index: number) => {
+        (results as Item[]).forEach((result: Item, index: number) => {
             try {
                 if (previousNmbItems != result.numberItem || index == rows.length-1) {
                     if (index == rows.length-1) {
@@ -328,7 +328,7 @@ app.get('/itemSets', async (req: Request, res: Response) => {
 app.get('/mobs', async (req: Request, res: Response) => {
     let groupedData: GroupedMob[] = [];
     let mobCharac: MobCharac[] = [];
-    let base_limit = 10;
+    let base_limit = 40;
     let previousMobID = 0;
     let itemQuery = `SELECT * from mobs`;
     const queryParams = [];
@@ -337,13 +337,21 @@ app.get('/mobs', async (req: Request, res: Response) => {
     let limit = base_limit;
     
     if (req.query.id) {
-        itemQuery += ` WHERE id = ?`;
-        queryParams.push(req.query.id);
+        let ids: number[] = [];
+        if (Array.isArray(req.query.id)) {
+            ids = req.query.id.map(Number);
+        } else {
+            ids = [Number(req.query.id)];
+        }
+
+        const placeholders = ids.map(() => '?').join(',');
+        itemQuery += ` WHERE id IN (${placeholders})`;
+        queryParams.push(...ids);
     }
 
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
-        const rows = results as mysql.RowDataPacket[];
+        const rows = results as Mob[];
 
         if (rows.length != 0) {
             previousMobID = rows[0].id;
@@ -351,12 +359,12 @@ app.get('/mobs', async (req: Request, res: Response) => {
             previousMobImg = rows[0].img;
         }
 
-        (results as mysql.RowDataPacket).forEach((result: Mob, index: number) => {
+        (results as Mob[]).forEach((result: Mob, index: number) => {
             if (index >= limit) {
                 return;
             }
             if (result.id != previousMobID || result.id == rows[rows.length-1].id && result.lifePoints == rows[rows.length-1].lifePoints) {
-                groupedData.push({name: previousMobName, id: previousMobID, characs: mobCharac, img: previousMobImg});
+                groupedData.push({name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg});
                 previousMobID = result.id;
                 previousMobName = result.name;
                 previousMobImg = result.img
@@ -370,6 +378,50 @@ app.get('/mobs', async (req: Request, res: Response) => {
         res.json({limit: base_limit, total: rows.length, data: groupedData})
     } catch (error) {
         console.error(`Error fetching mobs: ${error}`);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+    };
+});
+
+
+app.get('/mobs-drop', async (req: Request, res: Response) => {
+    let previousMobId = 0;
+    let drops: Drop[] = [];
+    let groupedData: DropsByMob[] = [];
+    let itemQuery = `SELECT * from mobsdrop`;
+    const queryParams = [];
+
+    if (req.query.mobId) {
+        itemQuery += ` WHERE mobId = ?`;
+        queryParams.push(req.query.mobId);
+    };
+
+    if (req.query.dropId) {
+        itemQuery += ` WHERE dropId = ?`;
+        queryParams.push(req.query.dropId);
+    };
+    
+    try {
+        const [results, _] = await pool.query(itemQuery, queryParams);
+        const rows = results as MobDrop[];
+
+        if (rows.length != 0) {
+            previousMobId = rows[0].mobId;
+        };
+
+        (results as MobDrop[]).forEach((mobDrop: MobDrop) => {
+            if (mobDrop.mobId != previousMobId) {
+                groupedData.push({mobId: previousMobId, dropsId: drops});
+                previousMobId = mobDrop.mobId;
+                drops = [];
+            } else {
+                drops.push({id: mobDrop.dropId, dropPourcentage: mobDrop.pourcentageDrop, criteria: Number(mobDrop.criteria)});
+            }
+        });
+        groupedData.push({mobId: previousMobId, dropsId: drops});
+        res.json({data: groupedData})
+    } catch (error) {
+        console.error(`Error fetching mobs drop: ${error}`);
         res.status(500).json({ error: "Internal Server Error" });
         return;
     };

@@ -47,7 +47,7 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -349,13 +349,13 @@ app.get('/itemSets', function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); });
 app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var groupedData, mobCharac, base_limit, previousMobID, itemQuery, queryParams, previousMobName, previousMobImg, limit, _a, results, fields, rows_2, error_6;
+    var groupedData, mobCharac, base_limit, previousMobID, itemQuery, queryParams, previousMobName, previousMobImg, limit, ids, placeholders, _a, results, fields, rows_2, error_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 groupedData = [];
                 mobCharac = [];
-                base_limit = 10;
+                base_limit = 40;
                 previousMobID = 0;
                 itemQuery = "SELECT * from mobs";
                 queryParams = [];
@@ -363,8 +363,16 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 previousMobImg = "";
                 limit = base_limit;
                 if (req.query.id) {
-                    itemQuery += " WHERE id = ?";
-                    queryParams.push(req.query.id);
+                    ids = [];
+                    if (Array.isArray(req.query.id)) {
+                        ids = req.query.id.map(Number);
+                    }
+                    else {
+                        ids = [Number(req.query.id)];
+                    }
+                    placeholders = ids.map(function () { return '?'; }).join(',');
+                    itemQuery += " WHERE id IN (".concat(placeholders, ")");
+                    queryParams.push.apply(queryParams, ids);
                 }
                 _b.label = 1;
             case 1:
@@ -383,7 +391,7 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                         return;
                     }
                     if (result.id != previousMobID || result.id == rows_2[rows_2.length - 1].id && result.lifePoints == rows_2[rows_2.length - 1].lifePoints) {
-                        groupedData.push({ name: previousMobName, id: previousMobID, characs: mobCharac, img: previousMobImg });
+                        groupedData.push({ name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg });
                         previousMobID = result.id;
                         previousMobName = result.name;
                         previousMobImg = result.img;
@@ -400,6 +408,61 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 3:
                 error_6 = _b.sent();
                 console.error("Error fetching mobs: ".concat(error_6));
+                res.status(500).json({ error: "Internal Server Error" });
+                return [2 /*return*/];
+            case 4:
+                ;
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/mobs-drop', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var previousMobId, drops, groupedData, itemQuery, queryParams, _a, results, _, rows, error_7;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                previousMobId = 0;
+                drops = [];
+                groupedData = [];
+                itemQuery = "SELECT * from mobsdrop";
+                queryParams = [];
+                if (req.query.mobId) {
+                    itemQuery += " WHERE mobId = ?";
+                    queryParams.push(req.query.mobId);
+                }
+                ;
+                if (req.query.dropId) {
+                    itemQuery += " WHERE dropId = ?";
+                    queryParams.push(req.query.dropId);
+                }
+                ;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, pool.query(itemQuery, queryParams)];
+            case 2:
+                _a = _b.sent(), results = _a[0], _ = _a[1];
+                rows = results;
+                if (rows.length != 0) {
+                    previousMobId = rows[0].mobId;
+                }
+                ;
+                results.forEach(function (mobDrop) {
+                    if (mobDrop.mobId != previousMobId) {
+                        groupedData.push({ mobId: previousMobId, dropsId: drops });
+                        previousMobId = mobDrop.mobId;
+                        drops = [];
+                    }
+                    else {
+                        drops.push({ id: mobDrop.dropId, dropPourcentage: mobDrop.pourcentageDrop, criteria: Number(mobDrop.criteria) });
+                    }
+                });
+                groupedData.push({ mobId: previousMobId, dropsId: drops });
+                res.json({ data: groupedData });
+                return [3 /*break*/, 4];
+            case 3:
+                error_7 = _b.sent();
+                console.error("Error fetching mobs drop: ".concat(error_7));
                 res.status(500).json({ error: "Internal Server Error" });
                 return [2 /*return*/];
             case 4:

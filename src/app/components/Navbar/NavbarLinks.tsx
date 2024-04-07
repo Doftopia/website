@@ -29,59 +29,59 @@ const NavbarLinks = () => {
 
   return (
     <div className="dark:text-white flex items-center space-x-6">
-      <a href="/objets" className="hover:text-primary hover:text-[#779643] hover:font-bold">
-        Objets
+      <a href="/objets" className="hover:text-primary hover:text-[#779643]">
+        OBJETS
       </a>
-      <a href="/panoplies" className="dark:hover:text-primary hover:text-[#779643] hover:font-bold">
-        Panoplies
+      <a href="/panoplies" className="dark:hover:text-primary hover:text-[#779643]">
+        PANOPLIES
       </a>
-      <a href="/quetes" className="hover:text-primary hover:text-[#779643] hover:font-bold">
-        Quêtes
+      <a href="/quetes" className="hover:text-primary hover:text-[#779643]">
+        QUETES
       </a>
-      <a href="/succes" className="hover:text-primary hover:text-[#779643] hover:font-bold">
-        Succès
+      <a href="/succes" className="hover:text-primary hover:text-[#779643]">
+        SUCCES
       </a>
-      <a href="/donjons" className="hover:text-primary hover:text-[#779643] hover:font-bold">
-        Donjons
+      <a href="/donjons" className="hover:text-primary hover:text-[#779643]">
+        DONJONS
       </a>
-      <a href="/items" className="hover:text-[#779643] hover:font-bold">Items</a>
-      <a href="/mobs" className="hover:text-[#779643] hover:font-bold">Mobs</a>
+      <a href="/items" className="hover:text-[#779643]">ITEMS</a>
+      <a href="/mobs" className="hover:text-[#779643]">MOBS</a>
       <div
         className="relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <a
-          className="text-white hover:text-primary focus:outline-none hover:text-[#779643] hover:font-bold"
+          className="text-black hover:text-primary focus:outline-none hover:text-[#779643]"
           onMouseEnter={handleMenuMouseEnter}
           onMouseLeave={handleMenuMouseLeave}
           href="/outils"
         >
-          Outils
+          OUTILS
         </a>
         {(isHovered || isMenuHovered) && (
           <div
-            className="absolute bg-gray-900 dark:bg-dark-3 rounded-md py-2 mt-4 space-y-2 w-48 z-10 border border-black"
+            className="absolute bg-[#cfc4ab] dark:bg-dark-3 rounded-md py-2 mt-4 space-y-2 w-48 z-10 border border-black"
             onMouseEnter={handleMenuMouseEnter}
             onMouseLeave={handleMenuMouseLeave}
           >
             <a
               href="/outils/portails"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-black hover:hover:bg-[#779643] dark:hover:bg-[#779643]"
             >
-              Portails
+              PORTAILS
             </a>
             <a
               href="#"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-black hover:hover:bg-[#779643]   dark:hover:bg-[#779643]"
             >
-              Carte Ressources
+              CARTE RESSOURCES
             </a>
             <a
               href="/outils/xp-metiers"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-black hover:hover:bg-[#779643]   dark:hover:bg-[#779643]"
             >
-              Xp Métiers
+              XP METIERS
             </a>
           </div>
         )}

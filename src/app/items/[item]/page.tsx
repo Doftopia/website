@@ -5,18 +5,21 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar/Navbar';
 import * as mysql from "mysql2/promise";
-import { Characteristic, GroupedItems, GroupedRecipes, Item, Jobs, Recipe } from '@/app/interfaces';
+import { Characteristic, Drop, GroupedItems, GroupedMob, GroupedRecipes, Item, Jobs, MobDrop, Recipe } from '@/app/interfaces';
+import { set } from 'zod';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
     const itemId = searchParams.get('id');
     const [item, setItem] = useState<GroupedItems[]>([]);
     const [recipes, setRecipes] = useState<GroupedRecipes[]>([]);
-    const [job, setjob] = useState<String[]>([]);
+    const [job, setjob] = useState<String>('');
+    const [mobs, setMobs] = useState<GroupedMob[]>([]);
 
     useEffect(() => {
         if (itemId) {
             fetchItem();
+            fetchMobDrop();
         }
     }, [itemId]);   
 
@@ -26,22 +29,42 @@ const Page: React.FC = () => {
     }
 
     const fetchItem = async () => {
-        const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
-        const recipesResponse = await axios.get(`http://localhost:3000/recipes?resultId=${itemId}`)
-        let jobsResponse: Jobs | any;
         try {
-            jobsResponse = await axios.get(`http://localhost:3000/jobs?id=${recipesResponse.data.data[0].jobId}`);
-            setjob(jobsResponse.data.data[0].jobName);
+            const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
+            const recipesResponse = await axios.get(`http://localhost:3000/recipes?resultId=${itemId}`)
+            let jobsResponse: Jobs | any;
+            try {
+                jobsResponse = await axios.get(`http://localhost:3000/jobs?id=${recipesResponse.data.data[0].jobId}`);
+                setjob(jobsResponse.data.data[0].jobName);
+            } catch (error) {
+                console.error(error);
+            }
+            setRecipes(recipesResponse.data.data);
+            setItem(response.data.data);
         } catch (error) {
-            console.error(error);
+            console.error(`Error fetching item ${error}`);
         }
-        setRecipes(recipesResponse.data.data);
-        setItem(response.data.data);
     }
+
+    const fetchMobDrop = async () => {
+        try {
+            const groupedMobs: GroupedMob[] = [];
+            let filters = "";
+            const dropsReponse = await axios.get(`http://localhost:3000/mobs-drop?dropId=${itemId}`);
+            dropsReponse.data.data.forEach((drop: MobDrop) => {
+                filters += `id=${drop.mobId}&`;
+            });
+            const mobResponse = await axios.get(`http://localhost:3000/mobs?${filters}`);
+            setMobs(mobResponse.data.data);
+        } catch (error) {
+            console.error(`Error fetching mob drop ${error}`);
+        }
+    } 
 
     const redirectRecipeItem = async (id: number) => {
         router.push(`/items/item?id=${id}`)
     }
+
     
     return (
         <div>
@@ -168,6 +191,16 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             ))}
+            <div className='grid grid-cols-4'>
+                {mobs.map((mob: GroupedMob) => (
+                    <div className=' text-white mt-10 h-fit pt-3 w-fit px-2 text-sm'>
+                        <div onClick={() => {router.push(`/mobs/mob?id=${mob.id}`)}} className='cursor-pointer'>
+                            <p>{mob.name}</p>
+                            <img src={mob.img} />
+                        </div>    
+                    </div>
+                ))}
+            </div>
         </div>
         </div>
     )

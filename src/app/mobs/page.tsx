@@ -13,8 +13,12 @@ const Page: React.FC = () => {
     const router = useRouter();
 
     const fetchMobs = async () => {
-        const response = await axios.get('http://localhost:3000/mobs');
-        setMobs(response.data.data);
+        try {
+            const response = await axios.get('http://localhost:3000/mobs');
+            setMobs(response.data.data);
+        } catch (error) {
+            console.error(`Error fetching mobs ${error}`);
+        }
     }
 
     const redirectMob = (mobId: string) => {
@@ -37,7 +41,13 @@ const Page: React.FC = () => {
                             {mob.name}
                             <img src={mob.img} alt={mob.name} />
                         </p>
-                        <p>Niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
+                            <div>
+                                {mob.characs[0].level != mob.characs[mob.characs.length-1].level ? (
+                                    <p>Niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
+                                ) : (
+                                    <p>Niveau {mob.characs[0].level}</p>
+                                )}
+                            </div>
                         {stats.map((stat: string, index: number) => (
                             <div>
                                 <p className={mob.characs[0][stat] < 0 || mob.characs[mob.characs.length-1][stat] < 0 ? "text-red-500" : "text-sm"}> 

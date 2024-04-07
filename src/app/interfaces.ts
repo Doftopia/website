@@ -159,4 +159,22 @@ interface Jobs {
     jobName: string;
 }
 
-export type { Item, GroupedItems, RecipeResult, GroupedRecipes, GroupedNmbItems, NmbItems, Recipe, Charac, GroupedMob, Mob, MobCharac, Characteristic, Category, Jobs };
+interface DropsByMob {
+    mobId: number;
+    dropsId: Drop[];
+}
+
+interface Drop {
+    id: number;  
+    dropPourcentage: number;
+    criteria: number;
+}   
+
+interface MobDrop {
+    mobId: number;
+    dropId: number;
+    criteria: boolean;
+    pourcentageDrop: number;
+}
+
+export type { Item, GroupedItems, RecipeResult, GroupedRecipes, GroupedNmbItems, NmbItems, Recipe, Charac, GroupedMob, Mob, MobCharac, Characteristic, Category, Jobs, DropsByMob, Drop, MobDrop };
