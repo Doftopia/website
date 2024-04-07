@@ -334,7 +334,7 @@ const Page: React.FC = () => {
             <div className="flex justify-end w-full">
             <div className="grid gap-3 mx-4 grid-cols-4">
               {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
-                <div key={index} className=" text-black px-3 rounded-lg flex flex-col bg-white pb-4">
+                <div key={index} className=" text-black px-3 rounded-lg flex flex-col border-white border pb-4">
                 <div className="flex justify-between pt-3 w-72">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
