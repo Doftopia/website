@@ -285,7 +285,6 @@ app.get('/itemSets', async (req: Request, res: Response) => {
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
         const rows = results as Item[];
-        console.log(fields);
 
         if (rows.length > 0) {
             previousSetId = rows[0].setId;
