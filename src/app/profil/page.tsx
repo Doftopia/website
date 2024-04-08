@@ -7,6 +7,7 @@ import { prisma } from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Characters from "../components/Elements/Lists/CharactersList";
+import ProfileForm from "../components/Elements/Forms/ProfileForm";
 
 interface ProfileProps {
   username: string;
@@ -34,16 +35,13 @@ const Profile: React.FC<ProfileProps> = async () => {
         <Navbar pageName="profil" />
       </header>
       <main>
-        <div className="mx-auto">
-          <Frame size="sm" className="text-white">
-            {" "}
-            <p>Mon pseudonyme : {user.username}</p>
-            <p>Mon Adresse mail : {user.email} </p>
-            <p>Mon mot de passe : ahahahh</p>
-            <p>Mon pseudo Ankama : {user.ankamaUsername?.replace("-", "#")}</p>
-            <Button>Modifier mes informations</Button>
-          </Frame>
-          <Characters />
+        <div className="grid w-fit grid-cols-3">
+          <div>
+            <ProfileForm />
+          </div>
+          <div className="col-span-2">
+            <Characters />
+          </div>
         </div>
       </main>
     </>

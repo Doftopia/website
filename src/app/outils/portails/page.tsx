@@ -12,7 +12,7 @@ const Page = async () => {
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar pageName="portails" />
       </header>
       <div className="mx-auto grid grid-cols-2 w-fit">
         {portals.map((portal) => (

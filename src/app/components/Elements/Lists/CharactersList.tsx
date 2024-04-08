@@ -22,13 +22,12 @@ const CharactersList: React.FC = () => {
 
   return (
     <div className="grid grid-cols-2">
-      <h1 className="text-white ml-3">Liste des personnages</h1>
       <div>
         <ul className="flex flex-wrap">
           {characters.map((character: any, index: number) => (
             <li key={index}>
               <Character
-                className={character.mainchar ? "border border-green" : ""}
+                className={character.mainChar == 1 ? "border border-green" : ""}
                 name={character.name}
                 level={character.level}
                 race={character.race}

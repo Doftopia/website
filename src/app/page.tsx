@@ -91,11 +91,11 @@ const Home: React.FC = async () => {
         </div>
       ))} */}
       <div></div>
-      {session && (
+      {/* {session && (
         <h1 className="dark:text-white text-center my-5 font-bold ">
           Bonjour {session.user.username}
         </h1>
-      )}
+      )} */}
       <div className="grid grid-cols-2">
         <div className="ml-3 mt-[4rem] grid-cols-1">
           <DailyAlmanax />
