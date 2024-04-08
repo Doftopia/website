@@ -173,7 +173,7 @@ const Page: React.FC = () => {
     return (
         <div>
         <Navbar pageName="Home"/>
-        <div className="min-h-screen bg-[#a7a18d] pt-24 lg:flex block">
+        <div className="min-h-screen bg-[#a7a18d] pt-8 lg:flex block">
             <div className="h-fit text-black lg:block 2xl:w-4/12 top-24 text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] mb-7 lg:w-5/12 lg:sticky py-3 px-4 lg:mx-8 mx-8">
                 <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-[#a7a18d] text-black placeholder-black w-full"/>
                 <div className="w-full flex justify-center gap-2 mt-1">
@@ -332,10 +332,10 @@ const Page: React.FC = () => {
                 </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 w-11/12 ml-8 lg:ml-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 w-full lg:mx-0 px-8 box-border gap-3 xl:grid-cols-3 2xl:grid-cols-4">
               {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
-                <div key={index} className=" text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] shadow-lg border">
-                <div className="flex justify-between pt-3 w-72">
+                <div key={index} className="text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] shadow-lg border w-full sm:w-full lg:w-auto box-border">                
+                <div className="flex justify-between pt-3 w-full">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
                     <h3 className="text-sm text-[#796f5a]">{item.type} - niveau {item.level}</h3>

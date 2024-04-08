@@ -67,10 +67,10 @@ const Page: React.FC = () => {
 
     
     return (
-        <div>
+        <div className='bg-[#a7a18d] h-screen'>
         <Navbar pageName="Home"/>
-        <div className='bg-[#a7a18d] h-screen lg:flex flex-row justify-center gap-4 pt-16'>
-        <div className='mt-10 lg:w-1/2 mx-8 lg:mx-0'>
+        <div className='xl:flex flex-row gap-4 px-8 bg-[#a7a18d]'>
+        <div className='mt-10 lg:w-full'>
         {item.map((item: GroupedItems, index: number) => (
                 <div key={index} className="bg-[#c6bdab] text-black px-3 pb-2 rounded-sm border-[#3eb167] border">
                 <div className="flex justify-between pt-3 pb-3 mb-4">
@@ -170,7 +170,7 @@ const Page: React.FC = () => {
               ))}
         </div>
             {recipes.map((recipe: GroupedRecipes) => (
-                <div className='bg-[#cfc4ab] mt-3 lg:mt-10 h-fit pt-3 w-fit pr-10 border border-[#3eb167] ml-8 lg:ml-0 pl-3'>
+                <div className='bg-[#cfc4ab] mt-3 lg:mt-10 h-fit pt-3 pr-10 border border-[#3eb167] pl-2'>
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
                         {recipe.recipe.map((item: Recipe, index: number) => (
@@ -185,15 +185,21 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             ))}
-            <div className='grid grid-cols-4'>
+            <div>
+                {mobs.length > 0 && (
+                    <div>
+            <div className='flex flex-wrap border-[#3eb167] bg-[#796f5a] border mt-10 pt-2 pl-2'>
                 {mobs.map((mob: GroupedMob) => (
-                    <div className=' text-white mt-10 h-fit pt-3 w-fit px-2 text-sm'>
+                    <div className=' text-white h-fit w-fit text-sm mr-10'>
                         <div onClick={() => {router.push(`/mobs/mob?id=${mob.id}`)}} className='cursor-pointer'>
                             <p>{mob.name}</p>
                             <img src={mob.img} />
                         </div>    
                     </div>
                 ))}
+            </div>
+                    </div>
+                )}
             </div>
         </div>
         </div>

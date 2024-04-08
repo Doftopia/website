@@ -18,7 +18,7 @@ app.use(
 
 const dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -35,8 +35,14 @@ app.get("/items", async (req: Request, res: Response) => {
     const filters = [];
 
     if (req.query.id) {
-        filters.push(`items.id = ?`);
-        queryParams.push(req.query.id);
+        if (Array.isArray(req.query.id)) {
+            let placeholders = req.query.id.map(id => '?').join(',');
+            filters.push(`items.id IN (${placeholders})`);
+            queryParams.push(...req.query.id);
+        } else {
+            filters.push(`items.id = ?`);
+            queryParams.push(req.query.id);
+        }
     }
     
     if (req.query.name) {
@@ -328,12 +334,12 @@ app.get('/mobs', async (req: Request, res: Response) => {
     let groupedData: GroupedMob[] = [];
     let mobCharac: MobCharac[] = [];
     let base_limit = 40;
+    let base_offset = 0;
     let previousMobID = 0;
     let itemQuery = `SELECT * from mobs`;
     const queryParams = [];
     let previousMobName = "";
     let previousMobImg = ""; 
-    let limit = base_limit;
     
     if (req.query.id) {
         let ids: number[] = [];
@@ -348,6 +354,20 @@ app.get('/mobs', async (req: Request, res: Response) => {
         queryParams.push(...ids);
     }
 
+    if (req.query.name) {
+        itemQuery += ` WHERE name LIKE ?`;
+        queryParams.push(`%${req.query.name}%`);
+    }
+
+    if (req.query.limit) {
+        base_limit = Number(req.query.limit);
+    }
+
+    if (req.query.offset) {
+        base_offset = Number(req.query.offset);
+    }
+
+    let limit = base_limit;
     try {
         const [results, fields] = await pool.query(itemQuery, queryParams);
         const rows = results as Mob[];

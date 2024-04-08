@@ -38,7 +38,7 @@ const Page: React.FC = () => {
 
         <Navbar pageName="Home"/>
 
-        <div className="bg-gray-800 h-full pb-10 pt-14">
+        <div className="bg-gray-800 h-full pb-10">
         <div className=" text-white pt-10">
             {(itemsSet as mysql.RowDataPacket).map((itemSet: GroupedNmbItems) => (
                 <div>
@@ -46,7 +46,7 @@ const Page: React.FC = () => {
                     <div className="bg-gray-900 w-fit rounded-sm border border-black pl-2 pr-6 pb-3 pt-3">
                         <p className="font-bold">{itemSet.setName} - niveau {itemSet.setLevel} </p>
                         {(items as mysql.RowDataPacket).map((item: Item) => (
-                            <div className="mt-3 flex items-center cursor-pointer hover:font-bold hover:bg-[#779643]" onClick={() => redirectItem(item.itemId)}>
+                            <div className="mt-3 flex items-center cursor-pointer hover:font-bold hover:bg-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>
                                 <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-16 mr-2"/>
                                 <h3>{item.type}</h3>
                             </div>

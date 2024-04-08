@@ -47,13 +47,13 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
 var pool = mysql.createPool(dbConfig);
 app.get("/items", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var itemQuery, base_limit, base_skip, item_limit, skip_limit, queryParams, filters, effects, categories, categoryFilters, groupedData, element_to_icon, _a, results, _, error_1;
+    var itemQuery, base_limit, base_skip, item_limit, skip_limit, queryParams, filters, placeholders, effects, categories, categoryFilters, groupedData, element_to_icon, _a, results, _, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -65,8 +65,15 @@ app.get("/items", function (req, res) { return __awaiter(void 0, void 0, void 0,
                 queryParams = [];
                 filters = [];
                 if (req.query.id) {
-                    filters.push("items.id = ?");
-                    queryParams.push(req.query.id);
+                    if (Array.isArray(req.query.id)) {
+                        placeholders = req.query.id.map(function (id) { return '?'; }).join(',');
+                        filters.push("items.id IN (".concat(placeholders, ")"));
+                        queryParams.push.apply(queryParams, req.query.id);
+                    }
+                    else {
+                        filters.push("items.id = ?");
+                        queryParams.push(req.query.id);
+                    }
                 }
                 if (req.query.name) {
                     filters.push("items.name LIKE ?");
@@ -348,19 +355,19 @@ app.get('/itemSets', function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); });
 app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var groupedData, mobCharac, base_limit, previousMobID, itemQuery, queryParams, previousMobName, previousMobImg, limit, ids, placeholders, _a, results, fields, rows_2, error_6;
+    var groupedData, mobCharac, base_limit, base_offset, previousMobID, itemQuery, queryParams, previousMobName, previousMobImg, ids, placeholders, limit, _a, results, fields, rows_2, error_6;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 groupedData = [];
                 mobCharac = [];
                 base_limit = 40;
+                base_offset = 0;
                 previousMobID = 0;
                 itemQuery = "SELECT * from mobs";
                 queryParams = [];
                 previousMobName = "";
                 previousMobImg = "";
-                limit = base_limit;
                 if (req.query.id) {
                     ids = [];
                     if (Array.isArray(req.query.id)) {
@@ -373,6 +380,17 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     itemQuery += " WHERE id IN (".concat(placeholders, ")");
                     queryParams.push.apply(queryParams, ids);
                 }
+                if (req.query.name) {
+                    itemQuery += " WHERE name LIKE ?";
+                    queryParams.push("%".concat(req.query.name, "%"));
+                }
+                if (req.query.limit) {
+                    base_limit = Number(req.query.limit);
+                }
+                if (req.query.offset) {
+                    base_offset = Number(req.query.offset);
+                }
+                limit = base_limit;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
@@ -386,20 +404,25 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     previousMobImg = rows_2[0].img;
                 }
                 results.forEach(function (result, index) {
-                    if (index >= limit) {
-                        return;
-                    }
-                    if (result.id != previousMobID || result.id == rows_2[rows_2.length - 1].id && result.lifePoints == rows_2[rows_2.length - 1].lifePoints) {
-                        groupedData.push({ name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg });
-                        previousMobID = result.id;
-                        previousMobName = result.name;
-                        previousMobImg = result.img;
-                        mobCharac = [];
-                        mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
+                    if (base_offset < index) {
+                        if (index >= limit) {
+                            return;
+                        }
+                        if (result.id != previousMobID || result.id == rows_2[rows_2.length - 1].id && result.lifePoints == rows_2[rows_2.length - 1].lifePoints) {
+                            groupedData.push({ name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg });
+                            previousMobID = result.id;
+                            previousMobName = result.name;
+                            previousMobImg = result.img;
+                            mobCharac = [];
+                            mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
+                        }
+                        else {
+                            limit += 1;
+                            mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
+                        }
                     }
                     else {
-                        limit += 1;
-                        mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
+                        console.log(result.name);
                     }
                 });
                 res.json({ limit: base_limit, total: rows_2.length, data: groupedData });

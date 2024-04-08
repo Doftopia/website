@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Drop, DropsByMob, GroupedItems, GroupedMob, MobCharac } from '@/app/interfaces';
+import { set } from 'zod';
 
 const Page: React.FC = () => {
     const searchParams = useSearchParams();
@@ -33,17 +34,18 @@ const Page: React.FC = () => {
     }
 
     async function fetchDropsFromMob(mobId: string) {
+        let filters = "";
         try {
             const dropsResponse = await axios.get(`http://localhost:3000/mobs-drop?mobId=${mobId}`);
             let drops = dropsResponse.data.data[0];
             const groupedDrops: GroupedItems[] = [];
             const groupedPourcentage: Drop[] = [];
             for (const drop of drops.dropsId) {
-                const itemResponse = await axios.get(`http://localhost:3000/items?id=${drop.id}`);
-                groupedDrops.push(itemResponse.data.data[0]);
+                filters += `id=${drop.id}&`;
                 groupedPourcentage.push({dropPourcentage: drop.dropPourcentage, criteria: drop.criteria, id: drop.id});
             }
-            setDrops(groupedDrops);
+            const itemResponse = await axios.get(`http://localhost:3000/items?${filters}`);
+            setDrops(itemResponse.data.data);
             setDropPourcentage(groupedPourcentage);
         } catch (error) {
             console.error(`Error fetching drops ${error}`);
@@ -89,33 +91,39 @@ const Page: React.FC = () => {
                         <br />
                     </div>
                 ))}
-            <p>Butins</p>
-            <div className= 'flex flex-wrap border-t border-black pt-4'>
-                {drops.map((drop: GroupedItems, index: number)=> (
+            <div>
+                {drops[0] && dropPourcentage[0] && (
                     <div>
-                        {dropPourcentage[index].criteria == 0 && (
-                            <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
-                                <img src={drop.img} alt={drop.itemName} className='mr-1' />
-                                <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
-                            </div>
-                        )}
+                        <p>Butins</p>
+                        <div className= 'flex flex-wrap border-t border-black pt-4'>
+                            {drops.map((drop: GroupedItems, index: number)=> (
+                                <div>
+                                    {dropPourcentage[index].criteria == 0 && (
+                                        <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
+                                            <img src={drop.img} alt={drop.itemName} className='mr-1' />
+                                            <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        <p>Butins conditionnés </p>
+                        <div className= 'flex flex-wrap border-t border-black pt-4'>
+                            {drops.map((drop: GroupedItems, index: number)=> (
+                                <div>
+                                    {dropPourcentage[index].criteria == 1 && (
+                                        <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
+                                            <img src={drop.img} alt={drop.itemName} className='mr-1' />
+                                            <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                ))}
+                )}
             </div>
-            <p>Butins conditionnés </p>
-            <div className= 'flex flex-wrap border-t border-black pt-4'>
-                {drops.map((drop: GroupedItems, index: number)=> (
-                    <div>
-                        {dropPourcentage[index].criteria == 1 && (
-                            <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
-                                <img src={drop.img} alt={drop.itemName} className='mr-1' />
-                                <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
-                            </div>
-                        )}
-                    </div>
-                ))}
             </div>
-        </div>
         </div>
     )
 }

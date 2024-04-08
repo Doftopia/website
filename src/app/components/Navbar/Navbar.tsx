@@ -26,7 +26,7 @@ const Navbar = ({ pageName }: NavbarProps) => {
   // }
 
   return (
-    <nav className="bg-[#796f5a] shadow-xl border-[#3eb167] border-b dark:bg-dark-2 py-1 fixed w-full justify-center gap-10 flex items-center text-black text-sm z-10">
+    <nav className="bg-[#796f5a] shadow-xl border-[#3eb167] border-b dark:bg-dark-2 py-1 sticky w-full justify-center gap-10 flex items-center text-black text-sm z-10">
           <a href="/"><Image src="/doftopia_logo.png" alt="logo" height={56} width={56} /></a>
           <NavbarLinks />
           <ThemeSwitcher />
