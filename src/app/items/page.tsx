@@ -173,23 +173,23 @@ const Page: React.FC = () => {
     return (
         <div>
         <Navbar pageName="Home"/>
-        <div className="min-h-screen flex bg-[#a7a18d] pt-24">
-            <div className="flex w-3/12 h-fit py-3 px-4 mx-8 text-black flex-col fixed text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] ">
-                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-[#a7a18d] text-white placeholder-white"/>
+        <div className="min-h-screen bg-[#a7a18d] pt-24 lg:flex block">
+            <div className="h-fit text-black lg:block 2xl:w-4/12 top-24 text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] mb-7 lg:w-5/12 lg:sticky py-3 px-4 lg:mx-8 mx-8">
+                <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 bg-[#a7a18d] text-black placeholder-black w-full"/>
                 <div className="w-full flex justify-center gap-2 mt-1">
-                    <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-white text-black"/>
-                    <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-white text-black"/>
+                    <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-black text-black"/>
+                    <input type="text" value={maxLvl} onChange={handleMaxLevelInputChange} placeholder="Niveau max" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 bg-[#a7a18d] placeholder-black text-black"/>
                 </div>
                 <div className="flex items-center">
                     <img src="/bin.svg" onClick={() => clearFilterEffect()} id='ResetFilters' className="hover:font-bold mt-3 size-5 cursor-pointer mb-2 mr-4"/>
-                    <div className="flex bg-white w-full h-6 items-center" onClick={() => filterCategoriesDiv()}>
-                        <img src="\down-arrow.svg" alt="non" className="size-5 ml-2"/>
+                    <div className="flex bg-[#a7a18d] text-black rounded-lg w-full h-8 mt-2 items-center" onClick={() => filterCategoriesDiv()}>
+                        <img src="\down-arrow.svg" alt="non" className="size-4 ml-4"/>
                         <button className="w-full mr-2">
                             <p>Categories</p>
                         </button>
                     </div>
                 </div>
-                <div className="text-white border-white border rounded-sm hidden overflow-visible" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
+                <div className="text-black border-[#a7a18d] border-2 rounded-sm mt-2 hidden overflow-visible" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
                     {(categories as Category[]).map((category: Category) => (
                         <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
@@ -234,7 +234,7 @@ const Page: React.FC = () => {
                             <img src="https://dofusdb.fr/icons/characteristics/tx_wisdom.png" alt="lifePoints" className="size-5 mr-1"></img>
                             Sagesse</button>
                     </div>
-                    <div className="  pl-2 py-1 w-full pb-2 mb-2">
+                    <div className="  pl-2 py-1 w-full pb-2 mb-2 border-[#a7a18d] border-2 rounded-sm">
                         <p className="mb-2 mt-1 font-bold">Secondaires</p>
                         <button onClick={() => filterEffect(82)} id='82' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_attackAP.png" alt="lifePoints" className="size-5 mr-1"></img>
@@ -272,14 +272,14 @@ const Page: React.FC = () => {
                     </div>
                 </div>
                 <div className="grid grid-cols-2 pt-2 w-full gap-2">
-                    <div className="  w-full pl-2 py-1 pb-2 mb-2">
+                    <div className="w-full pl-2 py-1 pb-2 mb-2 border-[#a7a18d] border-2 rounded-sm">
                         <p className="mb-2 mt-1 font-bold">Dommages</p>
                         <button onClick={() => filterEffect(16)} id='16' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_damage.png" alt="lifePoints" className="size-5 mr-1"></img>
                             Dommages</button>
                         <button onClick={() => filterEffect(86)} id='86' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_criticalDamage.png" alt="lifePoints" className="size-5 mr-1"></img>
-                            Dommages critiques</button>
+                            Do critiques</button>
                         <button onClick={() => filterEffect(92)} id='92' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-5 mr-1"></img>
                             Dmg Neutre</button>
@@ -296,7 +296,7 @@ const Page: React.FC = () => {
                             <img src="https://dofusdb.fr/icons/characteristics/tx_agility.png" alt="lifePoints" className="size-5 mr-1"></img>
                             Dmg Air</button>
                     </div>
-                    <div className="  w-full pl-2 py-1 pb-2 mb-2">
+                    <div className="  w-full pl-2 py-1 pb-2 mb-2 border-[#a7a18d] border-2 rounded-sm">
                     <p className="mb-2 mt-1 font-bold">Resistances</p>
                         <button onClick={() => filterEffect(58)} id='58' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
                             <img src="https://dofusdb.fr/icons/characteristics/tx_neutral.png" alt="lifePoints" className="size-5 mr-1"></img>
@@ -331,8 +331,8 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-end w-full">
-            <div className="grid gap-3 mx-4 grid-cols-4">
+
+            <div className="flex flex-wrap gap-3 w-11/12 ml-8 lg:ml-0">
               {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
                 <div key={index} className=" text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] shadow-lg border">
                 <div className="flex justify-between pt-3 w-72">
@@ -454,8 +454,6 @@ const Page: React.FC = () => {
               </div>
             </div>
         </div>
-        </div>
-
     );
 };
 

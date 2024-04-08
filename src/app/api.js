@@ -47,7 +47,7 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -305,7 +305,6 @@ app.get('/itemSets', function (req, res) { return __awaiter(void 0, void 0, void
             case 2:
                 _a = _b.sent(), results = _a[0], fields = _a[1];
                 rows_1 = results;
-                console.log(fields);
                 if (rows_1.length > 0) {
                     previousSetId = rows_1[0].setId;
                     previousNmbItems = rows_1[0].numberItem;

@@ -41,7 +41,7 @@ var axios_1 = require("axios");
 var mysql = require("mysql2/promise");
 var dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };

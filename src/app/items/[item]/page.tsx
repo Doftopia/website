@@ -69,22 +69,19 @@ const Page: React.FC = () => {
     return (
         <div>
         <Navbar pageName="Home"/>
-        <div className='bg-gray-800 h-screen flex flex-row justify-center gap-11 pt-16'>
-        <div className='mt-10 w-1/2'>
+        <div className='bg-[#a7a18d] h-screen lg:flex flex-row justify-center gap-4 pt-16'>
+        <div className='mt-10 lg:w-1/2 mx-8 lg:mx-0'>
         {item.map((item: GroupedItems, index: number) => (
-                <div key={index} className="bg-gray-900 text-white px-3 pb-2 rounded-sm border-black border">
+                <div key={index} className="bg-[#c6bdab] text-black px-3 pb-2 rounded-sm border-[#3eb167] border">
                 <div className="flex justify-between pt-3 pb-3 mb-4">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-gray-300">{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
                     <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
                   </div>
-                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="size-24 bg-gray-800 p-2 rounded-sm border border-black"/>
+                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="p-2 rounded-sm size-32"/>
                 </div>                  
                 <h3 className="mb-6">{item.description}</h3>
-                {item.characteristics[0].characId == -1 && (
-                <div className='border-t border-gray-800 mb-2 pb-3'></div>
-             )}
                 {item.characteristics.map((charac: Characteristic) => (
                 <div>
                     {charac.characId < 0 && (
@@ -97,9 +94,6 @@ const Page: React.FC = () => {
                     )}
                 </div>
              ))}
-             {item.characteristics[0].characId == -1 && (
-                <div className='border-b border-gray-800 mb-2 pb-3 w-2/3'></div>
-             )}
              {item.characteristics.map((charac: Characteristic, idx: number) => (
                                 <div key={idx} className="flex items-center">
                                     {charac.characId >= 0 && (
@@ -160,7 +154,7 @@ const Page: React.FC = () => {
                             ))}
                     {item.apCost && (
                         <>
-                                <div className="text-sm border-t border-gray-800 mt-3 pt-3 mb-1">
+                                <div className="text-sm  mt-3 pt-3 mb-1">
                                     <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
                                     {item.minRange !== item.maxRange ? (
                                         <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
@@ -176,7 +170,7 @@ const Page: React.FC = () => {
               ))}
         </div>
             {recipes.map((recipe: GroupedRecipes) => (
-                <div className='bg-gray-900 border border-black text-white mt-10 flex h-fit pt-3 pl-3 w-fit pr-10'>
+                <div className='bg-[#cfc4ab] mt-3 lg:mt-10 h-fit pt-3 w-fit pr-10 border border-[#3eb167] ml-8 lg:ml-0 pl-3'>
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
                         {recipe.recipe.map((item: Recipe, index: number) => (
