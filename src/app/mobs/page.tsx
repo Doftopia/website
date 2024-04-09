@@ -46,7 +46,7 @@ const Page: React.FC = () => {
             <input type="text" name="Mobs" placeholder='Chercher monstres' className='text-black outline-none w-1/2 h-8 mb-4 mx-8 pl-2 border border-[#3eb167]' onChange={handleNameFilter}/>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 mx-8 gap-5'>
                 {mobs.map((mob: GroupedMob) => (
-                    <div className='flex flex-col items-center cursor-pointer w-full bg-[#cfc4ab] border-[#3eb167] border transition-all hover:-translate-y-1' onClick={() => redirectMob(mob.id)}>
+                    <div className='flex flex-col items-center cursor-pointer w-full bg-[#cfc4ab] border-[#3eb167] border transition-all hover:-translate-y-1 hover:brightness-90' onClick={() => redirectMob(mob.id)}>
                         <p className='cursor-pointer'>
                         </p>
                             <div className='flex justify-center pt-1 w-full font-bold'>

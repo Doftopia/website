@@ -336,7 +336,7 @@ const Page: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 w-full lg:mx-0 px-8 box-border gap-3 xl:grid-cols-3 2xl:grid-cols-4">
               {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
-                <div key={index} className="text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] shadow-lg border w-full sm:w-full lg:w-auto box-border hover:-translate-y-1 transition-all cursor-pointer" onClick={() => redirectItem(item.itemId.toString())}>                
+                <div key={index} className="text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] border w-full sm:w-full lg:w-auto box-border hover:-translate-y-2 transition-all cursor-pointer hover:brightness-90" onClick={() => redirectItem(item.itemId.toString())}>                
                 <div className="flex justify-between pt-3 w-full">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
