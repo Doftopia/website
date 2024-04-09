@@ -18,7 +18,7 @@ app.use(
 
 const dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -224,13 +224,13 @@ app.get('/recipes', async (req: Request, res: Response) => {
         queryParams.push(req.query.resultId);
     }
 
-    itemQuery += ` GROUP BY 
-        recipes.resultId, 
-        recipes.quantities, 
-        recipes.ids, 
-        recipes.jobId 
-    ORDER BY
-        recipes.quantities DESC `
+        itemQuery += ` GROUP BY 
+            recipes.resultId, 
+            recipes.quantities, 
+            recipes.ids, 
+            recipes.jobId 
+        ORDER BY
+            recipes.quantities DESC `
 
     let groupedData: GroupedRecipes[] = [];
     let recipe: Recipe[] = []
@@ -246,6 +246,7 @@ app.get('/recipes', async (req: Request, res: Response) => {
 
         (results as RecipeResult[]).forEach((result: RecipeResult) => {
             try {
+                
                 if (previousItemId != result.resultId) {
                     groupedData.push({resultItemId: previousItemId, jobId: result.jobId, itemLevel: result.itemLevel, recipe: recipe});
                     previousItemId = result.resultId;
@@ -407,7 +408,7 @@ app.get('/mobs-drop', async (req: Request, res: Response) => {
     let previousMobId = 0;
     let drops: Drop[] = [];
     let groupedData: DropsByMob[] = [];
-    let itemQuery = `SELECT * from mobsdrop`;
+    let itemQuery = `SELECT * from mobsDrop`;
     const queryParams = [];
 
     if (req.query.mobId) {

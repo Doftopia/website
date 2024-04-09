@@ -40,26 +40,25 @@ const Page: React.FC = () => {
     }, [nameFilter])
 
     return (
-        <div>
+        <div className='bg-[#a7a18d]'>
         <Navbar pageName="Home"/>
-
-        <div className='bg-gray-800 h-full text-white pt-8'>
-            <input type="text" name="Mobs" placeholder='Chercher monstres' className='text-black outline-none w-full h-8 mb-4' onChange={handleNameFilter}/>
-            <div className='flex flex-wrap mx-6 gap-5'>
+        <div className='h-full text-black pt-8'>
+            <input type="text" name="Mobs" placeholder='Chercher monstres' className='text-black outline-none w-1/2 h-8 mb-4 mx-8 pl-2 border border-[#3eb167]' onChange={handleNameFilter}/>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 mx-8 gap-5'>
                 {mobs.map((mob: GroupedMob) => (
-                    <div className='flex flex-col items-center cursor-pointer w-44' onClick={() => redirectMob(mob.id)}>
-                        <p className='bg-black px-1'>
-                            {mob.name}
+                    <div className='flex flex-col items-center cursor-pointer w-full bg-[#cfc4ab] border-[#3eb167] border transition-all hover:-translate-y-1' onClick={() => redirectMob(mob.id)}>
                         <p className='cursor-pointer'>
                         </p>
-                            <div>
-                                {mob.characs[0].level != mob.characs[mob.characs.length-1].level ? (
-                                    <p>Niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
-                                ) : (
-                                    <p>Niveau {mob.characs[0].level}</p>
-                                )}
+                            <div className='flex justify-center pt-1 w-full font-bold'>
+                                {mob.name}
+                                <div className='font-normal ml-1'>
+                                    {mob.characs[0].level != mob.characs[mob.characs.length-1].level ? (
+                                        <p> - niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
+                                    ) : (
+                                        <p> - niveau {mob.characs[0].level}</p>
+                                    )}
+                                </div>
                             </div>
-                        </p>
                             <img src={mob.img} alt={mob.name}/>
                         <br />
                     </div>

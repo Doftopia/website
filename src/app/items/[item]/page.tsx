@@ -31,7 +31,22 @@ const Page: React.FC = () => {
     const fetchItem = async () => {
         try {
             const response = await axios.get(`http://localhost:3000/items?id=${itemId}`);
+            
             const recipesResponse = await axios.get(`http://localhost:3000/recipes?resultId=${itemId}`)
+            // recipesResponse.data.data.forEach((recipe: GroupedRecipes) => {
+            //     recipe.itemLevel = recipe.itemLevel.split(',')[0];
+                
+            //     recipe.recipe.forEach((item: Recipe) => {
+            //         console.log(item.itemName);
+            //         if (item.itemName.includes(',')) {
+            //             item.itemName = item.itemName.split(',')[0];
+            //             item.itemImg = item.itemImg.split(',')[0];
+            //         }
+            //     });
+            // });
+            console.log(recipesResponse.data.data);
+            
+            
             let jobsResponse: Jobs | any;
             try {
                 jobsResponse = await axios.get(`http://localhost:3000/jobs?id=${recipesResponse.data.data[0].jobId}`);
@@ -39,6 +54,8 @@ const Page: React.FC = () => {
             } catch (error) {
                 console.error(error);
             }
+            console.log(recipesResponse.data.data);
+            
             setRecipes(recipesResponse.data.data);
             setItem(response.data.data);
         } catch (error) {
@@ -72,12 +89,12 @@ const Page: React.FC = () => {
         <div className='xl:flex flex-row gap-4 px-8 bg-[#a7a18d]'>
         <div className='mt-10 lg:w-full'>
         {item.map((item: GroupedItems, index: number) => (
-                <div key={index} className="bg-[#c6bdab] text-black px-3 pb-2 rounded-sm border-[#3eb167] border">
+                <div key={index} className="bg-[#cfc4ab] text-black px-3 pb-2 rounded-sm border-[#3eb167] border">
                 <div className="flex justify-between pt-3 pb-3 mb-4">
                   <div className="flex flex-col transition-all">
                     <h2 className="font-bold cursor-pointer hover:text-gray-300">{item.itemName}</h2>
                     <h3 className="text-sm text-gray-500">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 text-green-300 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
+                    <h3 className="text-sm mb-5 text-gray-500 cursor-pointer hover:text-[#779643]" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
                   </div>
                   <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="p-2 rounded-sm size-32"/>
                 </div>                  
@@ -154,7 +171,7 @@ const Page: React.FC = () => {
                             ))}
                     {item.apCost && (
                         <>
-                                <div className="text-sm  mt-3 pt-3 mb-1">
+                                <div className="text-sm mt-3 pt-3 mb-1">
                                     <p className="flex"><p className="text-gray-500 mr-1">Coût </p>{item.apCost} PA</p>
                                     {item.minRange !== item.maxRange ? (
                                         <p className="flex"><p className="text-gray-500 mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
@@ -169,8 +186,9 @@ const Page: React.FC = () => {
                   </div>
               ))}
         </div>
+        <div className='flex flex-col mt-3 lg:mt-10 gap-3'>
             {recipes.map((recipe: GroupedRecipes) => (
-                <div className='bg-[#cfc4ab] mt-3 lg:mt-10 h-fit pt-3 pr-10 border border-[#3eb167] pl-2'>
+                <div className='bg-[#cfc4ab] h-fit pt-3 pr-10 border border-[#3eb167] pl-2'>
                     <div key={recipe.resultItemId}>
                         <p className='mb-2 font-bold'>{job}</p>
                         {recipe.recipe.map((item: Recipe, index: number) => (
@@ -188,7 +206,7 @@ const Page: React.FC = () => {
             <div>
                 {mobs.length > 0 && (
                     <div>
-            <div className='flex flex-wrap border-[#3eb167] bg-[#796f5a] border mt-10 pt-2 pl-2'>
+            <div className='flex flex-wrap border-[#3eb167] bg-[#cfc4ab] border pt-2 pl-2'>
                 {mobs.map((mob: GroupedMob) => (
                     <div className=' text-white h-fit w-fit text-sm mr-10'>
                         <div onClick={() => {router.push(`/mobs/mob?id=${mob.id}`)}} className='cursor-pointer'>
@@ -200,6 +218,7 @@ const Page: React.FC = () => {
             </div>
                     </div>
                 )}
+            </div>
             </div>
         </div>
         </div>

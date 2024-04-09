@@ -47,7 +47,7 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'root',
+    user: 'doftopia',
     password: '1234',
     database: 'doftopia'
 };
@@ -245,7 +245,7 @@ app.get('/recipes', function (req, res) { return __awaiter(void 0, void 0, void 
                     itemQuery += " WHERE recipes.resultId = ? ";
                     queryParams.push(req.query.resultId);
                 }
-                itemQuery += " GROUP BY \n        recipes.resultId, \n        recipes.quantities, \n        recipes.ids, \n        recipes.jobId \n    ORDER BY\n        recipes.quantities DESC ";
+                itemQuery += " GROUP BY \n            recipes.resultId, \n            recipes.quantities, \n            recipes.ids, \n            recipes.jobId \n        ORDER BY\n            recipes.quantities DESC ";
                 groupedData = [];
                 recipe = [];
                 previousItemId = 0;
@@ -404,25 +404,20 @@ app.get('/mobs', function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     previousMobImg = rows_2[0].img;
                 }
                 results.forEach(function (result, index) {
-                    if (base_offset < index) {
-                        if (index >= limit) {
-                            return;
-                        }
-                        if (result.id != previousMobID || result.id == rows_2[rows_2.length - 1].id && result.lifePoints == rows_2[rows_2.length - 1].lifePoints) {
-                            groupedData.push({ name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg });
-                            previousMobID = result.id;
-                            previousMobName = result.name;
-                            previousMobImg = result.img;
-                            mobCharac = [];
-                            mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
-                        }
-                        else {
-                            limit += 1;
-                            mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
-                        }
+                    if (index >= limit) {
+                        return;
+                    }
+                    if (result.id != previousMobID || result.id == rows_2[rows_2.length - 1].id && result.lifePoints == rows_2[rows_2.length - 1].lifePoints) {
+                        groupedData.push({ name: previousMobName, id: previousMobID.toString(), characs: mobCharac, img: previousMobImg });
+                        previousMobID = result.id;
+                        previousMobName = result.name;
+                        previousMobImg = result.img;
+                        mobCharac = [];
+                        mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
                     }
                     else {
-                        console.log(result.name);
+                        limit += 1;
+                        mobCharac.push({ level: result.level, lifePoints: result.lifePoints, ap: result.actionPoints, mp: result.mouvementPoints, vitality: result.vitality, paDodge: result.paDodge, pmDodge: result.pmDodge, wisdom: result.wisdom, earthResistance: result.earthResistance, fireResistance: result.fireResistance, airResistance: result.airResistance, waterResistance: result.waterResistance, neutralResistance: result.neutralResistance, strength: result.strength, intelligence: result.intelligence, chance: result.chance, agility: result.agility });
                     }
                 });
                 res.json({ limit: base_limit, total: rows_2.length, data: groupedData });
@@ -446,7 +441,7 @@ app.get('/mobs-drop', function (req, res) { return __awaiter(void 0, void 0, voi
                 previousMobId = 0;
                 drops = [];
                 groupedData = [];
-                itemQuery = "SELECT * from mobsdrop";
+                itemQuery = "SELECT * from mobsDrop";
                 queryParams = [];
                 if (req.query.mobId) {
                     itemQuery += " WHERE mobId = ?";

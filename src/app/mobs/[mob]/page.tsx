@@ -53,26 +53,28 @@ const Page: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className='bg-[#a7a18d] text-black'>
             <header>
                 <Navbar pageName="Home"/>
             </header>
-        <div className='bg-[#cfc4ab] h-screen text-white pt-24 mx-24'>
+        <div className='h-screen pt-8 mx-24'>
         {mob.map((mob: GroupedMob) => (
-                    <div className='border-black border rounded-sm text-sm pl-4 pt-2'>
+                    <div className='border-[#3eb167] border rounded-sm text-sm pl-4 pt-2 bg-[#cfc4ab] mb-4 px-3'>
                         <p>
                             {mob.name}
                             <img src={mob.img} alt={mob.name} />
                         </p>
-                        <div>
+                            <div>
                                 {mob.characs[0].level != mob.characs[mob.characs.length-1].level ? (
+
                                     <p>Niveau {mob.characs[0].level} a {mob.characs[mob.characs.length-1].level}</p>
                                 ) : (
                                     <p>Niveau {mob.characs[0].level}</p>
                                 )}
                             </div>
+                        <div className='flex flex-wrap mt-2'>
                         {stats.map((stat: string, index: number) => (
-                            <div>
+                            <div className='mr-3'>
                                 <p className={mob.characs[0][stat] < 0 || mob.characs[mob.characs.length-1][stat] < 0 ? "text-red-500" : "text-sm"}> 
                                 {mob.characs[0][stat] != mob.characs[mob.characs.length-1][stat] ? (
                                     <div className='flex items-center'>
@@ -88,6 +90,7 @@ const Page: React.FC = () => {
                                 </p>
                             </div>
                         ))}
+                        </div>
                         <br />
                     </div>
                 ))}
@@ -95,10 +98,10 @@ const Page: React.FC = () => {
                 {drops[0] && dropPourcentage[0] && (
                     <div>
                         <p>Butins</p>
-                        <div className= 'flex flex-wrap border-t border-black pt-4'>
+                        <div className= 'flex flex-wrap border-t border-[#3eb167] bg-[#cfc4ab] mb-4 mt-1 px-3 py-2'>
                             {drops.map((drop: GroupedItems, index: number)=> (
                                 <div>
-                                    {dropPourcentage[index].criteria == 0 && (
+                                    {dropPourcentage[index].criteria == 1 && (
                                         <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
                                             <img src={drop.img} alt={drop.itemName} className='mr-1' />
                                             <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
@@ -108,11 +111,11 @@ const Page: React.FC = () => {
                             ))}
                         </div>
                         <p>Butins conditionnés </p>
-                        <div className= 'flex flex-wrap border-t border-black pt-4'>
+                        <div className= 'flex flex-wrap border-t border-[#3eb167] py-2 bg-[#cfc4ab] mt-1'>
                             {drops.map((drop: GroupedItems, index: number)=> (
                                 <div>
-                                    {dropPourcentage[index].criteria == 1 && (
-                                        <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
+                                    {dropPourcentage[index].criteria == 0 && (
+                                        <div className='flex items-center hover:bg-[#779643] pr-2' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
                                             <img src={drop.img} alt={drop.itemName} className='mr-1' />
                                             <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
                                         </div>

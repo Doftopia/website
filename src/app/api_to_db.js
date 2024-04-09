@@ -638,38 +638,46 @@ function main() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 4, , 5]);
+                    _a.trys.push([0, 12, , 13]);
                     return [4 /*yield*/, mysql.createPool(dbConfig)];
                 case 1:
                     pool = _a.sent();
-                    // await fetchCharacteristicsAndInsertIntoDB(pool);    
-                    // await fetchEffectsAndInsertIntoDB(pool);
-                    // await fetchRecipesAndInsertIntoDB(pool);
-                    // await fetchJobsAndInsertIntoDB(pool); 
-                    // await fetchItemSetsAndInsertIntoDB(pool); 
-                    // await fetchItemsAndInsertIntoDB(pool);
-                    // await fetchMobsAndInsertIntoDB(pool);
-                    // await fetchItemsTypeAndInsertIntoDB(pool);
-                    return [4 /*yield*/, fetchMobsDropAndInsertIntoDB(pool)];
+                    return [4 /*yield*/, fetchCharacteristicsAndInsertIntoDB(pool)];
                 case 2:
-                    // await fetchCharacteristicsAndInsertIntoDB(pool);    
-                    // await fetchEffectsAndInsertIntoDB(pool);
-                    // await fetchRecipesAndInsertIntoDB(pool);
-                    // await fetchJobsAndInsertIntoDB(pool); 
-                    // await fetchItemSetsAndInsertIntoDB(pool); 
-                    // await fetchItemsAndInsertIntoDB(pool);
-                    // await fetchMobsAndInsertIntoDB(pool);
-                    // await fetchItemsTypeAndInsertIntoDB(pool);
                     _a.sent();
-                    return [4 /*yield*/, pool.end()];
+                    return [4 /*yield*/, fetchEffectsAndInsertIntoDB(pool)];
                 case 3:
                     _a.sent();
-                    return [3 /*break*/, 5];
+                    return [4 /*yield*/, fetchRecipesAndInsertIntoDB(pool)];
                 case 4:
+                    _a.sent();
+                    return [4 /*yield*/, fetchJobsAndInsertIntoDB(pool)];
+                case 5:
+                    _a.sent();
+                    return [4 /*yield*/, fetchItemSetsAndInsertIntoDB(pool)];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, fetchItemsAndInsertIntoDB(pool)];
+                case 7:
+                    _a.sent();
+                    return [4 /*yield*/, fetchMobsAndInsertIntoDB(pool)];
+                case 8:
+                    _a.sent();
+                    return [4 /*yield*/, fetchItemsTypeAndInsertIntoDB(pool)];
+                case 9:
+                    _a.sent();
+                    return [4 /*yield*/, fetchMobsDropAndInsertIntoDB(pool)];
+                case 10:
+                    _a.sent();
+                    return [4 /*yield*/, pool.end()];
+                case 11:
+                    _a.sent();
+                    return [3 /*break*/, 13];
+                case 12:
                     error_17 = _a.sent();
                     console.log(error_17);
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 13];
+                case 13: return [2 /*return*/];
             }
         });
     });

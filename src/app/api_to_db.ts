@@ -67,7 +67,7 @@ async function fetchItemsAndInsertIntoDB(pool: mysql.Pool) {
                         }
                     }
                 } catch (error) {
-                    console.log('error in item loop ', error);
+                    // console.log('error in item loop ', error);
                 }
             }
         }
@@ -405,14 +405,14 @@ async function fetchMobsDropAndInsertIntoDB(pool: mysql.Pool) {
 async function main() {
     try {
         const pool = await mysql.createPool(dbConfig);
-        // await fetchCharacteristicsAndInsertIntoDB(pool);    
-        // await fetchEffectsAndInsertIntoDB(pool);
-        // await fetchRecipesAndInsertIntoDB(pool);
-        // await fetchJobsAndInsertIntoDB(pool); 
-        // await fetchItemSetsAndInsertIntoDB(pool); 
-        // await fetchItemsAndInsertIntoDB(pool);
-        // await fetchMobsAndInsertIntoDB(pool);
-        // await fetchItemsTypeAndInsertIntoDB(pool);
+        await fetchCharacteristicsAndInsertIntoDB(pool);    
+        await fetchEffectsAndInsertIntoDB(pool);
+        await fetchRecipesAndInsertIntoDB(pool);
+        await fetchJobsAndInsertIntoDB(pool); 
+        await fetchItemSetsAndInsertIntoDB(pool); 
+        await fetchItemsAndInsertIntoDB(pool);
+        await fetchMobsAndInsertIntoDB(pool);
+        await fetchItemsTypeAndInsertIntoDB(pool);
         await fetchMobsDropAndInsertIntoDB(pool);
         await pool.end(); 
     } catch (error) {
