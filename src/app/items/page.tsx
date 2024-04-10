@@ -186,6 +186,7 @@ const Page: React.FC = () => {
                     </div>
                 </div>
                 <div className="text-black border-[#686459] border-2 rounded-sm mt-2 hidden overflow-visible bg-white" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
+                    <input type="text"className="bg-black w-full outline-none text-white" onChange={cateorgyNameFilterInput}/>
                     {(categories as Category[]).map((category: Category) => (
                         <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories transition-all" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}

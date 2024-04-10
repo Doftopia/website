@@ -7,63 +7,76 @@ import { Characteristic, GroupedItems } from "../interfaces";
 
 const Page: React.FC = () => {
     const [item, setItem] = useState<GroupedItems[]>([]);
+    const [reliquat, setReliquat] = useState<number>(0);
 
-    const runes = [
-        { characteristic: 'Initiative', name: 'Ini', base: 10, pa: 30, ra: 100 },
-        { characteristic: 'Poids portable', name: 'Pod', base: 10, pa: 30, ra: 100 },
-        { characteristic: 'Vitalité', name: 'Vi', base: 3, pa: 10, ra: 30 },
-        { characteristic: 'Force', name: 'Fo', base: 1, pa: 3, ra: 10 },
-        { characteristic: 'Intelligence', name: 'Ine', base: 1, pa: 3, ra: 10 },
-        { characteristic: 'Agilité', name: 'Age', base: 1, pa: 3, ra: 10 },
-        { characteristic: 'Chance', name: 'Cha', base: 1, pa: 3, ra: 10 },
-        { characteristic: '% Dommage', name: 'Do Per', base: 1, pa: 3, ra: 10 },
-        { characteristic: '% Dommage au piège', name: 'Pi Per', base: 1, pa: 3, ra: 10 },
-        { characteristic: 'Résistance fixe Neutre', name: 'Ré Neutre', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance fixe Terre', name: 'Ré Terre', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance fixe Feu', name: 'Ré Feu', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance fixe Eau', name: 'Ré Eau', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance fixe Air', name: 'Ré Air', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance en % Neutre', name: 'Ré Per Neutre', base: 1, pa: null, ra: null },
-        { characteristic: 'Résistance en % Terre', name: 'Ré Per Terre', base: 1, pa: null, ra: null },
-        { characteristic: 'Résistance en % Feu', name: 'Ré Per Feu', base: 1, pa: null, ra: null },
-        { characteristic: 'Résistance en % Eau', name: 'Ré Per Eau', base: 1, pa: null, ra: null },
-        { characteristic: 'Résistance en % Air', name: 'Ré Per Air', base: 1, pa: null, ra: null },
-        { characteristic: 'Sagesse', name: 'Sa', base: 1, pa: 3, ra: 10 },
-        { characteristic: 'Prospection', name: 'Prospe', base: 1, pa: 3, ra: null },
-        { characteristic: 'Tacle', name: 'Tac', base: 1, pa: 3, ra: null },
-        { characteristic: 'Fuite', name: 'Fui', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage élémentaire Neutre', name: 'Do Neutre', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage élémentaire Terre', name: 'Do Terre', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage élémentaire Feu', name: 'Do Feu', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage élémentaire Eau', name: 'Do Eau', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage élémentaire Air', name: 'Do Air', base: 1, pa: 3, ra: null },
-        { characteristic: 'Retrait PM', name: 'Ret Pme', base: 1, pa: 3, ra: null },
-        { characteristic: 'Retrait PA', name: 'Ret Pa', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance PM', name: 'Ré Pme', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance PA', name: 'Ré Pa', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage de Poussée', name: 'Do Pou', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance Poussée', name: 'Ré Pou', base: 1, pa: 3, ra: null },
-        { characteristic: 'Résistance Critique', name: 'Ré Cri', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage aux pièges', name: 'Pi', base: 1, pa: 3, ra: null },
-        { characteristic: 'Dommage', name: 'Do', base: 1, pa: null, ra: null },
-        { characteristic: 'Soin', name: 'So', base: 1, pa: null, ra: null },
-        { characteristic: 'Invocation', name: 'Invo', base: 1, pa: null, ra: null },
-        { characteristic: 'Coups critiques', name: 'Cri', base: 1, pa: null, ra: null },
-        { characteristic: 'Renvoi de dommage', name: 'Do Ren', base: 1, pa: null, ra: null },
-        { characteristic: 'Portée', name: 'Po', base: 1, pa: null, ra: null },
-        { characteristic: 'PM', name: 'Ga Pme', base: 1, pa: null, ra: null },
-        { characteristic: 'PA', name: 'Ga Pa', base: 1, pa: null, ra: null },
-        { characteristic: 'Arme de chasse', name: 'Rune de chasse', base: null, pa: null, ra: null }
-    ];
+    interface Rune {
+        characteristic: string;
+        base: number | null;
+        pa: number | null;
+        ra: number | null;
+    }
 
-        
+    interface Runes {
+        [key: string]: Rune;
+      }
+      
+
+    const runes: Runes = {
+        'Initiative': { characteristic: 'Initiative', base: 10, pa: 30, ra: 100 },
+        'Pod': { characteristic: 'Poids portable', base: 10, pa: 30, ra: 100 },
+        'Vitalité': { characteristic: 'Vitalité', base: 3, pa: 10, ra: 30 },
+        'Puissance': { characteristic: 'Puissance', base: 3, pa: 10, ra: 30 },
+        'Force': { characteristic: 'Force', base: 1, pa: 3, ra: 10 },
+        'Intelligence': { characteristic: 'Intelligence', base: 1, pa: 3, ra: 10 },
+        'Agilité': { characteristic: 'Agilité', base: 1, pa: 3, ra: 10 },
+        'Chance': { characteristic: 'Chance', base: 1, pa: 3, ra: 10 },
+        'Do Per': { characteristic: '% Dommage', base: 1, pa: 3, ra: 10 },
+        'Pi Per': { characteristic: '% Dommage au piège', base: 1, pa: 3, ra: 10 },
+        'Ré Neutre': { characteristic: 'Résistance fixe Neutre', base: 1, pa: 3, ra: null },
+        'Ré Terre': { characteristic: 'Résistance fixe Terre', base: 1, pa: 3, ra: null },
+        'Ré Feu': { characteristic: 'Résistance fixe Feu', base: 1, pa: 3, ra: null },
+        'Ré Eau': { characteristic: 'Résistance fixe Eau', base: 1, pa: 3, ra: null },
+        'Ré Air': { characteristic: 'Résistance fixe Air', base: 1, pa: 3, ra: null },
+        'Ré Per Neutre': { characteristic: 'Résistance en % Neutre', base: 1, pa: null, ra: null },
+        'Ré Per Terre': { characteristic: 'Résistance en % Terre', base: 1, pa: null, ra: null },
+        'Ré Per Feu': { characteristic: 'Résistance en % Feu', base: 1, pa: null, ra: null },
+        'Ré Per Eau': { characteristic: 'Résistance en % Eau', base: 1, pa: null, ra: null },
+        'Ré Per Air': { characteristic: 'Résistance en % Air', base: 1, pa: null, ra: null },
+        'Sagesse': { characteristic: 'Sagesse', base: 1, pa: 3, ra: 10 },
+        'Prospection': { characteristic: 'Prospection', base: 1, pa: 3, ra: null },
+        'Tacle': { characteristic: 'Tacle', base: 1, pa: 3, ra: null },
+        'Fuite': { characteristic: 'Fuite', base: 1, pa: 3, ra: null },
+        '(dommages Neutre)': { characteristic: 'Dommage élémentaire Neutre', base: 1, pa: 3, ra: null },
+        'Dommage  Terre': { characteristic: 'Dommage élémentaire Terre', base: 1, pa: 3, ra: null },
+        'Dommage  Feu': { characteristic: 'Dommage élémentaire Feu', base: 1, pa: 3, ra: null },
+        'Dommage  Eau': { characteristic: 'Dommage élémentaire Eau', base: 1, pa: 3, ra: null },
+        'Dommage  Air': { characteristic: 'Dommage élémentaire Air', base: 1, pa: 3, ra: null },
+        'Retrait PM': { characteristic: 'Retrait PM', base: 1, pa: 3, ra: null },
+        'Ret Pa': { characteristic: 'Retrait PA', base: 1, pa: 3, ra: null },
+        'Ré Pme': { characteristic: 'Résistance PM', base: 1, pa: 3, ra: null },
+        'Ré Pa': { characteristic: 'Résistance PA', base: 1, pa: 3, ra: null },
+        'Do Pou': { characteristic: 'Dommage de Poussée', base: 1, pa: 3, ra: null },
+        'Ré Pou': { characteristic: 'Résistance Poussée', base: 1, pa: 3, ra: null },
+        'Résistance Critiques': { characteristic: 'Résistance Critique', base: 1, pa: 3, ra: null },
+        'Pi': { characteristic: 'Dommage aux pièges', base: 1, pa: 3, ra: null },
+        'Do': { characteristic: 'Dommage', base: 1, pa: null, ra: null },
+        'So': { characteristic: 'Soin', base: 1, pa: null, ra: null },
+        'Invo': { characteristic: 'Invocation', base: 1, pa: null, ra: null },
+        'Critique': { characteristic: 'Coups critiques', base: 1, pa: null, ra: null },
+        'Do Ren': { characteristic: 'Renvoi de dommage', base: 1, pa: null, ra: null },
+        'Portée': { characteristic: 'Portée', base: 1, pa: null, ra: null },
+        'PM': { characteristic: 'PM', base: 1, pa: null, ra: null },
+        'PA': { characteristic: 'PA', base: 1, pa: null, ra: null },
+        'Rune de chasse': { characteristic: 'Arme de chasse', base: null, pa: null, ra: null }
+    };
+    
     useEffect(() => {
         fetchItems();
     }, []);
 
     const fetchItems = async () => {
         try {
-            const itemsResponse = await axios.get(`http://localhost:3000/items?id=180`);
+            const itemsResponse = await axios.get(`http://localhost:3000/items?id=11718`);
             for (const item of itemsResponse.data.data[0].characteristics) {
                 if (item.characTo === null) {
                     item.effectValue = item.characFrom;
@@ -111,7 +124,9 @@ const Page: React.FC = () => {
                     <div className="">
                         {item.itemName}
                         <img src={item.imgHighRes} alt="" className="size-44"/>
-                        <div className="mt-4 bg-[#cfc4ab] mx-3">
+                        Reliquat: {reliquat}
+                        <div className="mt-4 mx-3">
+                        <div className="border border-black">
                         <div className="flex bg-[#796f5a] align-middle">
                             <p className="w-1/6">Min</p>
                             <p className="w-1/6">Max</p>
@@ -121,33 +136,42 @@ const Page: React.FC = () => {
                             <button className="w-1/6">Ra</button>
                         </div>
                             {item.characteristics.map((charac: Characteristic, characIndex: number) => (
-                                <div>
+                                <div className={characIndex % 2 == 0 ? "bg-[#cfc4ab]" : "bg-white"}>
                                     {charac.characTo ? (
                                         <div>
                                             <div className="flex w-full align-middle">
                                                 <p className="w-1/6">{charac.characFrom}</p>
                                                 <p className="w-1/6">{charac.characTo}</p>
                                                 <p className="w-1/6">{charac.effectValue} {charac.characName} </p>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addBase(itemIndex, characIndex)}>x</button>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addPa(itemIndex, characIndex)}>x</button>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addRa(itemIndex, characIndex)}>x</button>
+                                                {/* <button className="px-1 rounded-lg w-1/6" onClick={() => addBase(itemIndex, characIndex)}>{runes[charac.characName].base}</button>
+                                                {runes[charac.characName].pa && (
+                                                    <button className="px-1 rounded-lg w-1/6" onClick={() => addPa(itemIndex, characIndex)}>{runes[charac.characName].pa}</button>
+                                                )}
+                                                {runes[charac.characName].ra && (
+                                                    <button className="px-1 rounded-lg w-1/6" onClick={() => addRa(itemIndex, characIndex)}>{runes[charac.characName].ra}</button>
+                                                )} */}
                                             </div>
                                         </div>
                                     ) : (
                                         <div>   
                                             <div className="flex w-full align-middle">
                                                 <p className="w-1/6">{charac.characFrom}</p>
-                                                <p className="w-1/6">x</p>
+                                                <p className="w-1/6">{charac.characFrom}</p>
                                                 <p className="w-1/6">{charac.effectValue} {charac.characName} </p>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addBase(itemIndex, characIndex)}>x</button>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addPa(itemIndex, characIndex)}>x</button>
-                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addRa(itemIndex, characIndex)}>x</button>
+                                                <button className="px-1 rounded-lg w-1/6" onClick={() => addBase(itemIndex, characIndex)}>{runes[charac.characName].base}</button>
+                                                {runes[charac.characName].pa && (
+                                                    <button className="px-1 rounded-lg w-1/6" onClick={() => addPa(itemIndex, characIndex)}>{runes[charac.characName].pa}</button>
+                                                )}
+                                                {runes[charac.characName].ra && (
+                                                    <button className="px-1 rounded-lg w-1/6" onClick={() => addRa(itemIndex, characIndex)}>{runes[charac.characName].ra}</button>
+                                                )}
                                             </div> 
                                         </div>
                                     )}
                                 </div>
 
                             ))}
+                        </div>
                         </div>
                     </div>
                 ))}

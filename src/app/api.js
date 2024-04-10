@@ -47,7 +47,7 @@ app.use(express.urlencoded({
 }), cors());
 var dbConfig = {
     host: 'localhost',
-    user: 'doftopia',
+    user: 'root',
     password: '1234',
     database: 'doftopia'
 };
@@ -160,7 +160,7 @@ app.get("/items", function (req, res) { return __awaiter(void 0, void 0, void 0,
                         else {
                             base_limit += 1;
                         }
-                        existingItem.characteristics.push({ characName: result.effectDescription, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId });
+                        existingItem.characteristics.push({ characName: result.effectDescription.slice(1, result.effectDescription.length), characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId, effectValue: 0 });
                     }
                     catch (error) {
                         console.error(error);

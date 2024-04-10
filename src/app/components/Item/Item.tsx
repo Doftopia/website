@@ -28,9 +28,6 @@ const Item = ({ PageName }: PageNameInterface) => {
             <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="p-1 size-20"/>
           </div>                  
           <div>
-          {item.characteristics[0].characId == -1 && (
-          <div></div>
-       )}
                     {item.apCost && (
 <>
       <div className="text-sm mb-1">
@@ -45,9 +42,6 @@ const Item = ({ PageName }: PageNameInterface) => {
       </div>
 </>
 )}
-     {item.characteristics[0].characId == -1 && (
-          <div className='mt-4'></div>
-       )}
           {item.characteristics.map((charac: Characteristic) => (
           <div>
               {charac.characId < 0 && (
@@ -69,10 +63,6 @@ const Item = ({ PageName }: PageNameInterface) => {
               )}
           </div>
        ))}
-
-       {item.characteristics[0].characId == -1 && (
-          <div className='mb-3'></div>
-       )}
        {item.characteristics.map((charac: Characteristic, idx: number) => (
                           <div key={idx} className="flex">
                               {charac.characId >= 0 && (
