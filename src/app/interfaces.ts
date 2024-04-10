@@ -52,6 +52,7 @@ interface Characteristic {
     characImg: string;
     characId: number;
     effectId: number;
+    effectValue: number;
 }
 
 interface Recipe {

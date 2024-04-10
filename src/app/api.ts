@@ -19,7 +19,7 @@ app.use(
 const dbConfig = {
     host: 'localhost',
     user: 'doftopia',
-    password: '1234',
+    password: '1234',   
     database: 'doftopia'
 };
 
@@ -149,7 +149,7 @@ app.get("/items", async (req: Request, res: Response) => {
                 } else {
                     base_limit += 1;
                 }
-                existingItem.characteristics.push({ characName: result.effectDescription, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId});
+                existingItem.characteristics.push({ characName: result.effectDescription, characFrom: result.characFrom, characTo: result.characTo, characImg: result.characImg, characId: result.characId, effectId: result.effectId, effectValue: 0});
             } catch (error) {
                 console.error(error)
             }
