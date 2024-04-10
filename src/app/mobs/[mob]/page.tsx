@@ -102,22 +102,24 @@ const Page: React.FC = () => {
                             {drops.map((drop: GroupedItems, index: number)=> (
                                 <div>
                                     {dropPourcentage[index].criteria == 1 && (
-                                        <div className='flex items-center hover:bg-[#779643]' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
-                                            <img src={drop.img} alt={drop.itemName} className='mr-1' />
-                                            <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
+                                        <div className='flex hover:bg-[#779643] pr-2 flex-col pl-3 rounded-lg transition-all pt-1' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
+                                            <p className='font-bold flex'>{drop.itemName} <p className='font-normal'> - niveau {drop.level}</p></p>
+                                            <p>{dropPourcentage[index].dropPourcentage}%</p>
+                                            <img src={drop.img} alt={drop.itemName} className='mr-1 size-16' />
                                         </div>
                                     )}
                                 </div>
                             ))}
                         </div>
                         <p>Butins conditionnés </p>
-                        <div className= 'flex flex-wrap border-t border-[#3eb167] py-2 bg-[#cfc4ab] mt-1'>
+                        <div className= 'flex flex-wrap border-t border-[#3eb167] py-2 bg-[#cfc4ab] mt-1 pl-2'>
                             {drops.map((drop: GroupedItems, index: number)=> (
                                 <div>
                                     {dropPourcentage[index].criteria == 0 && (
-                                        <div className='flex items-center hover:bg-[#779643] pr-2' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
-                                            <img src={drop.img} alt={drop.itemName} className='mr-1' />
-                                            <p>{drop.itemName} - lvl {drop.level} {dropPourcentage[index].dropPourcentage}%</p>
+                                        <div className='flex hover:bg-[#779643] pr-2 flex-col pl-3 rounded-lg transition-all pt-1' onClick={() => router.push(`/items/item?id=${drop.itemId}`)}>
+                                            <p className='font-bold flex'>{drop.itemName} <p className='font-normal'> - niveau {drop.level}</p></p>
+                                            <p>{dropPourcentage[index].dropPourcentage}%</p>
+                                            <img src={drop.img} alt={drop.itemName} className='mr-1 size-16' />
                                         </div>
                                     )}
                                 </div>

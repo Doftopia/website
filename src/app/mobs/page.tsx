@@ -60,7 +60,6 @@ const Page: React.FC = () => {
                                 </div>
                             </div>
                             <img src={mob.img} alt={mob.name}/>
-                        <br />
                     </div>
                 ))}
             </div>

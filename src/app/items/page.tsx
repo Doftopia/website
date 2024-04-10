@@ -6,7 +6,8 @@ import Navbar from "../components/Navbar/Navbar";
 import { HtmlContext } from "next/dist/server/future/route-modules/app-page/vendored/contexts/entrypoints";
 import { ButtonProps } from "../components/ui/Button";
 import { Category, Characteristic, GroupedItems } from "../interfaces";
-import mysql from "mysql2/promise";
+import mysql from "mysql2/promise"
+import Item from "../components/Item/Item";
 
 
 const Page: React.FC = () => {
@@ -20,14 +21,6 @@ const Page: React.FC = () => {
     const [categoriesFilter, setcategoriesFilter] = useState<string>();
     const [category, setCategory] = useState<string[]>([]); 
     const [categories, setCategories] = useState<Category[]>([]);
-
-    const redirectItem = (itemId: string) => {
-        router.push(`/items/item?id=${itemId}`);
-    }
-
-    const redirectSet = (setId: string) => {
-        router.push(`/set?id=${setId}`);
-    }
 
     const fetchItems = async () => {
         try {
@@ -121,11 +114,11 @@ const Page: React.FC = () => {
         const button = document.getElementById(effect.toString());
         if (effectFilter.includes(effect.toString())) {
             setEffectFilter(effectFilter.filter(item => item !== effect.toString()));
-            button!.style.fontWeight = 'normal';
-            button!.style.color = 'white';
+            button!.style.fontWeight = '';
+            button!.style.color = '';
         } else {
             button!.style.fontWeight = 'bolder';
-            button!.style.color = 'rgb(119, 150, 67)';
+            button!.style.color = 'rgb(236, 142, 2)';
             setEffectFilter([...effectFilter, effect.toString()]);
         }
     }
@@ -173,8 +166,9 @@ const Page: React.FC = () => {
     return (
         <div>
         <Navbar pageName="Home"/>
-        <div className="min-h-screen bg-[#a7a18d] pt-8 lg:flex block">
-            <div className="h-fit text-black lg:block 2xl:w-4/12 top-24 text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] mb-7 lg:w-5/12 lg:sticky py-3 px-4 lg:mx-8 mx-8">
+        <div className="flex">
+        <div className="min-h-screen bg-[#a7a18d] pt-8 lg:flex block w-full px-8">
+            <div className="h-fit text-black lg:block top-24 text-sm transition-all bg-[#cfc4ab] rounded-sm border border-[#3eb167] mb-7 lg:sticky py-3 px-4  w-full lg:w-1/3">
                 <input type="text" value={nameFilter} onChange={handleNameInputChange} placeholder="Rechercher" className="rounded-lg w-13 h-9 mt-1 outline-none pl-3 text-black w-full"/>
                 <div className="w-full flex justify-center gap-2 mt-1">
                     <input type="text" value={minLvl} onChange={handleMinLevelInputChange} placeholder="Niveau min" className="rounded-lg w-full h-9 mt-1 outline-none pl-3 text-black"/>
@@ -193,12 +187,12 @@ const Page: React.FC = () => {
                 </div>
                 <div className="text-black border-[#686459] border-2 rounded-sm mt-2 hidden overflow-visible bg-white" style={{ maxHeight: "78vh", overflowY: "auto" }} id="categoriesFilter">
                     {(categories as Category[]).map((category: Category) => (
-                        <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories" id={category.name} onClick={() => filterCategory(category.name)}>
+                        <div className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-[#779643] categories transition-all" id={category.name} onClick={() => filterCategory(category.name)}>
                             {category.name}
                         </div>
                     ))}
                 </div>
-                <div className="flex mt-3 w-full justify-between gap-2">
+                <div className="flex mt-3 w-full justify-between gap-2 ">
                     <div className=" pl-2 py-1 w-full pb-2 mb-2 border-[#779643] border rounded-sm">
                         <p className="mb-2 mt-1 font-bold">Primaires</p>
                         <button onClick={() => filterEffect(1)} id='1' className="filter-button flex hover:font-bold hover:bg-[#779643] w-full">
@@ -333,128 +327,9 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 w-full lg:mx-0 px-8 box-border gap-3 xl:grid-cols-3 2xl:grid-cols-4">
-              {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (
-                <div key={index} className="text-black px-3 flex flex-col bg-[#cfc4ab] pb-4 border-[#3eb167] border w-full sm:w-full lg:w-auto box-border hover:-translate-y-2 transition-all cursor-pointer hover:brightness-90" onClick={() => redirectItem(item.itemId.toString())}>                
-                <div className="flex justify-between pt-3 w-full">
-                  <div className="flex flex-col transition-all">
-                    <h2 className="font-bold cursor-pointer hover:text-[#779643]" onClick={() => redirectItem(item.itemId.toString())}>{item.itemName}</h2>
-                    <h3 className="text-sm text-[#796f5a]">{item.type} - niveau {item.level}</h3>
-                    <h3 className="text-sm mb-5 bg-[#779643 cursor-pointer hover:text-[#779643] text-gray-500" onClick={() => redirectSet(item.setID.toString())}>{item.setName}</h3>
-                  </div>
-                  <img src={item.imgHighRes} alt={item.itemName} draggable='false' className="p-1 size-20"/>
-                </div>                  
-                <div>
-                {item.characteristics[0].characId == -1 && (
-                <div></div>
-             )}
-                          {item.apCost && (
-    <>
-            <div className="text-sm mb-1">
-                <p className="flex"><p className="text-[#796f5a] mr-1">Coût </p>{item.apCost} PA</p>
-                {item.minRange !== item.maxRange ? (
-                    <p className="flex"><p className="text-[#796f5a] mr-1">Portée </p>{item.minRange}-{item.maxRange}</p>
-                ) : (
-                    <p className="flex"><p className="text-[#796f5a] mr-1">Portée </p>{item.maxRange}</p>
-                )}
-                <p className="flex"><p className="text-[#796f5a] mr-1">Utilisation par tour </p>{item.nmbCast}</p>
-                <p className="flex"><p className="text-[#796f5a] mr-1">Critique </p>{item.criticalHitProbability}%</p>
+        <Item PageName={items}/>
             </div>
-    </>
-)}
-           {item.characteristics[0].characId == -1 && (
-                <div className='mt-4'></div>
-             )}
-                {item.characteristics.map((charac: Characteristic) => (
-                <div>
-                    {charac.characId < 0 && (
-                        <div>
-                            <div className="flex text-sm">
-                                {charac.effectId == 101 ? (
-                                    <div className="flex text-sm items-center">
-                                        <img src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png" className="size-5 mr-2" alt="PA" />
-                                        <p>-1 pa</p>
-                                    </div>
-                                ) : (
-                                    <div className="flex text-sm">
-                                        <img src={charac.characImg} alt='x' className="mr-2 size-5" draggable='false'/>
-                                        <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
-             ))}
-
-             {item.characteristics[0].characId == -1 && (
-                <div className='mb-3'></div>
-             )}
-             {item.characteristics.map((charac: Characteristic, idx: number) => (
-                                <div key={idx} className="flex">
-                                    {charac.characId >= 0 && (
-                                            <p className={charac.characFrom < 0 || charac.characTo < 0 ? "text-red-500 text-sm" : "text-sm "}> 
-                                                {charac.characTo ? (
-                                                    <>
-                                                        <div>
-                                                            {charac.characFrom === null ? (
-                                                                <div className="flex">
-                                                                    <img src={charac.characImg} alt='x' className="mr-2 size-5" draggable='false'/>
-                                                                    <p>{charac.characTo} {charac.characName}</p>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="flex">
-                                                                    {charac.effectId != 983 && (
-                                                                        <div className="flex">
-                                                                            <img src={charac.characImg} alt='x' className="mr-2 size-5" draggable='false'/>
-                                                                            <p>{charac.characFrom} à {charac.characTo} {charac.characName}</p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                    {charac.effectId !== null && (
-                                                        <div className="flex">
-                                                            {charac.effectId == 110 || charac.effectId == 139 ? (
-                                                                <>
-                                                                <div className="flex text-sm">
-                                                                    <p>rend {charac.characFrom} {charac.characName}</p>
-                                                                    </div>
-                                                                </>
-                                                            ) : (
-                                                                <div className="flex text-sm">
-                                                                    {charac.effectId == 795 ? (
-                                                                        <p className=" text-orange-400">Arme de chasse</p>
-                                                                    ) : (
-                                                                        <div className="flex text-sm">
-                                                                            {charac.effectId != 984 && charac.effectId != 981 && charac.effectId != 826 && charac.effectId != 600 && charac.effectId != 193 && charac.effectId != 206 && charac.effectId != 1155 &&  charac.effectId != 149 && charac.effectId != 732 &&  charac.effectId != 649 && charac.effectId != 731 && charac.effectId != 760 && charac.effectId != 146 && charac.effectId != 811 && charac.effectId != 724 && charac.effectId != 705 && charac.effectId != 623 && charac.effectId != 2818 && charac.effectId != 620 && charac.effectId != 30 && (
-                                                                                <div className="flex">
-                                                                                    <img src={charac.characImg} alt='x' className="mr-2 size-5" draggable='false'/>
-                                                                                    <p>{charac.characFrom} {charac.characName}</p>
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                    </>
-                                                )}
-                                            </p>
-                                    )}
-                                </div>
-                            ))}
-                    </div>
-
-                  </div>
-              ))}
-              </div>
-            </div>
+        </div>
         </div>
     );
 };
