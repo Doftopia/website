@@ -7,8 +7,10 @@ import Frame from "../ui/Frame";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 interface PortalProps {
+  id: number;
   PortalName: string;
   Position: string;
   LastUpdate: Date;
@@ -17,6 +19,7 @@ interface PortalProps {
 }
 
 const Portal: React.FC<PortalProps> = ({
+  id,
   PortalName,
   Position,
   LastUpdate,
@@ -25,6 +28,8 @@ const Portal: React.FC<PortalProps> = ({
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [newPosition, setNewPosition] = useState("");
+  const { data: session, status } = useSession();
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewPosition(event.target.value);
   };
@@ -37,8 +42,9 @@ const Portal: React.FC<PortalProps> = ({
         {
           server: "Draconiros",
           name: PortalName,
-          UpdaterName: UpdaterName,
+          updaterName: UpdaterName,
           pos: newPosition,
+          userId: session?.user.id,
         },
         {
           headers: {
@@ -49,6 +55,30 @@ const Portal: React.FC<PortalProps> = ({
       if (!response) {
         throw new Error("Failed to update portal.");
       }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating portal:", error);
+    }
+  };
+
+  const handleDislike = () => {
+    try {
+      axios.post(
+        `/api/portals/dislike`,
+        {
+          server: "Draconiros",
+          name: PortalName,
+          UpdaterName: UpdaterName,
+          pos: Position,
+          userId: session?.user.id,
+          portalId: id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       window.location.reload();
     } catch (error) {
       console.error("Error updating portal:", error);
@@ -74,8 +104,8 @@ const Portal: React.FC<PortalProps> = ({
         mis à jour {LastUpdate.toString().slice(15, 21)}
       </p>
       <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
-      <div className="grid grid-cols-3 w-fit">
-        <Button className="dark:bg-blue w-fit mx-auto">
+      <div className="grid grid-cols-4 h-fit w-full">
+        <Button className="dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10">
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"
@@ -94,7 +124,10 @@ const Portal: React.FC<PortalProps> = ({
             width={32}
           />
         </Button>
-        <Button className="dark:bg-red w-fit mx-auto" onClick={toggleForm}>
+        <Button
+          className="dark:bg-red hover:bg-[#ab4141] w-fit mx-auto"
+          onClick={handleDislike}
+        >
           <img
             src="/dislike-icon.svg"
             alt="add_position"
@@ -103,14 +136,14 @@ const Portal: React.FC<PortalProps> = ({
           />
         </Button>
         <img
-          className="h-48 w-32 relative bottom-[1rem]"
+          className="h-48 w-32 relative bottom-[1rem] z-0"
           src={`/${PortalImage}.webp`}
           alt=""
         />
       </div>
       <div className={showForm ? "" : "hidden"}>
-        <form id={`${PortalName}`} onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 items-center w-fit mx-auto">
+        <form id={`${PortalName}`} onSubmit={handleSubmit} className="">
+          <div className="bottom-[2rem] grid grid-cols-4 items-center w-fit">
             <Input
               className="w-24"
               value={newPosition}
@@ -119,7 +152,7 @@ const Portal: React.FC<PortalProps> = ({
             <a href="/portails">
               <button
                 type="submit"
-                className="mt-2 bg-green text-white px-4 py-2 rounded-md hover:bg-[#2c7d49]"
+                className="bg-green text-white px-4 py-2 rounded-md hover:bg-[#2c7d49]"
               >
                 Soumettre
               </button>

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Frame from "../ui/Frame";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 
 const XpCalculator = () => {
   const jobs = [
@@ -56,19 +56,6 @@ const XpCalculator = () => {
               </select>
             </div>
             <div className="flex flex-col items-center">
-              <label className="text-white" htmlFor="level">
-                Niveau
-              </label>
-              <input
-                type="number"
-                id="level"
-                key={"level"}
-                className="w-20 h-8 mt-2 rounded-md"
-                placeholder="Niveau"
-                min={1}
-              />
-            </div>
-            <div className="flex flex-col items-center">
               <label className="text-white" htmlFor="item">
                 Objet
               </label>
@@ -100,7 +87,7 @@ const XpCalculator = () => {
         <Button
           variant={"default"}
           onClick={clicked}
-          className="mx-auto mt-2 bg-[#779643] font-bold bg-"
+          className="mx-auto mt-2 dark:bg-green dark:hover:bg-[#2c7d49] font-bold bg-"
         >
           Calculer
         </Button>
