@@ -1,7 +1,5 @@
 import React from "react";
-import { Button } from "../components/ui/Button";
 import Navbar from "../components/Navbar/Navbar";
-import Frame from "../components/ui/Frame";
 import { authOptions } from "../../../lib/auth";
 import { prisma } from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
@@ -37,7 +35,12 @@ const Profile: React.FC<ProfileProps> = async () => {
       <main>
         <div className="grid w-fit grid-cols-3">
           <div>
-            <ProfileForm />
+            <ProfileForm
+              name={user.username}
+              pseudoAnkama={user.ankamaUsername ?? ""}
+              email={user.email}
+              password={user.password}
+            />
           </div>
           <div className="col-span-2">
             <Characters />

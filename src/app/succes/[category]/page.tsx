@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import page from "@/app/donjons/page";
-import Navbar from "@/app/components/Navbar/navbar";
+import Navbar from "@/app/components/Navbar/Navbar";
 
 const Category: React.FC = () => {
   const [achievements, setAchievements] = useState<any[]>([]);

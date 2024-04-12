@@ -7,7 +7,6 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   const session = await getServerSession({ req, ...authOptions });
 
   const { name, server, pos } = await req.json();
-  // console.log(name, server, pos);
 
   await prisma.portail.update({
     where: { name: name, server: server },

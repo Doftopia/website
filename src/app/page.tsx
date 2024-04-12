@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
 import { error } from "console";
-import Navbar from "./components/Navbar/Navbar";
 import { getServerSession } from "next-auth";
+import Navbar from "./components/Navbar/Navbar";
 import { authOptions } from "../../lib/auth";
 import DailyAlmanax from "./components/Elements/DailyAlmanax";
 import MainCharacter from "./components/Elements/MainCharacter";

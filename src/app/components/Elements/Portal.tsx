@@ -4,8 +4,8 @@
 import React from "react";
 import { useState } from "react";
 import Frame from "../ui/Frame";
-import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import axios from "axios";
 
 interface PortalProps {
@@ -54,7 +54,7 @@ const Portal: React.FC<PortalProps> = ({
       console.error("Error updating portal:", error);
     }
   };
-  //
+
   const toggleForm = () => {
     setShowForm(!showForm);
   };
@@ -75,7 +75,7 @@ const Portal: React.FC<PortalProps> = ({
       </p>
       <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
       <div className="grid grid-cols-3 w-fit">
-        <Button className="dark:bg-green w-fit mx-auto">
+        <Button className="dark:bg-blue w-fit mx-auto">
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"
@@ -83,9 +83,20 @@ const Portal: React.FC<PortalProps> = ({
             width={32}
           />
         </Button>
-        <Button className="bg-[#ec8e02] w-fit mx-auto" onClick={toggleForm}>
+        <Button
+          className="dark:bg-green hover:bg-[#2c7d49] w-fit mx-auto"
+          onClick={toggleForm}
+        >
           <img
             src="https://img.icons8.com/windows/32/plus.png"
+            alt="add_position"
+            height={32}
+            width={32}
+          />
+        </Button>
+        <Button className="dark:bg-red w-fit mx-auto" onClick={toggleForm}>
+          <img
+            src="/dislike-icon.svg"
             alt="add_position"
             height={32}
             width={32}
@@ -108,7 +119,7 @@ const Portal: React.FC<PortalProps> = ({
             <a href="/portails">
               <button
                 type="submit"
-                className="mt-2 bg-[#779643] text-white px-4 py-2 rounded-md hover:bg-[#445527]"
+                className="mt-2 bg-green text-white px-4 py-2 rounded-md hover:bg-[#2c7d49]"
               >
                 Soumettre
               </button>

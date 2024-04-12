@@ -10,7 +10,7 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { Label } from "./Label";
+import { Label } from "./label";
 
 const Form = FormProvider;
 
@@ -150,7 +150,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={`${className}text-sm font-medium text-destructive`}
+      className={`${className}text-sm font-medium text-red mt-1 text-destructive`}
       {...props}
     >
       {body}

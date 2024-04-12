@@ -8,22 +8,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/Form";
+} from "../../ui/form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../../ui/Input";
-import { Button } from "../../ui/Button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 // import GoogleSignInButton from "../GoogleSignInButton";
 
 const FormSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email"),
+  email: z.string().min(1, "Adresse mail requise").email("Invalid email"),
   password: z
     .string()
-    .min(1, "Password is required")
-    .min(8, "Password must have than 8 characters"),
+    .min(1, "Il faut un mot de passe")
+    .min(8, "Le mot de passe doit faire au moins 8 caractères"),
 });
 
 const SignInForm = () => {
