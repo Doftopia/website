@@ -73,7 +73,7 @@ const Home: React.FC = async () => {
   return (
     <>
       <header className="w-full">
-        <Navbar pageName="Home" />
+        <Navbar pageName="Home"/>
         <div className="h-6 w-full mt-2 dark:bg-blue font-bold text-center text-black">
           <p>
             le site est encore en travaux ! la majeure partie des

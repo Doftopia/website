@@ -16,11 +16,11 @@
       {
         "name": "next"
       }
-    ],
+    ],  
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/page.mjs", "src/app/api_to_db.mts", "src/app/api_to_db.mts", "postcss.config.js", "src/app/models/item.js", "src/app/models/characteristic.js"],
   "exclude": ["node_modules"]
 }
