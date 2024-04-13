@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/jsx-key */
 "use client";
 import { useSearchParams } from "next/navigation";
 import Navbar from "@/app/components/Navbar/Navbar";
@@ -80,7 +82,7 @@ const Page: React.FC = () => {
   async function fetchMob(mobId: string) {
     try {
       const mobResponse = await axios.get(
-        `http://localhost:3000/mobs?id=${mobId}`
+        `http://localhost:3001/mobs?id=${mobId}`
       );
       setMob(mobResponse.data.data);
     } catch (error) {
@@ -92,7 +94,7 @@ const Page: React.FC = () => {
     let filters = "";
     try {
       const dropsResponse = await axios.get(
-        `http://localhost:3000/mobs-drop?mobId=${mobId}`
+        `http://localhost:3001/mobs-drop?mobId=${mobId}`
       );
       let drops = dropsResponse.data.data[0];
       const groupedDrops: GroupedItems[] = [];
@@ -106,7 +108,7 @@ const Page: React.FC = () => {
         });
       }
       const itemResponse = await axios.get(
-        `http://localhost:3000/items?${filters}`
+        `http://localhost:3001/items?${filters}`
       );
       setDrops(itemResponse.data.data);
       setDropPourcentage(groupedPourcentage);
@@ -191,7 +193,7 @@ const Page: React.FC = () => {
                   <div>
                     {dropPourcentage[index].criteria == 1 && (
                       <div
-                        className="flex hover:bg-[#779643] pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
+                        className="flex hover:bg-blue pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
                         onClick={() =>
                           router.push(`/items/item?id=${drop.itemId}`)
                         }
@@ -217,7 +219,7 @@ const Page: React.FC = () => {
                   <div>
                     {dropPourcentage[index].criteria == 0 && (
                       <div
-                        className="flex hover:bg-[#779643] pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
+                        className="flex hover:bg-blue  pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
                         onClick={() =>
                           router.push(`/items/item?id=${drop.itemId}`)
                         }
