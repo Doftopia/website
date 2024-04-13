@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable @next/next/no-img-element */
+import React from "react";
 import { Characteristic, GroupedItems } from "@/app/interfaces";
 import { useRouter } from "next/navigation";
 
-interface PageNameInterface {
-  PageName: GroupedItems[];
+interface ItemInterface {
+  Item: GroupedItems[];
 }
 
-const Item = ({ PageName }: PageNameInterface) => {
+const Item: React.FC<ItemInterface> = ({ Item }: ItemInterface) => {
   const router = useRouter();
   const redirectItem = (itemId: string) => {
     router.push(`/items/item?id=${itemId}`);
@@ -16,7 +17,7 @@ const Item = ({ PageName }: PageNameInterface) => {
   const redirectSet = (setId: string) => {
     router.push(`/set?id=${setId}`);
   };
-  const items = PageName;
+  const items = Item;
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:mx-8  box-border gap-3 xl:grid-cols-3 2xl:grid-cols-4">
       {(items as GroupedItems[]).map((item: GroupedItems, index: number) => (

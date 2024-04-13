@@ -91,7 +91,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="bg-[#a7a18d]">
-      <Navbar pageName="Home" />
+      <Navbar pageName="monstres" />
       <div className="h-full text-black pt-8">
         <input
           type="text"

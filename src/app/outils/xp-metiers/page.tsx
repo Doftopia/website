@@ -6,7 +6,7 @@ const page: React.FC = () => {
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar pageName="xp-métiers" />
       </header>
       <div>
         <XpCalculator />

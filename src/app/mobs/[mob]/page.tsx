@@ -120,7 +120,7 @@ const Page: React.FC = () => {
   return (
     <div className="bg-[#a7a18d] text-black">
       <header>
-        <Navbar pageName="Home" />
+        <Navbar pageName="monstre" />
       </header>
       <div className="h-screen pt-8 mx-24">
         {mob.map((mob: GroupedMob) => (

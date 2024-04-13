@@ -4,7 +4,7 @@
 import React from "react";
 import { useState } from "react";
 import Frame from "../ui/Frame";
-import { Button } from "../ui/button";
+import { Button } from "../ui/Button";
 import { Input } from "../ui/input";
 import axios from "axios";
 import { useSession } from "next-auth/react";

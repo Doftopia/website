@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-key */
 "use client";
 import Navbar from "../components/Navbar/Navbar";
-import Item from "../components/Item/Item";
 import axios from "axios";
 // import { useEffect } from "react";
 import { useState } from "react";
@@ -25,9 +24,9 @@ const Page: React.FC = () => {
 
   return (
     <div className="bg-[#a7a18d] h-screen">
-      <Navbar pageName="Home" />
+      <Navbar pageName="forgemagie" />
       <p>
-        Disclaimer: Je n'ai pas les vrais probas donc surement pas tres
+        Disclaimer: Je n&pos;ai pas les vrais probas donc surement pas tres
         coherent.
       </p>
       {/* <Item PageName={item}/> */}
