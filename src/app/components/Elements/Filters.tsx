@@ -2,12 +2,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Category, Characteristic, GroupedItems } from "../../interfaces";
-import Item from "./Item/Item";
+import { Category, GroupedItems } from "../../interfaces";
+import ItemList from "./Lists/ItemList";
 import axios from "axios";
 
 const Filters: React.FC = () => {
-  let limit = 50;
+  const [limit, setLimit] = useState<number>(50);
+  const [offset, setOffset] = useState(0);
   const [items, setItems] = useState<GroupedItems[]>([]);
   const [nameFilter, setNameFilter] = useState<string>();
   const [minLvl, setminLvl] = useState<string>();
@@ -27,7 +28,7 @@ const Filters: React.FC = () => {
       button!.style.color = "";
     } else {
       button!.style.fontWeight = "bolder";
-      button!.style.color = "rgb(236, 142, 2)";
+      button!.style.color = "#3eb167";
       setEffectFilter([...effectFilter, effect.toString()]);
     }
   };
@@ -58,31 +59,6 @@ const Filters: React.FC = () => {
       categoriesDiv!.style.display = "none";
     }
   };
-
-  const handleMinLevelInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setminLvl(event.target.value);
-  };
-
-  const handleMaxLevelInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setmaxLvl(event.target.value);
-  };
-
-  const cateorgyNameFilterInput = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setcategoriesFilter(event.target.value);
-  };
-
-  const handleNameInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setNameFilter(event.target.value);
-  };
-
   const filterCategory = (categoryName: string) => {
     const categoryDiv = document.getElementById(categoryName);
     if (category.includes(categoryName)) {
@@ -91,7 +67,7 @@ const Filters: React.FC = () => {
       setCategory(category.filter((item) => item !== categoryName));
     } else {
       categoryDiv!.style.fontWeight = "bold";
-      categoryDiv!.style.color = "rgb(119, 150, 67)";
+      categoryDiv!.style.color = "rgb(236, 142, 2)";
       setCategory([...category, categoryName]);
     }
   };
@@ -135,6 +111,30 @@ const Filters: React.FC = () => {
     fetchCategories();
   }, [nameFilter, effectFilter, minLvl, maxLvl, category, categoriesFilter]);
 
+  const handleMinLevelInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setminLvl(event.target.value);
+  };
+
+  const handleMaxLevelInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setmaxLvl(event.target.value);
+  };
+
+  const cateorgyNameFilterInput = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setcategoriesFilter(event.target.value);
+  };
+
+  const handleNameInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNameFilter(event.target.value);
+  };
+
   const fetchMoreItems = async () => {
     try {
       const responseItems = await axios.get(`http://localhost:3001/items`, {
@@ -144,10 +144,12 @@ const Filters: React.FC = () => {
           minLevel: minLvl,
           maxLevel: maxLvl,
           category: category,
-          limit: limit + 50,
+          limit: limit,
+          offset: offset + limit,
         },
       });
-      setItems([...responseItems.data.data]);
+      setItems((prevItems) => [...prevItems, ...responseItems.data.data]);
+      setOffset((prevOffset) => prevOffset + limit);
     } catch (error) {
       console.log("Error fetching more items:", error);
     }
@@ -235,7 +237,7 @@ const Filters: React.FC = () => {
           ))}
         </div>
         <div className="flex mt-3 w-full justify-between gap-2 ">
-          <div className=" pl-2 py-1 w-full pb-2 mb-2 border-blue border-[0.2px] rounded-sm">
+          <div className=" pl-2 py-1 w-full pb-2 mb-2  rounded-sm">
             <p className="mb-2 mt-1 font-bold">Primaires</p>
             <button
               onClick={() => filterEffect(1)}
@@ -370,7 +372,7 @@ const Filters: React.FC = () => {
               Sagesse
             </button>
           </div>
-          <div className="  pl-2 py-1 w-full pb-2 mb-2 border-blue border-[0.2px] rounded-sm">
+          <div className="  pl-2 py-1 w-full pb-2 mb-2  rounded-sm">
             <p className="mb-2 mt-1 font-bold">Secondaires</p>
             <button
               onClick={() => filterEffect(82)}
@@ -507,7 +509,7 @@ const Filters: React.FC = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 pt-2 w-full gap-2">
-          <div className="w-full pl-2 py-1 pb-2 mb-2 border-blue border-[0.2px] rounded-sm">
+          <div className="w-full pl-2 py-1 pb-2 mb-2  rounded-sm">
             <p className="mb-2 mt-1 font-bold">Dommages</p>
             <button
               onClick={() => filterEffect(16)}
@@ -594,7 +596,7 @@ const Filters: React.FC = () => {
               Dmg Air
             </button>
           </div>
-          <div className="  w-full pl-2 py-1 pb-2 mb-2 border-blue border-[0.2px] rounded-sm">
+          <div className="  w-full pl-2 py-1 pb-2 mb-2  rounded-sm">
             <p className="mb-2 mt-1 font-bold">Resistances</p>
             <button
               onClick={() => filterEffect(58)}
@@ -719,7 +721,7 @@ const Filters: React.FC = () => {
           </div>
         </div>
       </div>
-      <Item Item={items} />
+      <ItemList item={items}></ItemList>
     </>
   );
 };

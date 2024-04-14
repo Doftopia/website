@@ -19,7 +19,9 @@ const Page: React.FC = () => {
   return (
     <>
       <Navbar pageName="objet" />
-      <DetailedItem />
+      <div className="w-3/6 mx-auto">
+        <DetailedItem />
+      </div>
     </>
   );
 };

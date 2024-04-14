@@ -5,7 +5,6 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/app/components/Navbar/Navbar";
 import {
   Characteristic,
   Drop,
@@ -111,14 +110,15 @@ const DetailedItem: React.FC = () => {
           >
             <div className="flex justify-between pt-3 pb-3 mb-4">
               <div className="flex flex-col transition-all">
-                <h2 className="font-bold cursor-pointer dark:text-primary dark:hover:text-green w-fit">
+                <h2 className="font-bold cursor-pointer dark:text-primary w-fit">
                   {item.itemName}
                 </h2>
                 <h3 className=" text-secondary">
-                  {item.type} - niveau {item.level}
+                  <span className="text-green">{item.type}</span> - niv.{" "}
+                  {item.level}
                 </h3>
                 <h3
-                  className=" mb-5 dark:text-secondary cursor-pointer hover:text-green"
+                  className=" mb-5 dark:text-blue cursor-pointer dark:hover:text-green"
                   onClick={() => redirectSet(item.setID.toString())}
                 >
                   {item.setName}
@@ -136,9 +136,9 @@ const DetailedItem: React.FC = () => {
               <div>
                 {charac.characId < 0 && (
                   <div>
-                    <div className="flex ">
+                    <div className="flex dark:text-primary ">
                       {charac.effectId == 101 ? (
-                        <div className="flex  items-center">
+                        <div className="flex items-center">
                           <img
                             src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png"
                             className="size-5 mr-2"
@@ -147,14 +147,14 @@ const DetailedItem: React.FC = () => {
                           <p>-1 pa</p>
                         </div>
                       ) : (
-                        <div className="flex ">
+                        <div className="flex">
                           <img
                             src={charac.characImg}
                             alt="x"
                             className="mr-2 size-5"
                             draggable="false"
                           />
-                          <p>
+                          <p className="">
                             {charac.characFrom} à {charac.characTo}{" "}
                             {charac.characName}
                           </p>
@@ -166,12 +166,12 @@ const DetailedItem: React.FC = () => {
               </div>
             ))}
             {item.characteristics.map((charac: Characteristic, idx: number) => (
-              <div key={idx} className="flex items-center">
+              <div key={idx} className="flex dark:text-primary items-center">
                 {charac.characId >= 0 && (
                   <p
                     className={
                       charac.characFrom < 0 || charac.characTo < 0
-                        ? "text-red-500"
+                        ? "text-red"
                         : ""
                     }
                   >
@@ -179,7 +179,7 @@ const DetailedItem: React.FC = () => {
                       <>
                         <div className="flex items-center">
                           {charac.characFrom === null ? (
-                            <div className="flex">
+                            <div className="flex ">
                               <img
                                 src={charac.characImg}
                                 alt="x"
@@ -213,7 +213,7 @@ const DetailedItem: React.FC = () => {
                     ) : (
                       <>
                         {charac.effectId !== null && (
-                          <div className="flex items-center">
+                          <div className="flex items-center ">
                             {charac.effectId == 110 ||
                             charac.effectId == 139 ? (
                               <>
@@ -226,7 +226,7 @@ const DetailedItem: React.FC = () => {
                             ) : (
                               <div className="flex items-center ">
                                 {charac.effectId == 795 ? (
-                                  <p className=" text-orange-400">
+                                  <p className=" text-[#d45c40]">
                                     Arme de chasse
                                   </p>
                                 ) : (
@@ -260,28 +260,28 @@ const DetailedItem: React.FC = () => {
             ))}
             {item.apCost && (
               <>
-                <div className=" mt-3 pt-3 mb-1">
+                <div className="dark:text-secondary mt-3 pt-3 mb-1">
                   <p className="flex">
-                    <p className="text-gray-500 mr-1">Coût </p>
+                    <p className=" mr-1">Coût </p>
                     {item.apCost} PA
                   </p>
                   {item.minRange !== item.maxRange ? (
                     <p className="flex">
-                      <p className="text-gray-500 mr-1">Portée </p>
+                      <p className=" mr-1">Portée </p>
                       {item.minRange}-{item.maxRange}
                     </p>
                   ) : (
                     <p className="flex">
-                      <p className="text-gray-500 mr-1">Portée </p>
+                      <p className=" mr-1">Portée </p>
                       {item.maxRange}
                     </p>
                   )}
                   <p className="flex">
-                    <p className="text-gray-500 mr-1">Utilisation par tour </p>
+                    <p className=" mr-1">Utilisation par tour </p>
                     {item.nmbCast}
                   </p>
                   <p className="flex">
-                    <p className="text-gray-500 mr-1">Critique </p>
+                    <p className=" mr-1">Critique </p>
                     {item.criticalHitProbability}%
                   </p>
                 </div>
@@ -292,13 +292,16 @@ const DetailedItem: React.FC = () => {
       </div>
       <div className="flex flex-col mt-3 lg:mt-10 gap-3">
         {recipes.map((recipe: GroupedRecipes) => (
-          <div className="bg-[#cfc4ab] h-fit pt-3 pr-10 border border-green pl-2">
+          <div className="bg-[#cfc4ab] dark:bg-dark-3 h-fit pt-3 pr-10 border border-blue pl-2">
             <div key={recipe.resultItemId}>
-              <p className="mb-2 font-bold">{job}</p>
+              <p className="mb-2 font-bold text-green">
+                {job} niv.
+                {item.map((item: GroupedItems, index: number) => item.level)}
+              </p>
               {recipe.recipe.map((item: Recipe, index: number) => (
                 <div
                   key={index}
-                  className="flex flex-row items-center cursor-pointer hover:font-bold hover:bg-green pr-4 w-80 rounded-lg transition-all"
+                  className="flex flex-row items-center cursor-pointer hover:font-bold dark:text-primary dark:hover:text-black hover:bg-green pr-4 w-80 rounded-lg transition-all"
                   onClick={() => redirectRecipeItem(item.itemId)}
                 >
                   <img

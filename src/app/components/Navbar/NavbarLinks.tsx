@@ -28,15 +28,12 @@ const NavbarLinks = () => {
   };
 
   return (
-    <div className="dark:text-white flex items-center space-x-4">
-      <a href="/items" className="hover:text-[#779643]">
-        OBJETS
+    <div className="dark:text-white flex items-center space-x-4 z-50">
+      <a href="/objets" className="dark:hover:text-primary">
+        Objets
       </a>
-      <a href="/mobs" className="hover:text-[#779643]">
-        MONSTRES
-      </a>
-      <a href="/forgemagie" className="hover:text-[#779643]">
-        FORGEMAGIE
+      <a href="/monstres" className="dark:hover:text-primary">
+        Monstres
       </a>
       <a href="/panoplies" className="dark:hover:text-primary">
         Panoplies
@@ -71,21 +68,27 @@ const NavbarLinks = () => {
           >
             <a
               href="/outils/portails"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"
             >
               Portails
             </a>
             <a
               href="#"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"
             >
               Carte Ressources
             </a>
             <a
               href="/outils/xp-metiers"
-              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-[#779643]"
+              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"
             >
               Xp Métiers
+            </a>
+            <a
+              href="/forgemagie"
+              className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"
+            >
+              Forgemagie
             </a>
           </div>
         )}
