@@ -7,7 +7,7 @@ const Home: React.FC = async () => {
     <>
       <header>
         <Navbar pageName="Home" />
-        <div className="h-6 mt-2 dark:bg-blue font-bold text-center text-black">
+        <div className="h-6 mt-2 dark:bg-blue bg-orange font-bold text-center text-black">
           <p>
             le site est encore en travaux ! la majeure partie des
             fonctionnalités est en cours de dévelopement !{" "}

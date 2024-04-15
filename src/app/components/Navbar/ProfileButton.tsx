@@ -11,7 +11,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ text }) => {
   return (
     <>
       <a href="/profil">
-        <Button className="h-12 w-32 dark:bg-green dark:hover:bg-blue dark:hover:text-black">
+        <Button className="h-12 w-32 bg-orange hover:bg-light-green dark:bg-green dark:hover:bg-blue dark:hover:text-black">
           {text}
         </Button>
       </a>

@@ -25,7 +25,7 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
   return (
     <>
       <Frame
-        className="hover:brightness-90 hover:-translate-y-2 border border-blue dark:text-primary transition-all cursor-pointer"
+        className="hover:brightness-90 hover:-translate-y-2 border dark:border-blue border-orange dark:text-primary transition-all cursor-pointer"
         key={index}
         width="auto"
         height="auto"

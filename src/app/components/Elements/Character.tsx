@@ -32,7 +32,7 @@ const Character: React.FC<CharacterProps> = ({
     <div>
       <a
         href={`https://www.dofus.com/fr/mmorpg/communaute/annuaires/pages-persos/${link}`}
-        className="text-primary"
+        className="text-secondary dark:text-primary"
       >
         <Frame
           width="17rem"
@@ -50,12 +50,17 @@ const Character: React.FC<CharacterProps> = ({
           <div className="relative mt-2 right-5">
             {" "}
             <p className="text-sm">{name}</p>
-            <p className="font-Concert_One text-blue text-xs"> {title} </p>
-            <p className="text-primary mt-3 bottom-2 relative text-sm">
+            <p className="font-Concert_One text-white text dark:text-blue text-xs">
+              {" "}
+              {title}{" "}
+            </p>
+            <p className="text-secondary dark:text-primary mt-3 bottom-2 relative text-sm">
               Lv. {level}
             </p>{" "}
             <div className="grid grid-cols-2">
-              <p className="text-primary text-sm my-auto">{race}</p>{" "}
+              <p className="text-secondary dark:text-primary text-sm my-auto">
+                {race}
+              </p>{" "}
               <div className="grid w-fit ml-6 grid-cols-2">
                 <Image
                   className="my-auto"

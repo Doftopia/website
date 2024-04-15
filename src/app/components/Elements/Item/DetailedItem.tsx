@@ -97,7 +97,7 @@ const DetailedItem: React.FC = () => {
   };
 
   const redirectRecipeItem = async (id: number) => {
-    router.push(`/items/item?id=${id}`);
+    router.push(`/objets/objet?id=${id}`);
   };
 
   return (
@@ -106,7 +106,7 @@ const DetailedItem: React.FC = () => {
         {item.map((item: GroupedItems, index: number) => (
           <div
             key={index}
-            className="bg-[#cfc4ab] dark:bg-dark-3 text-black px-3 pb-2 rounded-sm border-blue border"
+            className="bg-light-2 dark:bg-dark-3 text-black px-3 pb-2 rounded-sm border-orange dark:border-blue border"
           >
             <div className="flex justify-between pt-3 pb-3 mb-4">
               <div className="flex flex-col transition-all">
@@ -114,11 +114,13 @@ const DetailedItem: React.FC = () => {
                   {item.itemName}
                 </h2>
                 <h3 className=" text-secondary">
-                  <span className="text-green">{item.type}</span> - niv.{" "}
-                  {item.level}
+                  <span className=" text-light-green dark:text-green">
+                    {item.type}
+                  </span>{" "}
+                  - niv. {item.level}
                 </h3>
                 <h3
-                  className=" mb-5 dark:text-blue cursor-pointer dark:hover:text-green"
+                  className=" mb-5 dark:text-blue cursor-pointer text-light-green dark:hover:text-green"
                   onClick={() => redirectSet(item.setID.toString())}
                 >
                   {item.setName}
@@ -292,16 +294,16 @@ const DetailedItem: React.FC = () => {
       </div>
       <div className="flex flex-col mt-3 lg:mt-10 gap-3">
         {recipes.map((recipe: GroupedRecipes) => (
-          <div className="bg-[#cfc4ab] dark:bg-dark-3 h-fit pt-3 pr-10 border border-blue pl-2">
+          <div className="bg-light-2 dark:bg-dark-3 h-fit pt-3 pr-10 border border-light-green dark:border-blue pl-2">
             <div key={recipe.resultItemId}>
-              <p className="mb-2 font-bold text-green">
+              <p className="mb-2 font-bold text-light-green dark:text-green">
                 {job} niv.
                 {item.map((item: GroupedItems, index: number) => item.level)}
               </p>
               {recipe.recipe.map((item: Recipe, index: number) => (
                 <div
                   key={index}
-                  className="flex flex-row items-center cursor-pointer hover:font-bold dark:text-primary dark:hover:text-black hover:bg-green pr-4 w-80 rounded-lg transition-all"
+                  className="flex flex-row items-center cursor-pointer hover:font-bold dark:text-primary dark:hover:text-black  hover:bg-light-green dark:hover:bg-green pr-4 w-80 rounded-lg transition-all"
                   onClick={() => redirectRecipeItem(item.itemId)}
                 >
                   <img
@@ -322,17 +324,19 @@ const DetailedItem: React.FC = () => {
         <div>
           {mobs.length > 0 && (
             <div>
-              <div className="flex flex-wrap border-blue bg-[#cfc4ab] dark:bg-dark-3 text-primary border pt-2 pl-2 pb-2 pr-2">
+              <div className="flex flex-wrap border-orange dark:border-blue bg-light-2 dark:bg-dark-3 dark:text-primary border pt-2 pl-2 pb-2 pr-2">
                 {mobs.map((mob: GroupedMob) => (
-                  <div className="flex flex-row cursor-pointer hover:font-bold hover:bg-green hover:text-black pr-4 rounded-lg transition-all w-fit">
+                  <div className="flex flex-row cursor-pointer hover:font-bold hover:bg-orange dark:hover:bg-green hover:text-black pr-4 rounded-lg transition-all w-fit">
                     <div
                       onClick={() => {
-                        router.push(`/mobs/mob?id=${mob.id}`);
+                        router.push(`/monstres/monstre?id=${mob.id}`);
                       }}
                       className="cursor-pointer flex pr-3"
                     >
                       <img src={mob.img} alt="mob_img" />
-                      <p className="flex items-center ">{mob.name}</p>
+                      <p className="flex items-center hover:text-white">
+                        {mob.name}
+                      </p>
                     </div>
                   </div>
                 ))}

@@ -96,7 +96,7 @@ const Portal: React.FC<PortalProps> = ({
       className="border border-black"
       key={PortalName}
     >
-      <h1 className="font-bold text-primary ml-4 mt-2">
+      <h1 className="font-bold text-secondary dark:text-primary ml-4 mt-2">
         Dimension {PortalName}
       </h1>
       <h2 className="text-blue ml-3">{Position}</h2>
@@ -105,7 +105,7 @@ const Portal: React.FC<PortalProps> = ({
       </p>
       <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
       <div className="grid grid-cols-4 h-fit w-full">
-        <Button className="dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10">
+        <Button className="bg-blue dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10">
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"
@@ -114,7 +114,7 @@ const Portal: React.FC<PortalProps> = ({
           />
         </Button>
         <Button
-          className="dark:bg-green hover:bg-[#2c7d49] w-fit mx-auto"
+          className="dark:bg-green dark:hover:bg-[#2c7d49] bg-light-green hover:bg-[#7c931f] w-fit mx-auto"
           onClick={toggleForm}
         >
           <img
@@ -125,7 +125,7 @@ const Portal: React.FC<PortalProps> = ({
           />
         </Button>
         <Button
-          className="dark:bg-red hover:bg-[#ab4141] w-fit mx-auto"
+          className="bg-dark-red dark:bg-dark-red hover:bg-light-red w-fit mx-auto"
           onClick={handleDislike}
         >
           <img
@@ -152,7 +152,7 @@ const Portal: React.FC<PortalProps> = ({
             <a href="/portails">
               <button
                 type="submit"
-                className="bg-green text-white px-4 py-2 rounded-md hover:bg-[#2c7d49]"
+                className="bg-orange hover:bg-[#b96f01] dark:bg-green text-white px-4 py-2 rounded-md dark:hover:bg-[#2c7d49] transition-all duration-300 ease-in-out"
               >
                 Soumettre
               </button>

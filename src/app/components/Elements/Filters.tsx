@@ -180,7 +180,7 @@ const Filters: React.FC = () => {
 
   return (
     <>
-      <div className="h-fit text-black dark:text-white lg:block top-24 text-sm transition-all bg-[#cfc4ab] dark:bg-dark-3 rounded-sm border border-blue mb-7 lg:sticky py-3 px-4  w-full lg:w-1/3">
+      <div className="h-fit text-black dark:text-white lg:block top-24 text-sm transition-all bg-light-2 dark:bg-dark-3 rounded-sm border border-orange dark:border-blue mb-7 lg:sticky py-3 px-4  w-full lg:w-1/3">
         <input
           type="text"
           value={nameFilter}
@@ -228,7 +228,7 @@ const Filters: React.FC = () => {
         >
           {(categories as Category[]).map((category: Category) => (
             <div
-              className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-green categories transition-all"
+              className="cursor-pointer hover:font-bold w-full pl-3 hover:bg-orange dark:hover:bg-green categories transition-all"
               id={category.name}
               onClick={() => filterCategory(category.name)}
             >
@@ -242,7 +242,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(1)}
               id="1"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png"
@@ -254,7 +254,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(23)}
               id="23"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_movementPoints.png"
@@ -266,7 +266,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(19)}
               id="19"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_range.png"
@@ -278,7 +278,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(11)}
               id="11"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_vitality.png"
@@ -290,7 +290,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(14)}
               id="14"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_agility.png"
@@ -302,7 +302,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(13)}
               id="13"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_chance.png"
@@ -314,7 +314,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(10)}
               id="10"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_strength.png"
@@ -326,7 +326,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(15)}
               id="15"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png"
@@ -338,7 +338,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(25)}
               id="25"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_damagesPercent.png"
@@ -350,7 +350,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(18)}
               id="18"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_crit.png"
@@ -362,7 +362,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(12)}
               id="12"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_wisdom.png"
@@ -377,7 +377,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(82)}
               id="82"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_attackAP.png"
@@ -389,7 +389,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(27)}
               id="27"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_dodgeAP.png"
@@ -401,7 +401,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(83)}
               id="83"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_attackMP.png"
@@ -413,7 +413,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(28)}
               id="28"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_dodgeMP.png"
@@ -425,7 +425,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(49)}
               id="49"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_heal.png"
@@ -437,7 +437,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(79)}
               id="79"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_tackle.png"
@@ -449,7 +449,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(78)}
               id="78"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_escape.png"
@@ -461,7 +461,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(44)}
               id="44"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_initiative.png"
@@ -473,7 +473,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(26)}
               id="26"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_summonableCreaturesBoost.png"
@@ -485,7 +485,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(48)}
               id="48"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_prospecting.png"
@@ -497,7 +497,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(40)}
               id="40"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_pods.png"
@@ -514,7 +514,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(16)}
               id="16"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_damage.png"
@@ -526,7 +526,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(86)}
               id="86"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_criticalDamage.png"
@@ -538,7 +538,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(92)}
               id="92"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_neutral.png"
@@ -550,7 +550,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(88)}
               id="88"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_strength.png"
@@ -562,7 +562,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(89)}
               id="89"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png"
@@ -574,7 +574,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(90)}
               id="90"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_chance.png"
@@ -586,7 +586,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(91)}
               id="91"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_agility.png"
@@ -601,7 +601,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(58)}
               id="58"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_neutral.png"
@@ -613,7 +613,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(37)}
               id="37"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_neutral.png"
@@ -625,7 +625,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(54)}
               id="54"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_strength.png"
@@ -637,7 +637,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(33)}
               id="33"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_strength.png"
@@ -649,7 +649,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(55)}
               id="55"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png"
@@ -661,7 +661,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(34)}
               id="34"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_intelligence.png"
@@ -673,7 +673,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(56)}
               id="56"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_chance.png"
@@ -685,7 +685,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(35)}
               id="35"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_chance.png"
@@ -697,7 +697,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(57)}
               id="57"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_agility.png"
@@ -709,7 +709,7 @@ const Filters: React.FC = () => {
             <button
               onClick={() => filterEffect(36)}
               id="36"
-              className="filter-button flex hover:font-bold hover:bg-green w-full"
+              className="filter-button flex hover:font-bold hover:bg-orange hover:text-white dark:hover:bg-green w-full"
             >
               <img
                 src="https://dofusdb.fr/icons/characteristics/tx_agility.png"

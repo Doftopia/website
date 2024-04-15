@@ -5,8 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Navbar from "@/app/components/Navbar/Navbar";
-import UniqueItem from "./UniqueItem";
 import {
   Characteristic,
   GroupedItems,
@@ -52,13 +50,13 @@ const ItemSet: React.FC = () => {
           {(itemsSet as mysql.RowDataPacket).map((itemSet: GroupedNmbItems) => (
             <div className="mb-8">
               <div className="gap-8 justify-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                <div className="bg-[#cfc4ab] w-full dark:text-primary dark:bg-dark-3 border-green border py-2 px-3">
+                <div className="bg-light-2 w-full dark:text-primary dark:bg-dark-3 border-orange border py-2 px-3">
                   <p className="font-bold">
                     {itemSet.setName} - niveau {itemSet.setLevel}{" "}
                   </p>
                   {(items as mysql.RowDataPacket).map((item: GroupedItems) => (
                     <div
-                      className="mt-3 flex items-center cursor-pointer hover:font-bold dark:hover:bg-green hover:text-black rounded-lg transition-all p-1"
+                      className="mt-3 flex items-center cursor-pointer hover:font-bold dark:hover:bg-green hover:bg-light-green hover:text-white rounded-lg transition-all p-1"
                       onClick={() => redirectItem(item.itemId.toString())}
                     >
                       <img
@@ -72,7 +70,7 @@ const ItemSet: React.FC = () => {
                   ))}
                 </div>
                 {itemSet.nmbItems.map((nmbItem: NmbItems) => (
-                  <div className="bg-[#cfc4ab] dark:bg-dark-3 dark:text-primary w-full rounded-sm pl-2 pr-6 pb-3 border border-[#3eb167]">
+                  <div className="bg-light-2 dark:bg-dark-3 dark:text-primary w-full rounded-sm pl-2 pr-6 pb-3 border border-light-green dark:border-green">
                     <p className="mt-3 mb-2">Bonus {nmbItem.nmbItems} items</p>
                     {nmbItem.characs.map((charac: Charac) => (
                       <div className="items-center flex ml-1">

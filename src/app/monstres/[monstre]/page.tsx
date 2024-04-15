@@ -3,7 +3,7 @@ import MobDetailed from "@/app/components/Elements/Mob/DetailedMob";
 
 const Page: React.FC = () => {
   return (
-    <div className="bg-[#a7a18d] dark:bg-dark-2 text-black">
+    <div className=" text-black">
       <header>
         <Navbar pageName="monstre" />
       </header>

@@ -11,7 +11,7 @@ const Page: React.FC = () => {
         <Navbar pageName="objets" />
       </div>
       <div className="flex">
-        <div className="min-h-screen bg-[#a7a18d] dark:bg-dark-2 pt-8 lg:flex block w-full px-8">
+        <div className="min-h-screen dark:bg-dark-2 pt-8 lg:flex block w-full px-8">
           <Filters></Filters>
         </div>
       </div>

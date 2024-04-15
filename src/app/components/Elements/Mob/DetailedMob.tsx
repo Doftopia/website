@@ -119,7 +119,7 @@ const DetailedMob: React.FC = () => {
   return (
     <div className="h-screen pt-8 mx-24">
       {mob.map((mob: GroupedMob) => (
-        <div className="dark:border-blue border rounded-sm text-sm pl-4 pt-2 bg-[#cfc4ab] grid text-primary dark:bg-dark-3 mb-4 px-3">
+        <div className="dark:border-blue border-orange border rounded-sm text-sm pl-4 pt-2 bg-light-2 grid dark:text-primary dark:bg-dark-3 mb-4 px-3">
           <p className="text-lg font-bold">
             {mob.name}
             <img src={mob.img} alt={mob.name} />
@@ -182,13 +182,13 @@ const DetailedMob: React.FC = () => {
       <div>
         {drops[0] && dropPourcentage[0] && (
           <div>
-            <p className="font-bold text-blue">Butins</p>
-            <div className="flex flex-wrap border-t text-primary border-blue bg-[#cfc4ab] dark:bg-dark-3 mb-4 mt-1 px-3 py-2">
+            <p className="font-bold text-light-green dark:text-blue">Butins</p>
+            <div className="flex flex-wrap border-t dark:text-primary border-light-green dark:border-blue bg-light-2 dark:bg-dark-3 mb-4 mt-1 px-3 py-2">
               {drops.map((drop: GroupedItems, index: number) => (
                 <div>
                   {dropPourcentage[index].criteria == 1 && (
                     <div
-                      className="flex dark:hover:bg-green dark:hover:text-black pr-2 flex-col pl-3 cursor-pointer rounded-lg transition-all pt-1"
+                      className="flex hover:bg-light-green hover:text-black dark:hover:bg-green dark:hover:text-black pr-2 flex-col pl-3 cursor-pointer rounded-lg transition-all pt-1"
                       onClick={() =>
                         router.push(`/objets/objet?id=${drop.itemId}`)
                       }
@@ -208,13 +208,15 @@ const DetailedMob: React.FC = () => {
                 </div>
               ))}
             </div>
-            <p className="font-light text-red">Butins conditionnés </p>
-            <div className="flex flex-wrap border-t border-blue py-2 dark:bg-dark-3 dark:text-secondary bg-[#cfc4ab] mt-1 pl-2">
+            <p className="font-bold text-light-red dark:text-dark-red">
+              Butins conditionnés{" "}
+            </p>
+            <div className="flex flex-wrap border-t border-light-green dark:border-blue py-2 dark:bg-dark-3 dark:text-secondary bg-light-2 mt-1 pl-2 cursor-pointer">
               {drops.map((drop: GroupedItems, index: number) => (
                 <div>
                   {dropPourcentage[index].criteria == 0 && (
                     <div
-                      className="flex hover:bg-green hover:text-black  pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
+                      className="flex hover:bg-light-green dark:hover:bg-green hover:text-black  pr-2 flex-col pl-3 rounded-lg transition-all pt-1"
                       onClick={() =>
                         router.push(`/objets/objet?id=${drop.itemId}`)
                       }

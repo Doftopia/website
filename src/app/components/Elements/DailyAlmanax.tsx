@@ -52,7 +52,7 @@ const DailyAlmanax: React.FC = () => {
     <Frame
       width="33rem"
       height="20rem"
-      className="border shadow-lg border-blue"
+      className="border shadow-lg bg-light-2 dark:border-blue border-light-green"
     >
       <div className="text-center text-white font-bold">
         <p>OFFRANDE DU JOUR</p>
@@ -64,7 +64,7 @@ const DailyAlmanax: React.FC = () => {
             <Frame
               height="6rem"
               width="22rem"
-              className="rounded-md hover:shadow-lg"
+              className="rounded-md hover:shadow-lg bg-light-1"
             >
               <div
                 id="tribute"
@@ -73,7 +73,7 @@ const DailyAlmanax: React.FC = () => {
                 <Frame
                   height="4rem"
                   width="4rem"
-                  className="items-center hover:border hover:border-green border border-black justify-center"
+                  className="items-center bg-light-2 hover:border hover:border-light-green border border-orange justify-center"
                 >
                   {" "}
                   <img
@@ -86,7 +86,7 @@ const DailyAlmanax: React.FC = () => {
                 </Frame>
 
                 <div id="col-2" className="col-span-2">
-                  <p className="text-sm text-primary ml-2 my-auto font-bold">
+                  <p className="text-sm text-secondary dark:text-primary ml-2 my-auto font-bold">
                     {almanaxData.tribute.quantity}x{" "}
                     {almanaxData.tribute.item.name}
                   </p>
@@ -97,11 +97,16 @@ const DailyAlmanax: React.FC = () => {
               </div>
             </Frame>
           </a>
-          <p className="text-[#779643] font-bold ml-2">Bonus</p>
-          <p className="text-xs text-primary ml-2 font-bold">
+          <p className="text-light-green dark:text-green font-bold ml-2">
+            Bonus
+          </p>
+          <p className="text-xs text-secondary dark:text-primary ml-2 font-bold">
             {almanaxData.bonus.type.name}
           </p>
-          <Frame size="lg" className="border border-black">
+          <Frame
+            size="lg"
+            className="border border-light-green dark:border-blue bg-light-2"
+          >
             {" "}
             <p className="text-sm text-secondary ml-2">
               {almanaxData.bonus.description}

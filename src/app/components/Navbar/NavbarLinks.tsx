@@ -62,7 +62,7 @@ const NavbarLinks = () => {
         </a>
         {(isHovered || isMenuHovered) && (
           <div
-            className="absolute bg-[#a7a18d] dark:bg-dark-3 rounded-md py-2 mt-4 space-y-2 w-48 z-10"
+            className="absolute bg-light-2 dark:bg-dark-3 rounded-md py-2 mt-4 space-y-2 w-48 z-10"
             onMouseEnter={handleMenuMouseEnter}
             onMouseLeave={handleMenuMouseLeave}
           >

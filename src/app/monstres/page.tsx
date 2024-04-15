@@ -5,7 +5,7 @@ import Mob from "../components/Elements/Lists/MobList";
 
 const Page: React.FC = () => {
   return (
-    <div className="bg-[#a7a18d] dark:bg-dark-2">
+    <div className="">
       <Navbar pageName="monstres" />
       <Mob />
     </div>

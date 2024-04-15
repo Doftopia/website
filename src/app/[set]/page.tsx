@@ -7,7 +7,7 @@ const Page: React.FC = () => {
       <div>
         <Navbar pageName="Home" />
       </div>
-      <div className="bg-[#a7a18d] dark:bg-dark-2 h-full pb-10">
+      <div className="dark:bg-dark-2 h-full pb-10">
         <ItemSet />
       </div>
     </>
