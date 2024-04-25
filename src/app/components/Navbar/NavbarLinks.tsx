@@ -72,12 +72,12 @@ const NavbarLinks = () => {
             >
               Portails
             </a>
-            <a
+            {/* <a
               href="#"
               className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"
             >
               Carte Ressources
-            </a>
+            </a> */}
             <a
               href="/outils/xp-metiers"
               className="block px-4 py-2 text-white hover:bg-[#ec8e02] dark:hover:bg-green"

@@ -34,7 +34,7 @@ export const fetchCompletionData = async (req: Request) => {
     });
 
     for (const character of characters) {
-      const url = `https://www.dofus.com/fr/mmorpg/communaute/annuaires/pages-persos/${character.link}`;
+      const url = `https://www.dofus.com/fr/mmorpg/communaute/annuaires/pages-persos/${character.link}/succes`;
       exec(
         `python src/app/api/characters/fetcher/challs/script.py ${url}`,
         async (error, stdout, stderr) => {

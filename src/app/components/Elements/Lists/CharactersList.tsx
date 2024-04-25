@@ -27,6 +27,7 @@ const CharactersList: React.FC = () => {
           {characters.map((character: any, index: number) => (
             <li key={index}>
               <Character
+                id={character.id}
                 className={character.mainChar == 1 ? "border border-green" : ""}
                 name={character.name}
                 level={character.level}

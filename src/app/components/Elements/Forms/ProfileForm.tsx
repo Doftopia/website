@@ -3,7 +3,7 @@
 import { Button } from "../../ui/Button";
 import Frame from "../../ui/Frame";
 import { useState, useEffect } from "react";
-import { Input } from "../../ui/input";
+import { Input } from "../../ui/Input";
 import axios from "axios";
 
 interface Character {
@@ -144,7 +144,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             />
           </form>
         )}
-        <Button onClick={toggleForm} className="bg-blue w-24">
+        <Button
+          onClick={toggleForm}
+          className="bg-blue hover:bg-[#4163a1] w-24 py-2"
+        >
           Changer le profil
         </Button>
       </Frame>
@@ -163,10 +166,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           ))}
         </select>
         <div className="grid grid-cols-2">
-          <Button className="bg-green w-[6rem]" onClick={handleFormSubmit}>
+          <Button className="bg-green w-[6rem] py-2" onClick={handleFormSubmit}>
             Changer mes infos
           </Button>
-          <Button className="bg-red w-[7rem]">Supprimer mon compte</Button>
+          <Button className="hover:bg-light-red bg-dark-red w-[7rem] py-2">
+            Supprimer mon compte
+          </Button>
         </div>
       </Frame>
     </div>

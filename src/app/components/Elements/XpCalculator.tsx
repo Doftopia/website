@@ -25,8 +25,8 @@ const XpCalculator = () => {
     "Sculptemage",
   ];
 
-  const calculateXp = (level: number, item: number) => {
-    return 10 * Math.pow(item - level - 1, 2) + 10 * (level - 1);
+  const getLevel = (xp: number) => {
+    return;
   };
 
   const clicked = () => {
