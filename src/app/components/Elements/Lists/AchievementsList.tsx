@@ -1,60 +1,64 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Frame from "../../ui/Frame";
+import { UniqueAchievement } from "../../Achievement/UniqueAchievement";
 
-const AchievementsList: React.FC = () => {
-  const [achievements, setAchievements] = useState<any[]>([]);
+interface Achievement {
+  AchievementId: number;
+  AchievementName: string;
+  AchievementDesc: string;
+  AchievementLevel: number;
+}
+
+export const AchievementsList: React.FC = ({}) => {
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
 
   useEffect(() => {
     const fetchAchievements = async () => {
       try {
-        const response = await axios.get(
-          `https://api.dofusdb.fr/achievement-categories?$limit=50`
-        );
+        let url = "";
+        const reqUrl = "http://localhost:3001/achievements?categoryId=";
+        if (path === "/succes") {
+          url = "http://localhost:3001/achievements";
+        } else {
+          const categoryName = path.split("/").pop();
+          url = `http://localhost:3001/achievements?category=${categoryName}`;
+        }
+        const response = await axios.get(url);
         setAchievements(response.data.data);
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error fetching achievements:", error);
+      }
     };
 
     fetchAchievements();
-  }, []);
+  }, [path]);
+
+  const handleAchievementClick = (achievementName: string) => {
+    window.location.href = `${window.location.pathname}/${achievementName}`;
+  };
 
   return (
-    <div className="container mx-auto px-4">
-      <h1 className="text-white p-2">Catégories des succès </h1>
-      {achievements.map(
-        (achievement) =>
-          achievement.parent === null && (
-            <Frame
-              key={achievement.id}
-              width="sm"
-              height="sm mr-2"
-              className="m-2"
-            >
-              <a
-                href={`/succes/${achievement.name.fr
-                  .toLowerCase()
-                  .replace("é", "e")
-                  .replace("ê", "e")
-                  .replace("è", "e")
-                  .replace("à", "a")
-                  .replace("â", "a")
-                  .replace("ô", "o")
-                  .replace("î", "i")
-                  .replace("û", "u")
-                  .replace("ç", "c")
-                  .replace(" ", "-")}`}
-                key={achievement.id}
-                className="text-white w-fit"
-              >
-                <p className="text-sm"> {achievement.name.fr.parent}</p>
-              </a>
-            </Frame>
-          )
-      )}
-    </div>
+    <>
+      <div className="px-4">
+        <h1 className="text-white p-2">Achievements List</h1>
+        <ul>
+          <div className="grid grid-cols-5">
+            {achievements.map((achievement) => (
+              <UniqueAchievement
+                key={achievement.AchievementId}
+                id={achievement.AchievementId}
+                name={achievement.AchievementName}
+                description={achievement.AchievementDesc}
+                level={achievement.AchievementLevel}
+                classname="hover:bg-blue"
+              />
+            ))}
+          </div>
+        </ul>
+      </div>
+    </>
   );
 };
-
-export default AchievementsList;

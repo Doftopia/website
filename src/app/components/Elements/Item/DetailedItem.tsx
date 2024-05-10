@@ -16,6 +16,7 @@ import {
   MobDrop,
   Recipe,
 } from "@/app/interfaces";
+import Image from "next/image";
 
 const DetailedItem: React.FC = () => {
   const searchParams = useSearchParams();
@@ -126,11 +127,13 @@ const DetailedItem: React.FC = () => {
                   {item.setName}
                 </h3>
               </div>
-              <img
+              <Image
                 src={item.imgHighRes}
                 alt={item.itemName}
                 draggable="false"
-                className="p-2 rounded-sm size-32"
+                className="p-2 rounded-sm"
+                width={128}
+                height={128}
               />
             </div>
             <h3 className="mb-6 dark:text-secondary">{item.description}</h3>
@@ -141,20 +144,25 @@ const DetailedItem: React.FC = () => {
                     <div className="flex dark:text-primary ">
                       {charac.effectId == 101 ? (
                         <div className="flex items-center">
-                          <img
+                          <Image
                             src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png"
-                            className="size-5 mr-2"
+                            className="mr-2"
                             alt="PA"
+                            draggable="false"
+                            width={28}
+                            height={28}
                           />
                           <p>-1 pa</p>
                         </div>
                       ) : (
                         <div className="flex">
-                          <img
+                          <Image
                             src={charac.characImg}
                             alt="x"
-                            className="mr-2 size-5"
+                            className="mr-2"
                             draggable="false"
+                            width={28}
+                            height={28}
                           />
                           <p className="">
                             {charac.characFrom} à {charac.characTo}{" "}
@@ -182,11 +190,13 @@ const DetailedItem: React.FC = () => {
                         <div className="flex items-center">
                           {charac.characFrom === null ? (
                             <div className="flex ">
-                              <img
+                              <Image
                                 src={charac.characImg}
                                 alt="x"
-                                className="mr-1 size-6"
+                                className="mr-1"
                                 draggable="false"
+                                width={28}
+                                height={28}
                               />
                               <p>
                                 {charac.characTo} {charac.characName}
@@ -196,11 +206,13 @@ const DetailedItem: React.FC = () => {
                             <div className="flex">
                               {charac.effectId != 983 && (
                                 <div className="flex">
-                                  <img
+                                  <Image
                                     src={charac.characImg}
                                     alt="x"
-                                    className="mr-1 size-6"
+                                    className="mr-1"
                                     draggable="false"
+                                    width={24}
+                                    height={24}
                                   />
                                   <p>
                                     {charac.characFrom} à {charac.characTo}{" "}
@@ -306,11 +318,12 @@ const DetailedItem: React.FC = () => {
                   className="flex flex-row items-center cursor-pointer hover:font-bold dark:text-primary dark:hover:text-black  hover:bg-light-green dark:hover:bg-green pr-4 w-80 rounded-lg transition-all"
                   onClick={() => redirectRecipeItem(item.itemId)}
                 >
-                  <img
+                  <Image
                     src={item.itemImg}
                     alt={item.itemName}
-                    className="size-11"
                     draggable="false"
+                    width={44}
+                    height={44}
                   />
                   <p className="ml-2">
                     {item.quantity} {item.itemName}

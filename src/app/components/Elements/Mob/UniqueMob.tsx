@@ -3,6 +3,7 @@
 
 import React from "react";
 import Frame from "@/app/components/ui/Frame";
+import Image from "next/image";
 
 interface UniqueMobProps {
   mob: any;
@@ -34,7 +35,7 @@ const UniqueMob: React.FC<UniqueMobProps> = ({ mob }) => {
             )}
           </div>
         </div>
-        <img src={mob.img} alt={mob.name} />
+        <Image src={mob.img} alt={mob.name} height={70} width={70} />
       </a>
     </Frame>
   );

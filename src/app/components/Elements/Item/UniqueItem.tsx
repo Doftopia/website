@@ -7,6 +7,7 @@ import React from "react";
 import Frame from "@/app/components/ui/Frame";
 import { useRouter } from "next/navigation";
 import { Characteristic, GroupedItems } from "@/app/interfaces";
+import Image from "next/image";
 
 interface ItemProps {
   index?: number;
@@ -48,11 +49,13 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
               {item.setName}
             </h3>
           </div>
-          <img
+          <Image
             src={item.imgHighRes}
             alt={item.itemName}
+            className="p-1"
             draggable="false"
-            className="p-1 size-20"
+            width={80}
+            height={80}
           />
         </div>
         <div>
@@ -94,20 +97,24 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
                   <div className="flex text-sm">
                     {charac.effectId == 101 ? (
                       <div className="flex text-sm items-center">
-                        <img
+                        <Image
                           src="https://dofusdb.fr/icons/characteristics/tx_actionPoints.png"
-                          className="size-5 mr-2"
+                          className="mr-2"
                           alt="PA"
+                          width={28}
+                          height={28}
                         />
                         <p>-1 pa</p>
                       </div>
                     ) : (
                       <div className="flex text-sm">
-                        <img
+                        <Image
                           src={charac.characImg}
                           alt="x"
-                          className="mr-2 size-5"
+                          className="mr-2"
                           draggable="false"
+                          width={28}
+                          height={28}
                         />
                         <p>
                           {charac.characFrom} à {charac.characTo}{" "}
@@ -139,11 +146,13 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
                       <div>
                         {charac.characFrom === null ? (
                           <div className="flex">
-                            <img
+                            <Image
                               src={charac.characImg}
                               alt="x"
-                              className="mr-2 size-5"
+                              className="mr-2"
                               draggable="false"
+                              width={28}
+                              height={28}
                             />
                             <p>
                               {charac.characTo} {charac.characName}
@@ -153,11 +162,13 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
                           <div className="flex">
                             {charac.effectId != 983 && (
                               <div className="flex">
-                                <img
+                                <Image
                                   src={charac.characImg}
                                   alt="x"
                                   className="mr-2 size-5"
                                   draggable="false"
+                                  width={28}
+                                  height={28}
                                 />
                                 <p>
                                   {charac.characFrom} à {charac.characTo}{" "}
@@ -210,11 +221,13 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
                                     charac.effectId != 620 &&
                                     charac.effectId != 30 && (
                                       <div className="flex">
-                                        <img
+                                        <Image
                                           src={charac.characImg}
                                           alt="x"
-                                          className="mr-2 size-5"
+                                          className="mr-2"
                                           draggable="false"
+                                          height={28}
+                                          width={28}
                                         />
                                         <p>
                                           {charac.characFrom}{" "}

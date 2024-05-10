@@ -13,6 +13,7 @@ import {
   GroupedMob,
   MobCharac,
 } from "@/app/interfaces";
+import Image from "next/image";
 
 const DetailedMob: React.FC = () => {
   const searchParams = useSearchParams();
@@ -122,7 +123,7 @@ const DetailedMob: React.FC = () => {
         <div className="dark:border-blue border-orange border rounded-sm text-sm pl-4 pt-2 bg-light-2 grid dark:text-primary dark:bg-dark-3 mb-4 px-3">
           <p className="text-lg font-bold">
             {mob.name}
-            <img src={mob.img} alt={mob.name} />
+            <Image src={mob.img} alt={mob.name} width={65} height={70} />
           </p>
           <div>
             {mob.characs[0].level !=
@@ -149,10 +150,12 @@ const DetailedMob: React.FC = () => {
                   {mob.characs[0][stat] !=
                   mob.characs[mob.characs.length - 1][stat] ? (
                     <div className="flex items-center">
-                      <img
+                      <Image
                         src={`https://dofusdb.fr/icons/characteristics/tx_${icons[index]}.png`}
                         alt={stat}
                         className="mr-1"
+                        width={28}
+                        height={28}
                       />
                       <p>
                         {mob.characs[0][stat]} à{" "}
@@ -162,10 +165,12 @@ const DetailedMob: React.FC = () => {
                     </div>
                   ) : (
                     <div className="flex items-center">
-                      <img
+                      <Image
                         src={`https://dofusdb.fr/icons/characteristics/tx_${icons[index]}.png`}
                         alt={stat}
                         className="mr-1"
+                        width={28}
+                        height={28}
                       />
                       <p>
                         {mob.characs[0][stat]} {stat_french_name[index]}
@@ -198,10 +203,12 @@ const DetailedMob: React.FC = () => {
                         <p className="font-normal"> - niveau {drop.level}</p>
                       </p>
                       <p>{dropPourcentage[index].dropPourcentage}%</p>
-                      <img
+                      <Image
                         src={drop.img}
                         alt={drop.itemName}
-                        className="mr-1 size-16"
+                        className="mr-1"
+                        width={64}
+                        height={64}
                       />
                     </div>
                   )}
@@ -226,10 +233,12 @@ const DetailedMob: React.FC = () => {
                         <p className="font-normal"> - niveau {drop.level}</p>
                       </p>
                       <p>{dropPourcentage[index].dropPourcentage}%</p>
-                      <img
+                      <Image
                         src={drop.img}
                         alt={drop.itemName}
-                        className="mr-1 size-16"
+                        className="mr-1"
+                        width={64}
+                        height={64}
                       />
                     </div>
                   )}

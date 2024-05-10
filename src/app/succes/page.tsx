@@ -1,5 +1,5 @@
 import Navbar from "../components/Navbar/Navbar";
-import AchievementsList from "../components/Elements/Lists/AchievementsList";
+import { AchievementsCategories } from "../components/Elements/Lists/AchievementsCategories";
 
 const Page: React.FC = () => {
   return (
@@ -7,8 +7,13 @@ const Page: React.FC = () => {
       <header>
         <Navbar pageName="succes" />
       </header>
-      <div className="w-fit">
-        <AchievementsList />
+      <div className="px-4">
+        <h1 className="text-white p-2">Catégories des succès</h1>
+        <div className="grid grid-cols-5 ">
+          <div className="w-full">
+            <AchievementsCategories />
+          </div>
+        </div>
       </div>
     </>
   );

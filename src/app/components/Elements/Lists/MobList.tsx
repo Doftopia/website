@@ -3,12 +3,10 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { GroupedMob } from "@/app/interfaces";
 import UniqueMob from "../Mob/UniqueMob";
 
 const MobList: React.FC = () => {
-  const router = useRouter();
   const [nameFilter, setNameFilter] = useState<string>("");
   const [mobs, setMobs] = useState<any[]>([]);
   const stats: string[] = [
@@ -96,7 +94,7 @@ const MobList: React.FC = () => {
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 mx-8 gap-5">
         {mobs.map((mob: GroupedMob) => (
-          <UniqueMob mob={mob} />
+          <UniqueMob mob={mob} key={mob.id} />
         ))}
       </div>
     </div>

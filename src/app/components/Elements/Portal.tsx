@@ -5,11 +5,11 @@ import React from "react";
 import { useState } from "react";
 import Frame from "../ui/Frame";
 import { Button } from "../ui/Button";
-import { Input } from "../ui/Input";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { Input } from "../ui/Input";
 
-interface PortalProps {
+export interface PortalProps {
   id: number;
   PortalName: string;
   Position: string;
@@ -36,31 +36,38 @@ const Portal: React.FC<PortalProps> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await axios.post(
-        `/api/portals`,
-        {
-          server: "Draconiros",
-          name: PortalName,
-          updaterName: UpdaterName,
-          pos: newPosition,
-          userId: session?.user.id,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response) {
-        throw new Error("Failed to update portal.");
-      }
+    const regexPattern = /^\[-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?\]$/;
+
+    if (!newPosition.match(regexPattern)) {
+      window.alert("Cette position n'est pas valide ! [-1,2] ");
       window.location.reload();
-    } catch (error) {
-      console.error("Error updating portal:", error);
+      return;
+    } else {
+      try {
+        const response = await axios.post(
+          `/api/portals`,
+          {
+            server: "Draconiros",
+            name: PortalName,
+            updaterName: UpdaterName,
+            pos: newPosition,
+            userId: session?.user.id,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response) {
+          throw new Error("Failed to update portal.");
+        }
+        window.location.reload();
+      } catch (error) {
+        console.error("Error updating portal:", error);
+      }
     }
   };
-
   const handleDislike = () => {
     try {
       axios.post(
@@ -101,7 +108,7 @@ const Portal: React.FC<PortalProps> = ({
       </h1>
       <h2 className="text-blue ml-3">{Position}</h2>
       <p className="text-secondary ml-[15rem]">
-        mis à jour {LastUpdate.toString().slice(15, 21)}
+        mis à jour {LastUpdate?.toString().slice(15, 21)}
       </p>
       <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
       <div className="grid grid-cols-4 h-fit w-full">
@@ -143,7 +150,7 @@ const Portal: React.FC<PortalProps> = ({
       </div>
       <div className={showForm ? "" : "hidden"}>
         <form id={`${PortalName}`} onSubmit={handleSubmit} className="">
-          <div className="bottom-[2rem] grid grid-cols-4 items-center w-fit">
+          <div className="bottom-[2rem] grid grid-cols-2 items-center">
             <Input
               className="w-24"
               value={newPosition}

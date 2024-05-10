@@ -19,6 +19,7 @@ const MainCharacter = async () => {
   return (
     <div className="grid grid-cols-2 w-[34rem]">
       <Character
+        id={mainChar.id}
         name={mainChar.name}
         level={parseInt(mainChar.level)}
         race={mainChar.race ?? ""}
