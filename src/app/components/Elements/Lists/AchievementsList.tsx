@@ -9,6 +9,7 @@ interface Achievement {
   AchievementName: string;
   AchievementDesc: string;
   AchievementLevel: number;
+  AchievementImg: string;
 }
 
 export const AchievementsList: React.FC = ({}) => {
@@ -59,6 +60,7 @@ export const AchievementsList: React.FC = ({}) => {
                   description={achievement.AchievementDesc}
                   level={achievement.AchievementLevel}
                   classname="hover:bg-blue"
+                  img={achievement.AchievementImg}
                 />
               </div>
             ))}

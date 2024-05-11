@@ -124,7 +124,7 @@ const DetailedItem: React.FC = () => {
                   className=" mb-5 dark:text-blue cursor-pointer text-light-green dark:hover:text-green"
                   onClick={() => redirectSet(item.setID.toString())}
                 >
-                  z{item.setName}
+                  {item.setName}
                 </h3>
               </div>
               <Image
@@ -318,7 +318,7 @@ const DetailedItem: React.FC = () => {
                   className="flex flex-row items-center cursor-pointer hover:font-bold dark:text-primary dark:hover:text-black  hover:bg-light-green dark:hover:bg-green pr-4 w-80 rounded-lg transition-all"
                   onClick={() => redirectRecipeItem(item.itemId)}
                 >
-                  <Image
+                  <img
                     src={item.itemImg}
                     alt={item.itemName}
                     draggable="false"

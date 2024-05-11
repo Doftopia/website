@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Button } from "../../ui/Button";
 
 interface Achievement {
   id: number;
@@ -89,9 +90,12 @@ export const AchievementsCategories: React.FC = ({}) => {
 
   return (
     <>
+      <h1 className="text-white p-2">Catégories</h1>
+
+      <Button className="dark:bg-dark-red" onClick={() => handlePreviousPage()}>
+        Retour
+      </Button>
       <div className="mt-10 px-4 w-full">
-        <button onClick={() => handlePreviousPage()}>Retour</button>
-        <h1 className="text-white p-2">Catégories</h1>
         <ul>
           {categories.map((category) => (
             <div

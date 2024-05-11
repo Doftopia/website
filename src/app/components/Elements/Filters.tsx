@@ -72,44 +72,52 @@ const Filters: React.FC = () => {
     }
   };
 
-  const fetchItems = async () => {
-    try {
-      const responseItems = await axios.get(`http://localhost:3001/items`, {
-        params: {
-          name: nameFilter,
-          effect: effectFilter,
-          minLevel: minLvl,
-          maxLevel: maxLvl,
-          category: category,
-          limit: limit,
-        },
-      });
-      setItems(responseItems.data.data);
-    } catch (error) {
-      console.log("Error fetching items:", error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const responseCategories = await axios.get(
-        `http://localhost:3001/items-type`,
-        {
-          params: {
-            category: categoriesFilter,
-          },
-        }
-      );
-      setCategories(responseCategories.data.data);
-    } catch (error) {
-      console.error(`Error fetching catories ${error}`);
-    }
-  };
-
   useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const responseItems = await axios.get(`http://localhost:3001/items`, {
+          params: {
+            name: nameFilter,
+            effect: effectFilter,
+            minLevel: minLvl,
+            maxLevel: maxLvl,
+            category: category,
+            limit: limit,
+          },
+        });
+        setItems(responseItems.data.data);
+      } catch (error) {
+        console.log("Error fetching items:", error);
+      }
+    };
+
+    const fetchCategories = async () => {
+      try {
+        const responseCategories = await axios.get(
+          `http://localhost:3001/items-type`,
+          {
+            params: {
+              category: categoriesFilter,
+            },
+          }
+        );
+        setCategories(responseCategories.data.data);
+      } catch (error) {
+        console.error(`Error fetching catories ${error}`);
+      }
+    };
+
     fetchItems();
     fetchCategories();
-  }, [nameFilter, effectFilter, minLvl, maxLvl, category, categoriesFilter]);
+  }, [
+    nameFilter,
+    effectFilter,
+    minLvl,
+    maxLvl,
+    category,
+    categoriesFilter,
+    limit,
+  ]);
 
   const handleMinLevelInputChange = (
     event: React.ChangeEvent<HTMLInputElement>

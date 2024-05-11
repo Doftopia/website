@@ -23,7 +23,7 @@ export const QuestList: React.FC = ({}) => {
           key={quest.id}
           className="w-fit"
         >
-          <Frame size="sm" key={quest.id}>
+          <Frame size="sm" height="5rem" key={quest.id}>
             <h1 className="text-primary">{quest.questName}</h1>
             <p className="text-secondary text-sm">{quest.categoryName}</p>
             <p className="text-primary">niv.{quest.minLvl}</p>
