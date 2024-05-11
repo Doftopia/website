@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { UniqueAchievement } from "../../Achievement/UniqueAchievement";
+import { UniqueAchievement } from "../Achievement/UniqueAchievement";
 
 interface Achievement {
   AchievementId: number;
@@ -36,8 +36,8 @@ export const AchievementsList: React.FC = ({}) => {
     fetchAchievements();
   }, [path]);
 
-  const handleAchievementClick = (achievementName: string) => {
-    window.location.href = `${window.location.pathname}/${achievementName}`;
+  const handleAchievementClick = (achievementId: number) => {
+    window.location.href = `${window.location.pathname}/${achievementId}`;
   };
 
   return (
@@ -47,14 +47,20 @@ export const AchievementsList: React.FC = ({}) => {
         <ul>
           <div className="grid grid-cols-5">
             {achievements.map((achievement) => (
-              <UniqueAchievement
+              <div
                 key={achievement.AchievementId}
-                id={achievement.AchievementId}
-                name={achievement.AchievementName}
-                description={achievement.AchievementDesc}
-                level={achievement.AchievementLevel}
-                classname="hover:bg-blue"
-              />
+                onClick={() =>
+                  handleAchievementClick(achievement.AchievementId)
+                }
+              >
+                <UniqueAchievement
+                  id={achievement.AchievementId}
+                  name={achievement.AchievementName}
+                  description={achievement.AchievementDesc}
+                  level={achievement.AchievementLevel}
+                  classname="hover:bg-blue"
+                />
+              </div>
             ))}
           </div>
         </ul>

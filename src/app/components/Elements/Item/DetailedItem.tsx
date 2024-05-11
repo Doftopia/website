@@ -124,7 +124,7 @@ const DetailedItem: React.FC = () => {
                   className=" mb-5 dark:text-blue cursor-pointer text-light-green dark:hover:text-green"
                   onClick={() => redirectSet(item.setID.toString())}
                 >
-                  {item.setName}
+                  z{item.setName}
                 </h3>
               </div>
               <Image

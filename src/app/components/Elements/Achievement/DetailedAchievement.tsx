@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Frame from "../ui/Frame";
+import Frame from "../../ui/Frame";
 import axios from "axios";
 
 interface Achievement {
@@ -15,7 +15,7 @@ export const DetailedAchievement: React.FC = ({}) => {
   const achievementId = path.split("/").pop();
 
   useEffect(() => {
-    if (!achievementId) return; // Add a check here to ensure achievementId exists
+    if (!achievementId) return;
 
     const fetchAchievement = async () => {
       try {

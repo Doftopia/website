@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "@/app/components/Navbar/Navbar";
-import { DetailedAchievement } from "@/app/components/Achievement/DetailedAchievement";
+import { DetailedAchievement } from "@/app/components/Elements/Achievement/DetailedAchievement";
 
 const Page = () => {
   return (
