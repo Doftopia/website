@@ -1,6 +1,6 @@
 # Doftopia
 
-Bienvenue dans le projet Doftopia ! Doftopia est un site regroupant toutes les informations sur le jeu Dofus, incluant les quêtes, les objets, les monstres, les succès, les crafts, les équipements, ainsi que des outils pour créer des panoplies, calculer son expérience, et consulter la position des portails de dimensions.
+Doftopia est un site regroupant toutes les informations sur le jeu Dofus, incluant les quêtes, les objets, les monstres, les succès, les crafts, les équipements, ainsi que des outils pour créer des panoplies, calculer son expérience, et consulter la position des portails de dimensions. Le site est en cours de développement et certaines informations ou fonctionnalités ne sont pas encore disponibles 
 
 ## Capacités et Technologies Utilisées
 
@@ -15,13 +15,24 @@ Bienvenue dans le projet Doftopia ! Doftopia est un site regroupant toutes les i
 
 ### Fonctionnalités Clés :
 
-- **Quêtes** : Recherchez et explorez toutes les quêtes disponibles dans Dofus.
+- **Quêtes** : Explorez toutes les quêtes disponibles dans Dofus.
 - **Objets** : Découvrez les caractéristiques de chaque objet et leur utilité dans le jeu.
-- **Monstres** : Consultez les informations sur les monstres, leurs emplacements et leurs drops.
-- **Succès** : Suivez votre progression dans les succès et découvrez les récompenses.
-- **Crafts** : Accédez à la liste des crafts disponibles et les ressources nécessaires.
+- **Monstres** : Consultez les informations et les drops des monstres.
+- **Succès** : Consultez les succès et découvrez les récompenses.
+- **Crafts** : Accédez à la liste des crafts disponibles et aux ressources nécessaires.
 - **Équipements** : Consultez les statistiques et les effets des équipements.
-- **Outils** : Utilisez des outils pratiques pour créer des panoplies, calculer l'expérience et localiser les portails de dimensions.
+- **Outils** : Utilisez des outils pratiques pour calculer l'expérience et localiser les portails de dimensions.
+
+## Installation
+
+Doftopia nécessite [Node.js](https://nodejs.org/) v18+ et son api pour fonctionner correctement.
+pour démarrer l'api, suivez le tutoriel pour installer et lancer l'api a [doftopia/api](https://github.com/doftopia/api)
+
+Installer les dépendances et lancer le projet depuis la racine 
+```sh
+yarn install
+yarn dev
+```
 
 ## Licence
 
