@@ -21,28 +21,30 @@ const CharactersList: React.FC = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-2">
-      <div>
-        <ul className="flex flex-wrap">
-          {characters.map((character: any, index: number) => (
-            <li key={index}>
-              <Character
-                id={character.id}
-                className={character.mainChar == 1 ? "border border-green" : ""}
-                name={character.name}
-                level={character.level}
-                race={character.race}
-                server={character.server}
-                link={character.link}
-                image_link={character.imagelink}
-                successPts={character.successPts}
-                title={character.title}
-              />
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <>
+      <ul className="grid grid-cols-3">
+        {characters.map((character: any, index: number) => (
+          <li key={index}>
+            <Character
+              id={character.id}
+              className={
+                character.mainChar == 1
+                  ? "border border-green"
+                  : "border border-secondary"
+              }
+              name={character.name}
+              level={character.level}
+              race={character.race}
+              server={character.server}
+              link={character.link}
+              image_link={character.imagelink}
+              successPts={character.successPts}
+              title={character.title}
+            />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 

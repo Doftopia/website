@@ -11,7 +11,13 @@ interface Achievement {
   AchievementImg: string;
 }
 
-export const DetailedAchievement: React.FC = ({}) => {
+interface DetailedAchievementProps {
+  classname?: string;
+}
+
+export const DetailedAchievement: React.FC<DetailedAchievementProps> = ({
+  classname,
+}) => {
   const [achievement, setAchievement] = useState<Achievement | null>(null);
   const path = typeof window !== "undefined" ? window.location.pathname : "";
   const achievementId = path.split("/").pop();
@@ -25,7 +31,6 @@ export const DetailedAchievement: React.FC = ({}) => {
           `http://localhost:3001/achievements?id=${achievementId}`
         );
         if (response.data.data && response.data.data.length > 0) {
-          // Check if data exists and is not empty
           setAchievement(response.data.data[0]);
         }
       } catch (error) {
@@ -39,7 +44,7 @@ export const DetailedAchievement: React.FC = ({}) => {
   return (
     <>
       {achievement && (
-        <Frame>
+        <Frame className={classname}>
           <div className="grid grid-cols-2 w-fit">
             <Image
               src={achievement.AchievementImg}
@@ -47,7 +52,7 @@ export const DetailedAchievement: React.FC = ({}) => {
               width={64}
               height={64}
             />
-            <h1 className="text-primary font-bold">
+            <h1 className="text-primary font-bold mt-2">
               {achievement.AchievementName}
             </h1>
           </div>

@@ -8,6 +8,7 @@ import Characters from "../components/Elements/Lists/CharactersList";
 import ProfileForm from "../components/Elements/Forms/ProfileForm";
 
 interface ProfileProps {
+  id: number;
   username: string;
   email: string;
   password: string;
@@ -33,15 +34,14 @@ const Profile: React.FC<ProfileProps> = async () => {
         <Navbar pageName="profil" />
       </header>
       <main>
-        <div className="grid w-fit grid-cols-3">
-          <div>
-            <ProfileForm
-              name={user.username}
-              pseudoAnkama={user.ankamaUsername ?? ""}
-              email={user.email}
-              password={user.password}
-            />
-          </div>
+        <div className="grid w-fit grid-cols-3 mx-auto mt-[5rem]">
+          <ProfileForm
+            id={user.id}
+            name={user.username}
+            pseudoAnkama={user.ankamaUsername ?? ""}
+            email={user.email}
+            password={user.password}
+          />
           <div className="col-span-2">
             <Characters />
           </div>

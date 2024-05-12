@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "@/app/components/Navbar/Navbar";
-import { DetailedAchievement } from "@/app/components/Elements/Achievement/DetailedAchievement";
+import { ItemSetsList } from "../components/Elements/Lists/ItemSetsLists";
 
 const Page = () => {
   return (
@@ -9,7 +9,7 @@ const Page = () => {
         <Navbar pageName="succes"></Navbar>
       </header>
       <main>
-        <DetailedAchievement classname="mx-auto mt-[5rem] border border-blue" />
+        <ItemSetsList />
       </main>
     </>
   );

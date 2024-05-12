@@ -16,7 +16,7 @@ export const QuestList: React.FC = ({}) => {
     fetchQuests();
   }, [path]);
   return (
-    <div className="grid grid-cols-4">
+    <div className="grid grid-cols-4 w-fit gap-x-4 mx-auto">
       {quests.map((quest: any) => (
         <a
           href={`/quetes/${path.split("/").pop()}/${quest.questName}`}

@@ -12,6 +12,7 @@ interface Character {
   mainChar: boolean;
 }
 interface ProfileFormProps {
+  id?: number;
   name?: string;
   pseudoAnkama: string;
   email?: string;
@@ -20,6 +21,7 @@ interface ProfileFormProps {
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({
+  id,
   name,
   pseudoAnkama,
   email,
@@ -30,6 +32,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   const [characters, setCharacters] = useState<Character[]>([]);
   const mainChar = characters.find((char) => char.mainChar === true);
   const [selectedCharacter, setSelectedCharacter] = useState<string>("");
+  const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
   useEffect(() => {
     const fetchChars = async () => {
       try {
@@ -43,26 +48,26 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
   }, []);
 
   const texts = () => (
-    <div className="text-primary">
+    <div className="text-primary ml-[4rem] mt-6">
       <div className="">
         <p>Nom d&apos;utilisateur</p>
-        <p className="text-blue">{name}</p>
+        <p className="text-blue ml-3">{name}</p>
       </div>
       <div className="">
         <p>Pseudo Ankama</p>
-        <p className="text-green">{pseudoAnkama}</p>
+        <p className="text-green ml-3">{pseudoAnkama}</p>
       </div>
       <div className="">
         <p>Email</p>
-        <p className="text-blue">{email}</p>
+        <p className="text-blue ml-3">{email}</p>
       </div>
       <div className="">
         <p>Mot de passe</p>
-        <p className="text-blue">********</p>
+        <p className="text-blue ml-3">********</p>
       </div>
       <div className="">
         <p>Votre personnage principal</p>
-        <p className="text-green">{mainChar?.name}</p>
+        <p className="text-green ml-3">{mainChar?.name}</p>
       </div>
     </div>
   );
@@ -106,74 +111,161 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     }
   };
 
+  const handleDeleteConfirmation = async () => {
+    try {
+      await axios.post("/api/user/delete", {
+        id: id,
+        name: name,
+        email: email,
+      });
+      window.location.href = "/";
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
-      <Frame height="30rem" width="28rem">
+      <Frame height="30rem" width="28rem" className="border border-secondary">
         {!showForm ? (
           texts()
         ) : (
-          <form className="w-40 text-primary">
-            <div>
-              <p>Nom d&apos;utilisateur</p>
-              <Input type="text" id="name" placeholder={name} className="" />
+          <form className="text-primary ml-[6rem]">
+            <div className="mb-4">
+              <p className="ml-[1rem]">Nom d&apos;utilisateur</p>
+              <Input
+                type="text"
+                id="name"
+                placeholder={name}
+                className="w-[14rem] ml-2 bg-dark-3 py-1 px-2 rounded"
+              />
             </div>
-            <div>
-              <p>Pseudo Ankama</p>
+            <div className="mb-4">
+              <p className="ml-[1rem]">Pseudo Ankama</p>
               <Input
                 id="pseudoAnkama"
                 type="text"
                 value={pseudoAnkama}
                 placeholder="Pseudo Ankama"
+                className="w-[14rem] ml-2 bg-dark-3 py-1 px-2 rounded"
               />
             </div>
-            <div>
-              <p>Email</p>
+            <div className="mb-4">
+              <p className="ml-[1rem]">Email</p>
               <Input
                 type="email"
                 id="email"
                 value={email}
                 placeholder="Email"
+                className="w-[14rem] ml-2 bg-dark-3 py-1 px-2 rounded"
               />
             </div>
-            <p>Mot de passe</p>
-            <Input
-              type="password"
-              id="password"
-              value={password}
-              placeholder="Password"
-            />
+            <div className="mb-4">
+              <p className="ml-[1rem]">Mot de passe</p>
+              <Input
+                type="password"
+                id="password"
+                value={password}
+                placeholder="Password"
+                className="w-[14rem] ml-2 bg-dark-3 py-1 px-2 rounded"
+              />
+            </div>
           </form>
         )}
         <Button
           onClick={toggleForm}
-          className="bg-blue hover:bg-[#4163a1] w-24 py-2"
+          className="relative bg-blue hover:bg-[#4163a1] ml-[15rem] w-24 py-2"
         >
           Changer le profil
         </Button>
       </Frame>
-      <Frame width="28rem" className={showForm ? "" : "hidden"}>
-        <select
-          name="character"
-          id="character"
-          onChange={handleCharacterChange}
-          value={selectedCharacter}
-          className="w-44 bg-dark-3 mb-6 text-primary"
-        >
-          {characters.map((char) => (
-            <option key={char.id} value={char.id}>
-              {char.name}
-            </option>
-          ))}
-        </select>
-        <div className="grid grid-cols-2">
-          <Button className="bg-green w-[6rem] py-2" onClick={handleFormSubmit}>
-            Changer mes infos
-          </Button>
-          <Button className="hover:bg-light-red bg-dark-red w-[7rem] py-2">
-            Supprimer mon compte
-          </Button>
+
+      <div className={showForm ? "" : "hidden"}>
+        <Frame width="28rem" className="">
+          <p className="text-primary relative bottom-[2.7rem] ml-4">
+            Selectionnez un personnage principal
+          </p>
+          <select
+            name="character"
+            id="character"
+            onChange={handleCharacterChange}
+            value={selectedCharacter}
+            className="w-full bg-dark-3 mb-4 text-primary py-1 px-2 rounded"
+          >
+            {characters.map((char) => (
+              <option key={char.id} value={char.id}>
+                {char.name}
+              </option>
+            ))}
+          </select>
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              className="bg-green w-full py-2"
+              onClick={() => setShowUpdateConfirmation(true)}
+            >
+              Changer mes infos
+            </button>
+            <button
+              className="hover:bg-light-red bg-dark-red w-full py-2"
+              onClick={() => setShowDeleteConfirmation(true)}
+            >
+              Supprimer mon compte
+            </button>
+          </div>
+        </Frame>
+      </div>
+
+      {/* Update Confirmation Popup */}
+      {showUpdateConfirmation && (
+        <div className="fixed inset-0 flex items-center z-50 justify-center">
+          <div className="dark:bg-dark-1 p-4 rounded-md shadow-lg">
+            <p className="text-primary">Confirmer la mise à jour</p>
+            <p className="text-primary text-sm text-center">
+              Êtes-vous sûr de vouloir mettre à jour vos informations ?
+            </p>
+            <div className="flex justify-between mx-10 mt-4">
+              <button
+                onClick={() => setShowUpdateConfirmation(false)}
+                className="text-dark-red font-bold text-sm hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                ANNULER
+              </button>
+              <button
+                onClick={handleFormSubmit}
+                className="text-green text-sm font-bold hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                CONFIRMER
+              </button>
+            </div>
+          </div>
         </div>
-      </Frame>
+      )}
+
+      {/* Delete Confirmation Popup */}
+      {showDeleteConfirmation && (
+        <div className="fixed inset-0 flex items-center z-50 justify-center">
+          <div className="dark:bg-dark-1 p-4 rounded-md shadow-lg">
+            <p className="text-primary">Confirmer la suppression</p>
+            <p className="text-primary text-sm text-center">
+              Êtes-vous sûr de vouloir supprimer votre compte ?
+            </p>
+            <div className="flex justify-between mx-10 mt-4">
+              <button
+                onClick={() => setShowDeleteConfirmation(false)}
+                className="text-dark-red font-bold text-sm hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                ANNULER
+              </button>
+              <button
+                onClick={handleDeleteConfirmation}
+                className="text-green text-sm font-bold hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                CONFIRMER
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

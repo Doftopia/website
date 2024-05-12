@@ -306,11 +306,17 @@ const DetailedItem: React.FC = () => {
       </div>
       <div className="flex flex-col mt-3 lg:mt-10 gap-3">
         {recipes.map((recipe: GroupedRecipes) => (
-          <div className="bg-light-2 dark:bg-dark-3 h-fit pt-3 pr-10 border border-light-green dark:border-blue pl-2">
-            <div key={recipe.resultItemId}>
+          <div
+            key={recipe.resultItemId}
+            className="bg-light-2 dark:bg-dark-3 h-fit pt-3 pr-10 border border-light-green dark:border-blue pl-2"
+          >
+            <div>
               <p className="mb-2 font-bold text-light-green dark:text-green">
-                {job} niv.
-                {item.map((item: GroupedItems, index: number) => item.level)}
+                {job} niv.{" "}
+                {recipe.itemLevel
+                  .split(",")
+                  .slice(0, 1)
+                  .map((level: string) => level.trim())}
               </p>
               {recipe.recipe.map((item: Recipe, index: number) => (
                 <div
@@ -319,21 +325,22 @@ const DetailedItem: React.FC = () => {
                   onClick={() => redirectRecipeItem(item.itemId)}
                 >
                   <img
-                    src={item.itemImg}
-                    alt={item.itemName}
+                    src={item.itemImg.split(",")[0]} // Afficher uniquement la première image pour chaque élément
+                    alt={item.itemName.split(",")[0]} // Afficher uniquement le premier nom pour chaque élément
                     draggable="false"
                     width={44}
                     height={44}
                   />
                   <p className="ml-2">
-                    {item.quantity} {item.itemName}
+                    {item.quantity} {item.itemName.split(",")[0]}{" "}
+                    {/* Afficher uniquement le premier nom pour chaque élément */}
                   </p>
                 </div>
               ))}
-              <br></br>
             </div>
           </div>
         ))}
+
         <div>
           {mobs.length > 0 && (
             <div>

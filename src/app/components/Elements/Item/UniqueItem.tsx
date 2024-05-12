@@ -15,9 +15,10 @@ interface ItemProps {
 }
 
 const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
+  const [hoveredItem, setHoveredItem] = React.useState<boolean>(false);
   const router = useRouter();
   const redirectItem = (itemId: string) => {
-    router.push(`/items/item?id=${itemId}`);
+    router.push(`/objets/objet?id=${itemId}`);
   };
 
   const redirectSet = (setId: string) => {
@@ -26,7 +27,7 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
   return (
     <>
       <Frame
-        className="hover:brightness-90 hover:-translate-y-2 border dark:border-blue border-orange dark:text-primary transition-all cursor-pointer"
+        className="hover:brightness-90 hover:-translate-y-2 border dark:border-secondary dark:hover:border-primary border-orange dark:text-primary transition-all cursor-pointer"
         key={index}
         width="auto"
         height="auto"
@@ -39,7 +40,7 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
             >
               {item.itemName}
             </h2>
-            <h3 className="relative left-3 text-sm text-[#796f5a] dark:text-secondary">
+            <h3 className="relative left-3 text-sm text-secondary">
               {item.type} - niv.{item.level}
             </h3>
             <h3
@@ -61,28 +62,28 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
         <div>
           {item.characteristics[0].characId == -1 && <div></div>}
           {item.apCost && (
-            <div className="text-sm mb-1">
+            <div className="text-sm mb-1 ml-2">
               <p className="flex">
-                <p className="text-[#796f5a] mr-1">Coût </p>
+                <p className="text-secondary mr-1">Coût </p>
                 {item.apCost} PA
               </p>
               {item.minRange !== item.maxRange ? (
                 <p className="flex">
-                  <p className="text-[#796f5a] mr-1">Portée </p>
+                  <p className="text-secondary mr-1">Portée </p>
                   {item.minRange}-{item.maxRange}
                 </p>
               ) : (
                 <p className="flex">
-                  <p className="text-[#796f5a] mr-1">Portée </p>
+                  <p className="text-secondary mr-1">Portée </p>
                   {item.maxRange}
                 </p>
               )}
               <p className="flex">
-                <p className="text-[#796f5a] mr-1">Utilisation par tour </p>
+                <p className="text-secondary mr-1">Utilisation par tour </p>
                 {item.nmbCast}
               </p>
               <p className="flex">
-                <p className="text-[#796f5a] mr-1">Critique </p>
+                <p className="text-secondary mr-1">Critique </p>
                 {item.criticalHitProbability}%
               </p>
             </div>
@@ -94,7 +95,7 @@ const UniqueItem: React.FC<ItemProps> = ({ index, item }) => {
             <div>
               {charac.characId < 0 && (
                 <div>
-                  <div className="flex text-sm">
+                  <div className="flex text-sm ml-3">
                     {charac.effectId == 101 ? (
                       <div className="flex text-sm items-center">
                         <Image

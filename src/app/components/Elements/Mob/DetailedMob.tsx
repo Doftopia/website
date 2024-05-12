@@ -120,8 +120,8 @@ const DetailedMob: React.FC = () => {
   return (
     <div className="h-screen pt-8 mx-24">
       {mob.map((mob: GroupedMob) => (
-        <div className="dark:border-blue border-orange border rounded-sm text-sm pl-4 pt-2 bg-light-2 grid dark:text-primary dark:bg-dark-3 mb-4 px-3">
-          <p className="text-lg font-bold">
+        <div className="dark:border-primary border-orange border rounded-sm text-sm pl-4 pt-2 bg-light-2 grid dark:text-primary dark:bg-dark-3 mb-4 px-3">
+          <p className="text-lg font-bold text-blue">
             {mob.name}
             <Image src={mob.img} alt={mob.name} width={65} height={70} />
           </p>
@@ -187,8 +187,8 @@ const DetailedMob: React.FC = () => {
       <div>
         {drops[0] && dropPourcentage[0] && (
           <div>
-            <p className="font-bold text-light-green dark:text-blue">Butins</p>
-            <div className="flex flex-wrap border-t dark:text-primary border-light-green dark:border-blue bg-light-2 dark:bg-dark-3 mb-4 mt-1 px-3 py-2">
+            <p className="font-bold text-light-green dark:text-green">Butins</p>
+            <div className="flex flex-wrap border-t dark:text-primary border-light-green dark:border-green bg-light-2 dark:bg-dark-3 mb-4 mt-1 px-3 py-2">
               {drops.map((drop: GroupedItems, index: number) => (
                 <div>
                   {dropPourcentage[index].criteria == 1 && (
@@ -218,7 +218,7 @@ const DetailedMob: React.FC = () => {
             <p className="font-bold text-light-red dark:text-dark-red">
               Butins conditionnés{" "}
             </p>
-            <div className="flex flex-wrap border-t border-light-green dark:border-blue py-2 dark:bg-dark-3 dark:text-secondary bg-light-2 mt-1 pl-2 cursor-pointer">
+            <div className="flex flex-wrap border-t border-light-green dark:border-green py-2 dark:bg-dark-3 dark:text-secondary bg-light-2 mt-1 pl-2 cursor-pointer">
               {drops.map((drop: GroupedItems, index: number) => (
                 <div>
                   {dropPourcentage[index].criteria == 0 && (

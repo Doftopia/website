@@ -13,7 +13,7 @@ const UniqueMob: React.FC<UniqueMobProps> = ({ mob }) => {
   return (
     <Frame
       width="sm"
-      className="border-orange dark:border-blue border transition-all hover:-translate-y-1 hover:brightness-90"
+      className="border-orange dark:border-secondary dark:hover:border-blue border transition-all hover:-translate-y-1 hover:brightness-90"
     >
       <a
         href={`/monstres/monstre?id=${mob.id}`}

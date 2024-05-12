@@ -29,7 +29,7 @@ const ItemSet: React.FC = () => {
   const router = useRouter();
 
   const redirectItem = (itemId: string) => {
-    router.push(`/items/item?id=${itemId}`);
+    router.push(`/objets/objet?id=${itemId}`);
   };
 
   const fetchItem = async () => {
@@ -44,13 +44,13 @@ const ItemSet: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <div className=" text-black pt-10">
         <div className="px-8">
           {(itemsSet as mysql.RowDataPacket).map((itemSet: GroupedNmbItems) => (
             <div className="mb-8">
-              <div className="gap-8 justify-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                <div className="bg-light-2 w-full dark:text-primary dark:bg-dark-3 border-orange border py-2 px-3">
+              <div className="gap-8 justify-center grid grid-cols-1 md:grid-cols-4">
+                <div className="bg-light-2 dark:text-primary dark:bg-dark-3 col-span-1 border-orange dark:border-blue w-fit border py-2 px-3">
                   <p className="font-bold">
                     {itemSet.setName} - niveau {itemSet.setLevel}{" "}
                   </p>
@@ -69,29 +69,33 @@ const ItemSet: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                {itemSet.nmbItems.map((nmbItem: NmbItems) => (
-                  <div className="bg-light-2 dark:bg-dark-3 dark:text-primary w-full rounded-sm pl-2 pr-6 pb-3 border border-light-green dark:border-green">
-                    <p className="mt-3 mb-2">Bonus {nmbItem.nmbItems} items</p>
-                    {nmbItem.characs.map((charac: Charac) => (
-                      <div className="items-center flex ml-1">
-                        <img
-                          src={charac.characImg}
-                          alt={charac.characName}
-                          className="mr-2"
-                        />
-                        <p>
-                          {charac.characValue} {charac.characName}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                ))}
+                <div className="grid gap-x-24 col-span-3 grid-cols-4">
+                  {itemSet.nmbItems.map((nmbItem: NmbItems) => (
+                    <div className=" bg-light-2 dark:bg-dark-3 dark:text-primary w-full rounded-sm pl-2 pr-6 pb-3 border border-light-green dark:border-secondary h-fit">
+                      <p className="mt-3 mb-2">
+                        Bonus {nmbItem.nmbItems} items
+                      </p>
+                      {nmbItem.characs.map((charac: Charac) => (
+                        <div className="items-center flex ml-1">
+                          <img
+                            src={charac.characImg}
+                            alt={charac.characName}
+                            className="mr-2"
+                          />
+                          <p>
+                            {charac.characValue} {charac.characName}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

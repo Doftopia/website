@@ -25,6 +25,7 @@ interface Item {
   name: string;
   characValue: number;
   img_url: string;
+  recipe: Item[];
 }
 
 interface GroupedItems {

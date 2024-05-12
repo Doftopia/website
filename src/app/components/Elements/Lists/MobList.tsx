@@ -84,20 +84,23 @@ const MobList: React.FC = () => {
   }, [nameFilter]);
 
   return (
-    <div className="h-full text-black pt-8">
-      <input
-        type="text"
-        name="Mobs"
-        placeholder="Chercher monstres"
-        className="text-black outline-none w-1/2 h-8 mb-4 mx-8 pl-2 border border-[#3eb167]"
-        onChange={handleNameFilter}
-      />
+    <>
+      <div className="mx-auto w-[38rem] mt-[3rem]">
+        <p className="text-primary text-xl text-center">Liste des Monstres</p>
+        <input
+          type="text"
+          name="Mobs"
+          placeholder="Chercher un monstre"
+          className="text-black outline-none h-8 ml-[11.7rem] pl-2 border-2 dark:border-blue"
+          onChange={handleNameFilter}
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 mx-8 gap-5">
         {mobs.map((mob: GroupedMob) => (
           <UniqueMob mob={mob} key={mob.id} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

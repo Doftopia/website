@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Frame from "../ui/Frame";
 import Image from "next/image";
-
 import { Button } from "../ui/Button";
 import axios from "axios";
 
@@ -35,10 +33,24 @@ const Character: React.FC<CharacterProps> = ({
   successPts,
   title,
 }) => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
+
+  const openConfirmation = () => {
+    setShowConfirmation(true);
+  };
+
+  const closeConfirmation = () => {
+    setShowConfirmation(false);
+  };
+
   const charDeletion = async () => {
+    closeConfirmation();
     axios.post("/api/characters/delete", { id, name, server });
     window.location.reload();
   };
+
+  const isProfilePage = path === "/profil";
 
   return (
     <div>
@@ -92,12 +104,40 @@ const Character: React.FC<CharacterProps> = ({
           </Frame>
         </a>
       </div>
-      <Button
-        className="hover:bg-light-red relative bottom-[8rem] left-[1.4rem]"
-        onClick={charDeletion}
-      >
-        X
-      </Button>
+      {isProfilePage && ( // Render delete button only if on /profil page
+        <Button
+          className="hover:bg-light-red relative bottom-[8rem] left-[1.4rem]"
+          onClick={openConfirmation}
+        >
+          X
+        </Button>
+      )}
+
+      {showConfirmation && (
+        <div className="fixed inset-0 flex items-center z-50 justify-center">
+          <div className="dark:bg-dark-1 p-4 rounded-md shadow-lg">
+            <p className="text-primary">Est ce que tu veux vraiment</p>
+            <p className="text-primary text-sm text-center">
+              supprimer ton personnage ?
+            </p>
+
+            <div className="flex justify-between mx-10 mt-4">
+              <button
+                onClick={closeConfirmation}
+                className="text-dark-red font-bold text-sm hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                NON
+              </button>
+              <button
+                onClick={charDeletion}
+                className="text-green text-sm font-bold hover:bg-dark-2 hover:p-1 rounded-md"
+              >
+                OUI
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

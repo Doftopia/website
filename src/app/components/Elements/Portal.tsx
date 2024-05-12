@@ -99,7 +99,7 @@ const Portal: React.FC<PortalProps> = ({
   return (
     <Frame
       width="sm"
-      height="sm"
+      height="18rem"
       className="border border-black"
       key={PortalName}
     >
@@ -107,12 +107,14 @@ const Portal: React.FC<PortalProps> = ({
         Dimension {PortalName}
       </h1>
       <h2 className="text-blue ml-3">{Position}</h2>
-      <p className="text-secondary ml-[15rem]">
-        mis à jour {LastUpdate?.toString().slice(15, 21)}
-      </p>
-      <p className="text-secondary ml-[15rem]">par : {UpdaterName}</p>
+      <div className="relative bottom-6">
+        <p className="text-secondary ml-[24rem]">
+          mis à jour {LastUpdate?.toString().slice(15, 21)}
+        </p>
+        <p className="text-secondary ml-[24rem]">par : {UpdaterName}</p>
+      </div>
       <div className="grid grid-cols-4 h-fit w-full">
-        <Button className="bg-blue dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10">
+        <Button className="bg-blue dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10 p-2">
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"
@@ -121,7 +123,7 @@ const Portal: React.FC<PortalProps> = ({
           />
         </Button>
         <Button
-          className="dark:bg-green dark:hover:bg-[#2c7d49] bg-light-green hover:bg-[#7c931f] w-fit mx-auto"
+          className="dark:bg-green dark:hover:bg-[#2c7d49] bg-light-green hover:bg-[#7c931f] w-fit mx-auto p-2"
           onClick={toggleForm}
         >
           <img
@@ -132,7 +134,7 @@ const Portal: React.FC<PortalProps> = ({
           />
         </Button>
         <Button
-          className="bg-dark-red dark:bg-dark-red hover:bg-light-red w-fit mx-auto"
+          className="bg-dark-red dark:bg-dark-red hover:bg-light-red w-fit mx-auto p-2"
           onClick={handleDislike}
         >
           <img
@@ -148,25 +150,27 @@ const Portal: React.FC<PortalProps> = ({
           alt=""
         />
       </div>
-      <div className={showForm ? "" : "hidden"}>
-        <form id={`${PortalName}`} onSubmit={handleSubmit} className="">
-          <div className="bottom-[2rem] grid grid-cols-2 items-center">
-            <Input
-              className="w-24"
-              value={newPosition}
-              onChange={handleInputChange}
-            />
-            <a href="/portails">
-              <button
-                type="submit"
-                className="bg-orange hover:bg-[#b96f01] dark:bg-green text-white px-4 py-2 rounded-md dark:hover:bg-[#2c7d49] transition-all duration-300 ease-in-out"
-              >
-                Soumettre
-              </button>
-            </a>
-          </div>
-        </form>
-      </div>
+      <form
+        id={`${PortalName}`}
+        onSubmit={handleSubmit}
+        className={`${showForm ? "" : "hidden"} relative ml-2 bottom-[4.5rem]`}
+      >
+        <div className="grid grid-cols-2 gap-x-2 items-center">
+          <Input
+            className="w-24"
+            value={newPosition}
+            onChange={handleInputChange}
+          />
+          <a href="/portails">
+            <button
+              type="submit"
+              className="bg-orange hover:bg-[#b96f01] dark:bg-green text-white px-4 py-2 rounded-md dark:hover:bg-[#2c7d49] transition-all duration-300 ease-in-out p-2"
+            >
+              Soumettre
+            </button>
+          </a>
+        </div>
+      </form>
     </Frame>
   );
 };
