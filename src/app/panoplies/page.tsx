@@ -1,18 +1,18 @@
 import React from "react";
-import Navbar from "../components/Navbar/navbar";
+import Navbar from "@/app/components/Navbar/Navbar";
+import { ItemSetsList } from "../components/Elements/Lists/ItemSetsLists";
 
-const FolderComponent: React.FC<{ folderName: string }> = ({ folderName }) => {
-  return <div>{folderName}</div>;
-};
-
-const page: React.FC = () => {
+const Page = () => {
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar pageName="succes"></Navbar>
       </header>
+      <main>
+        <ItemSetsList />
+      </main>
     </>
   );
 };
 
-export default page;
+export default Page;

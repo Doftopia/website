@@ -23,6 +23,7 @@ model User {
   Personnages    Personnage[]
   updater        Portail[]
   Panoplies      Panoplie[]
+  Dislikes       Dislike[]
 }
 
 model Personnage {
@@ -30,12 +31,18 @@ model Personnage {
   user       User   @relation(fields: [userId], references: [id])
   userId     Int
   name       String
-  race       String
-  level      Int
+  race       String?
+  level      String
   server     String
-  stuff      String
-  completion Int
+  link       String
+  stuff      String?
+  completion Int?
+  successPts Int?
   Panoplie   Panoplie[]
+  mainChar   Boolean  @default(false)
+  imagelink  String?  @db.Text
+  title      String?
+  lastSucces String?
 }
 
 model Panoplie {
@@ -50,11 +57,25 @@ model Panoplie {
 }
 
 model Portail {
-  name        String   @unique
-  server      String
-  position    String
-  lastUpdate  DateTime @default(now())
-  updater     User     @relation(fields: [updaterName], references: [username])
-  updaterName String
-  image       String?
+  id           Int        @id @default(autoincrement())
+  name         String     @unique
+  server       String
+  position     String
+  lastUpdate   DateTime   @default(now())
+  updater      User       @relation(fields: [updaterName], references: [username])
+  updaterName  String
+  image        String?
+  dislikeCount Int       @default(0)
+  dislikes     Dislike[]
+}
+
+model Dislike {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  portal    Portail  @relation(fields: [portalId], references: [id])
+  portalId  Int
+  wrongPos  String
+
+  @@unique([userId, portalId])
 }

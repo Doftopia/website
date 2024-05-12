@@ -1,18 +1,22 @@
-import React from "react";
-import Navbar from "../components/Navbar/navbar";
+import Navbar from "../components/Navbar/Navbar";
+import { AchievementsCategories } from "../components/Elements/Lists/AchievementsCategories";
 
-const FolderComponent: React.FC<{ folderName: string }> = ({ folderName }) => {
-  return <div>{folderName}</div>;
-};
-
-const page: React.FC = () => {
+const Page: React.FC = () => {
   return (
     <>
       <header>
-        <Navbar />
+        <Navbar pageName="succes" />
       </header>
+      <div className="px-4">
+        <h1 className="text-white p-2">Catégories des succès</h1>
+        <div className="grid grid-cols-5 ">
+          <div className="w-full">
+            <AchievementsCategories />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
 
-export default page;
+export default Page;

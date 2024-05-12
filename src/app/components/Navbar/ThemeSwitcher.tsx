@@ -14,7 +14,7 @@ const ThemeSwitcher: React.FC = () => {
   const darkImagePath = "/tofu_noir.png";
   const lightImagePath = "/tofu.png";
 
-  const imagePath = theme === "dark" ? lightImagePath : darkImagePath;
+  const imagePath = theme === "dark" ? darkImagePath : lightImagePath;
 
   return (
     <>

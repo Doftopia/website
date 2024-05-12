@@ -1,18 +1,20 @@
-import React from "react";
-import Navbar from "../components/Navbar/navbar";
+import Navbar from "../components/Navbar/Navbar";
+import { QuestCategories } from "../components/Elements/Lists/QuestCategories";
 
-const FolderComponent: React.FC<{ folderName: string }> = ({ folderName }) => {
-  return <div>{folderName}</div>;
-};
-
-const page: React.FC = () => {
+const Page: React.FC = () => {
   return (
-    <>
+    <div>
       <header>
-        <Navbar />
+        <Navbar pageName="quetes" />
       </header>
-    </>
+      <main>
+        <h1 className="text-primary mt-8 ml-[6rem]">Quêtes</h1>
+        <div className="w-full mx-auto">
+          <QuestCategories />
+        </div>
+      </main>
+    </div>
   );
 };
 
-export default page;
+export default Page;
