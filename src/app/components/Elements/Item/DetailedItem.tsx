@@ -47,17 +47,17 @@ const DetailedItem: React.FC = () => {
       const recipesResponse = await axios.get(
         `http://localhost:3001/recipes?resultId=${itemId}`
       );
-      // recipesResponse.data.data.forEach((recipe: GroupedRecipes) => {
-      //     recipe.itemLevel = recipe.itemLevel.split(',')[0];
+      recipesResponse.data.data.forEach((recipe: GroupedRecipes) => {
+        recipe.itemLevel = recipe.itemLevel.split(",")[0];
 
-      //     recipe.recipe.forEach((item: Recipe) => {
-      //         console.log(item.itemName);
-      //         if (item.itemName.includes(',')) {
-      //             item.itemName = item.itemName.split(',')[0];
-      //             item.itemImg = item.itemImg.split(',')[0];
-      //         }
-      //     });
-      // });
+        recipe.recipe.forEach((item: Recipe) => {
+          console.log(item.itemName);
+          if (item.itemName.includes(",")) {
+            item.itemName = item.itemName.split(",")[0];
+            item.itemImg = item.itemImg.split(",")[0];
+          }
+        });
+      });
       console.log(recipesResponse.data.data);
 
       let jobsResponse: Jobs | any;

@@ -8,7 +8,6 @@ const Page: React.FC = () => {
         <Navbar pageName="succes" />
       </header>
       <div className="px-4">
-        <h1 className="text-white p-2">Catégories des succès</h1>
         <div className="grid grid-cols-5 ">
           <div className="w-full">
             <AchievementsCategories />

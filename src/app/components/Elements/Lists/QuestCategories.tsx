@@ -42,6 +42,7 @@ export const QuestCategories: React.FC = () => {
           key={category.id}
           onMouseEnter={() => setHoveredCategory(category.questCategory)}
           onMouseLeave={() => setHoveredCategory(null)}
+          onClick={() => handleCategoryClick(category.questCategory)}
         >
           <Frame
             size="sm"

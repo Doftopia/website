@@ -31,11 +31,11 @@ const MainCharacter = async () => {
         className="border-y border-l dark:border-y-green dark:border-l-green border-y-light-green border-l-light-green"
       ></Character>
       <Frame width="16rem">
-        <div className="grid grid-cols-7 h-full border-y border-r dark:border-y-green dark:border-l-green dark:border-r-green border-y-light-green border-r-light-green">
-          <div className="h-5/6 w-[2px] bg-opacity-10 my-auto bg-secondary dark:bg-primary col-span-1"></div>
-          <div className="text-secondary dark:text-primary col-span-6 ml-2 mt-5">
+        <div className="grid grid-cols-7 h-full border-y border-r dark:border-y-green dark:border-l-primary dark:border-r-blue border-y-light-green border-r-light-green">
+          <div className="h-5/6 w-[2px] bg-opacity-10 my-auto bg-secondary dark:bg-secondary col-span-1"></div>
+          <div className="text-primary dark:text-primary col-span-6 ml-2 mt-5">
             <p>Dernier succès obtenu</p>
-            <p className="text-white">{mainChar.lastSucces}</p>
+            <p className="text-secondary">{mainChar.lastSucces}</p>
           </div>
         </div>
       </Frame>

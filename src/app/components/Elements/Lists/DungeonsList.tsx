@@ -43,7 +43,6 @@ export const DungeonsList: React.FC = () => {
   return (
     <>
       <div className="px-4">
-        <h1 className="text-white p-2">Liste des donjons</h1>
         <ul>
           <div className="grid grid-cols-5 w-fit mx-auto gap-7">
             {dungeons.map((achievement) => (

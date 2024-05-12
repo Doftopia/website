@@ -44,7 +44,6 @@ export const AchievementsList: React.FC = ({}) => {
   return (
     <>
       <div className="px-4">
-        <h1 className="text-white p-2">Achievements List</h1>
         <ul>
           <div className="grid grid-cols-5">
             {achievements.map((achievement) => (

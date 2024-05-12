@@ -6,6 +6,7 @@ import Frame from "../../ui/Frame";
 import axios from "axios";
 import { Input } from "../../ui/Input";
 import { get } from "http";
+import Image from "next/image";
 
 const XpCalculator = () => {
   const [selectedJob, setSelectedJob] = useState("");
@@ -124,10 +125,24 @@ const XpCalculator = () => {
 
   return (
     <>
+      <Image
+        src="/kamasbag.png"
+        alt=""
+        width={200}
+        height={237}
+        className="absolute top-[24.1rem] z-0 opacity-45 left-[18.9rem]"
+      ></Image>
+      <Image
+        src="/ternette.png"
+        alt=""
+        width={768}
+        height={830}
+        className="absolute top-[3.5rem] z-0 opacity-30 right-[3.9rem]"
+      ></Image>
       <Frame
         size="lg"
         height="16rem"
-        className="border border-green shadow-xl mx-auto mt-[15rem]"
+        className="border border-green shadow-xl mx-auto mt-[15rem] z-10"
       >
         <h1 className="ml-6 mt-2 text-primary text-sm mb-6">
           Recettes possibles
@@ -165,7 +180,6 @@ const XpCalculator = () => {
           </div>
         </div>
       </Frame>
-
       <div className="mt-4 grid grid-cols-3 mx-auto w-fit gap-x-[4rem]">
         {craftableItems.map((item: any, index: number) => (
           <Frame

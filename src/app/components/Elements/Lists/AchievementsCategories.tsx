@@ -24,6 +24,7 @@ const cat = {
 export const AchievementsCategories: React.FC = ({}) => {
   const [categories, setCategories] = useState<Achievement[]>([]);
   const path = typeof window !== "undefined" ? window.location.pathname : "";
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -90,7 +91,9 @@ export const AchievementsCategories: React.FC = ({}) => {
 
   return (
     <>
-      <h1 className="text-white p-2">Catégories</h1>
+      <h1 className="text-primary text center text-xl mt-[5rem]">
+        Catégories des succès
+      </h1>
 
       <Button className="dark:bg-dark-red" onClick={() => handlePreviousPage()}>
         Retour
@@ -101,7 +104,11 @@ export const AchievementsCategories: React.FC = ({}) => {
             <div
               key={category.id}
               onClick={() => handleCategoryClick(category.id, category.name)}
-              className="p-2 mx-2 mt-4 dark:bg-dark-3 text-white hover:cursor-pointer hover:p-3"
+              className={`p-2 mx-2 mt-4 dark:bg-dark-3 text-white hover:cursor-pointer hover:p-3 ${
+                isHovered
+                  ? "border-green"
+                  : "border-secondary border-opacity-50"
+              }`}
             >
               <li>{category.name}</li>
             </div>

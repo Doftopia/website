@@ -9,7 +9,9 @@ const Page: React.FC = () => {
         <Navbar pageName="quetes" />
       </header>
       <main>
-        <h1 className="text-primary mt-8">Quêtes</h1>
+        <h1 className="text-primary mt-[5rem] py-[5rem] text-center text-xl">
+          Liste des Quêtes
+        </h1>
         <div className="w-full mx-auto">
           <QuestList />
         </div>

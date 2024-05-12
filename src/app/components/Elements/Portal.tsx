@@ -1,6 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import React from "react";
 import { useState } from "react";
 import Frame from "../ui/Frame";
@@ -68,6 +66,12 @@ const Portal: React.FC<PortalProps> = ({
       }
     }
   };
+
+  const handleCopyPosition = () => {
+    navigator.clipboard.writeText(`/travel ${Position}`);
+    alert("Position copiée dans le presse-papiers !");
+  };
+
   const handleDislike = () => {
     try {
       axios.post(
@@ -114,7 +118,10 @@ const Portal: React.FC<PortalProps> = ({
         <p className="text-secondary ml-[24rem]">par : {UpdaterName}</p>
       </div>
       <div className="grid grid-cols-4 h-fit w-full">
-        <Button className="bg-blue dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10 p-2">
+        <Button
+          className="bg-blue dark:bg-blue hover:bg-[#4163a1] w-fit mx-auto z-10 p-2"
+          onClick={handleCopyPosition}
+        >
           <img
             src="https://img.icons8.com/color/48/where.png"
             alt="fast travel"

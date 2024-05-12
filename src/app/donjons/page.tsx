@@ -14,6 +14,9 @@ const page: React.FC = () => {
         <Navbar pageName="donjons" />
       </header>
       <main>
+        <h1 className="text-primary p-2 mt-[5rem] text-center text-xl py-[5rem]">
+          Liste des Donjons
+        </h1>
         <DungeonsList />
       </main>
     </>

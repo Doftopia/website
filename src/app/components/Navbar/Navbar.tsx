@@ -15,6 +15,9 @@ const Navbar = async ({ pageName }: NavbarProps) => {
   const user = await prisma.user.findUnique({
     where: { username: session.user.username },
   });
+  if (!user) {
+    return;
+  }
 
   return (
     <>

@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-
 "use client";
 import React, { useEffect, useState } from "react";
 import Frame from "../ui/Frame";
@@ -7,6 +6,7 @@ import axios from "axios";
 
 const DailyAlmanax: React.FC = () => {
   const [almanaxData, setAlmanaxData] = useState<any>(null);
+
   function formatDate(date: Date) {
     const months = [
       "Janvier",
@@ -32,6 +32,7 @@ const DailyAlmanax: React.FC = () => {
 
   const currentDate = new Date();
   const formattedDate = formatDate(currentDate);
+
   useEffect(() => {
     const fetchAlmanax = async () => {
       try {
@@ -48,11 +49,25 @@ const DailyAlmanax: React.FC = () => {
     fetchAlmanax();
   }, []);
 
+  const handleClick = async () => {
+    if (almanaxData && almanaxData.tribute && almanaxData.tribute.item) {
+      try {
+        const tribItemId = almanaxData.tribute.item.ankama_id;
+        // const response = await axios.get(
+        //   `http://localhost:3001/items?name=${tribItemId}`
+        // );
+        window.location.href = `/objets/objet?id=${tribItemId}`;
+      } catch (error) {
+        console.error("Error fetching item:", error);
+      }
+    }
+  };
+
   return (
     <Frame
       width="33rem"
       height="20rem"
-      className="border shadow-lg bg-light-2 dark:border-blue border-light-green"
+      className="border shadow-lg bg-light-2 dark:border-primary border-light-green"
     >
       <div className="text-center text-white font-bold">
         <p>OFFRANDE DU JOUR</p>
@@ -60,7 +75,7 @@ const DailyAlmanax: React.FC = () => {
       </div>
       {almanaxData && (
         <>
-          <a className="w-fit mx-auto" href="">
+          <a className="w-fit mx-auto" onClick={handleClick} href="#">
             <Frame
               height="6rem"
               width="22rem"
@@ -73,7 +88,7 @@ const DailyAlmanax: React.FC = () => {
                 <Frame
                   height="4rem"
                   width="4rem"
-                  className="items-center bg-light-2 hover:border hover:border-light-green border border-orange justify-center"
+                  className="items-center bg-light-2 hover:border hover:border-light-green border border-secondary dark:hover:border-green justify-center"
                 >
                   {" "}
                   <img
@@ -105,7 +120,7 @@ const DailyAlmanax: React.FC = () => {
           </p>
           <Frame
             size="lg"
-            className="border border-light-green dark:border-blue bg-light-2"
+            className="border border-light-green dark:border-secondary bg-light-2"
           >
             {" "}
             <p className="text-sm text-secondary ml-2">

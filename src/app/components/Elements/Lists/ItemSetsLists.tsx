@@ -42,9 +42,6 @@ export const ItemSetsList: React.FC = () => {
   return (
     <>
       <div className="px-4">
-        <h1 className="text-white p-2 text-xl mt-[3rem] text-center">
-          Liste des ensembles d&apos;objets
-        </h1>
         <div className="py-[15rem]"></div>
         <ul>
           <div className="grid grid-cols-6 w-fit mx-auto gap-7">

@@ -43,7 +43,11 @@ export const UniqueAchievement: React.FC<UniqueAchievementProps> = ({
       onClick={() => handleAchievementClick(name)}
     >
       <Frame width="fit" height="6rem" key={id}>
-        <div className="grid h-full grid-cols-2">
+        <div
+          className={`grid h-full grid-cols-2 border  ${
+            isHovered ? "border-green" : "border-secondary border-opacity-50"
+          }`}
+        >
           <Image
             src={img ? img : ""}
             alt=""
@@ -60,7 +64,9 @@ export const UniqueAchievement: React.FC<UniqueAchievementProps> = ({
               {name}
             </h1>
             <h1
-              className={`${isHovered ? "text-blue" : "text-primary"} text-xs`}
+              className={`${
+                isHovered ? "text-blue" : "text-primary"
+              } text-xs italic`}
             >
               niv.{level}
             </h1>

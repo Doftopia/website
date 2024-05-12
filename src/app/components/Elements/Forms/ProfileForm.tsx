@@ -130,7 +130,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         {!showForm ? (
           texts()
         ) : (
-          <form className="text-primary ml-[6rem]">
+          <form className="text-primary mr-4 mt-[2rem]">
             <div className="mb-4">
               <p className="ml-[1rem]">Nom d&apos;utilisateur</p>
               <Input
